@@ -7,30 +7,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import sbnz.mrsandman.neuralinkapp.facts.Item;
-
-
+import sbnz.mrsandman.neuralinkapp.model.User;
 
 
 
 @Service
-public class SampleAppService {
-
-	private static Logger log = LoggerFactory.getLogger(SampleAppService.class);
-
+public class NeuralinkAppService {
+	private static Logger log = LoggerFactory.getLogger(NeuralinkAppService.class);
 	private final KieContainer kieContainer;
 
 	@Autowired
-	public SampleAppService(KieContainer kieContainer) {
+	public NeuralinkAppService(KieContainer kieContainer) {
 		log.info("Initialising a new example session.");
 		this.kieContainer = kieContainer;
 	}
 
-	public Item getClassifiedItem(Item i) {
+	public User detectIsStatic(User u) {
 		KieSession kieSession = kieContainer.newKieSession();
-		kieSession.insert(i);
+		kieSession.insert(u);
 		kieSession.fireAllRules();
 		kieSession.dispose();
-		return i;
+		return u;
 	}
 }

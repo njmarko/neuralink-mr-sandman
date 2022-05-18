@@ -12,31 +12,58 @@ public class User {
 	private LocalTime goingToBedTime;
 	private Chronotype chronotype;
 	private boolean isLightSleep;
+	private LocalTime optimalSleepTime;
+	private float speed;
+	private boolean isStatic;
 
 	public User() {
 		super();
+		this.isStatic = false;
 	}
 
-
-	public User(int age, Gender gender, LocalTime goingToBedTime, Chronotype chronotype, boolean isLightSleep) {
+	public User(int age, Gender gender, LocalTime goingToBedTime, Chronotype chronotype, boolean isLightSleep,
+			LocalTime optimalSleepTime, float speed) {
 		super();
 		this.age = age;
 		this.gender = gender;
 		this.goingToBedTime = goingToBedTime;
 		this.chronotype = chronotype;
 		this.isLightSleep = isLightSleep;
+		this.optimalSleepTime = optimalSleepTime;
+		this.speed = speed;
+	}
+	
+	public void setIsStatic(boolean isStatic) {
+		this.isStatic = isStatic;
+	}
+	
+	public boolean getIsStatic() {
+		return this.isStatic;
 	}
 
+	public float getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(float speed) {
+		this.speed = speed;
+	}
+
+	public void setOptimalSleepTime(LocalTime optimalSleepTime) {
+		this.optimalSleepTime = optimalSleepTime;
+	}
+
+	public LocalTime getOptimalSleepTime() {
+		return optimalSleepTime;
+	}
 
 	public boolean isLightSleep() {
 		return isLightSleep;
 	}
 
-
 	public void setLightSleep(boolean isLightSleep) {
 		this.isLightSleep = isLightSleep;
 	}
-
 
 	public int getAge() {
 		return age;
@@ -73,7 +100,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [age=" + age + ", gender=" + gender + ", goingToBedTime=" + goingToBedTime + ", chronotype="
-				+ chronotype + "]";
+				+ chronotype + ", isLightSleep=" + isLightSleep + ", optimalSleepTime=" + optimalSleepTime + "]";
 	}
 
 }
