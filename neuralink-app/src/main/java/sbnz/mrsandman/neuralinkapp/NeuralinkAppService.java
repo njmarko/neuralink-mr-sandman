@@ -29,4 +29,12 @@ public class NeuralinkAppService {
 		kieSession.dispose();
 		return u;
 	}
+	
+	public User determineOptimalSleepTime(User u) {
+		KieSession kieSession = kieContainer.newKieSession();
+		kieSession.insert(u);
+		kieSession.fireAllRules();
+		kieSession.dispose();
+		return u;
+	}
 }

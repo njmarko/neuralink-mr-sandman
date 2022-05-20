@@ -1,0 +1,14 @@
+package sbnz.mrsandsman.rules;
+
+import sbnz.mrsandman.neuralinkapp.model.User;
+import sbnz.mrsandman.neuralinkapp.model.enums.Gender;
+import sbnz.mrsandman.neuralinkapp.model.enums.Chronotype;
+import java.time.LocalTime;
+
+rule "Determine optimal sleep time for BEAR chronotype"
+    when
+        $u: User(optimalSleepTime==null, chronotype==Chronotype.BEAR)
+    then
+        $u.setOptimalSleepTime(LocalTime.of(22 + (($u.getAge() > 14 & $u.getAge()< 28)? -1:1), 30 + (($u.getGender() == Gender.MALE)? 15:-15) , 00));
+        update($u);
+end

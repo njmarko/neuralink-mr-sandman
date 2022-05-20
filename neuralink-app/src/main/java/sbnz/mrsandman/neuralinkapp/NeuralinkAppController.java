@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sbnz.mrsandman.neuralinkapp.model.User;
+import sbnz.mrsandman.neuralinkapp.model.enums.Chronotype;
+import sbnz.mrsandman.neuralinkapp.model.enums.Gender;
 
 
 @RestController
@@ -27,6 +29,23 @@ public class NeuralinkAppController {
 
 		User user = new User();
 		user.setSpeed(speed);
+
+		log.debug("Item request received for: " + user.toString());
+
+		User updated = appService.detectIsStatic(user);
+
+		return updated;
+	}
+	
+	@RequestMapping(value = "/determine-optimal-sleep-time", method = RequestMethod.GET, produces = "application/json")
+	public User determineOptimalSleepTime(@RequestParam(required = true) int age,
+			@RequestParam(required = true) Gender gender, @RequestParam(required = true) Chronotype chronotype) {
+
+		User user = new User();
+		user.setAge(age);
+		user.setGender(gender);
+		user.setChronotype(chronotype);
+
 
 		log.debug("Item request received for: " + user.toString());
 

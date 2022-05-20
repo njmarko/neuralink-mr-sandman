@@ -1,8 +1,12 @@
 package sbnz.mrsandman.neuralinkapp.model;
 
+import java.io.Serializable;
+
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 
-public class Sleep {
+public class Sleep implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
 	private int brainwaveFrequency;
 	private SleepPhase sleepPhase;
