@@ -3,6 +3,7 @@ package sbnz.mrsandman.neuralinkapp.model.cep;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Collection;
@@ -39,9 +40,12 @@ public class SleepStageCep {
     	
         KieServices ks = KieServices.Factory.get();
         KieFileSystem kfs = ks.newKieFileSystem();
-
-//        kfs.write(ResourceFactory.newInputStreamResource(new FileInputStream("../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + ".drl")));
-        kfs.write(ResourceFactory.newClassPathResource("cep2/sleep-cep.drl"));
+        
+        String filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + ".drl";
+        
+        File f = new File(filePath);
+        kfs.write(ResourceFactory.newFileResource(f));
+//        kfs.write(ResourceFactory.newClassPathResource("cep2/sleep-cep.drl"));
         KieBuilder kbuilder = ks.newKieBuilder(kfs);
         kbuilder.buildAll();
         if (kbuilder.getResults().hasMessages(Message.Level.ERROR)) {
@@ -60,7 +64,7 @@ public class SleepStageCep {
         ksconf2.setOption(ClockTypeOption.get(ClockType.PSEUDO_CLOCK.getId()));
         KieSession ksession2 = kbase.newKieSession(ksconf2, null);
         
-//        runRealtimeClockExample(ksession1);
+        runRealtimeClockExample(ksession1);
         runPseudoClockExample(ksession2);
     }
     
@@ -105,7 +109,7 @@ public class SleepStageCep {
             //do nothing
         }
         ksession.fireUntilHalt();
-        Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(BrainWaveEvent.class));
+        Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(SleepPhaseEvent.class));
         assertThat(newEvents.size(), equalTo(1));
     }
     
