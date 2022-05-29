@@ -1,0 +1,41 @@
+template header
+minValue
+maxValue
+signalType
+timePeriod
+timeUnit
+amountAppeared
+newEvent
+
+package chapter07.ruletemplate.simple;
+
+import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
+
+template "classification-rules"
+
+rule "Categorize Signal_@{row.rowNumber} - @{signalType} between @{minValue} and @{maxValue} and insert new @{newEvent}"
+	no-loop true
+	when
+		s1: SignalEvent(signalType == SignalType.@{signalType}, value >= @{minValue}, value <= @{maxValue})
+	    Number(intValue >= @{amountAppeared}) from accumulate(
+	    	s2: SignalEvent(
+	    		this != s1,
+	    		signalType == SignalType.@{signalType},
+	    		value >= @{minValue},
+	    		value <= @{maxValue},
+	    		this meets[@{timePeriod}@{timeUnit}] s1
+	    	),
+	    	count(s2) 
+	    )
+        not(
+            @{newEvent}() 
+            over window:time(@{timePeriod}@{timeUnit})
+        )
+	then
+		insert(new @{newEvent}());
+	end
+
+end template
+

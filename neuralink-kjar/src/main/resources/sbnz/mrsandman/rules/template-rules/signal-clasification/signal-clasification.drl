@@ -1,0 +1,28 @@
+package chapter07.ruletemplate.simple;
+import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
+
+rule "Categorize Signal_0 - ALCOHOL_LEVEL between 0.2 and 100.0 and insert new RaisedAlcoholLevelEvent"
+	no-loop true
+	when
+		s1: SignalEvent(signalType == SignalType.ALCOHOL_LEVEL, value >= 0.2, value <= 100.0)
+	    Number(intValue >= 3) from accumulate(
+	    	s2: SignalEvent(
+	    		this != s1,
+	    		signalType == SignalType.ALCOHOL_LEVEL,
+	    		value >= 0.2,
+	    		value <= 100.0,
+	    		this meets[10s] s1
+	    	),
+	    	count(s2) 
+	    )
+        not(
+            RaisedAlcoholLevelEvent() 
+            over window:time(10s)
+        )
+	then
+		insert(new RaisedAlcoholLevelEvent());
+	end
+
+
