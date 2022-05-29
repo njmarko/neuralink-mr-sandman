@@ -1,5 +1,6 @@
 package sbnz.mrsandman.neuralinkapp.model;
 
+import java.io.File;
 import java.io.InputStream;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -14,7 +15,9 @@ import org.drools.template.DataProvider;
 import org.drools.template.DataProviderCompiler;
 import org.drools.template.ObjectDataCompiler;
 import org.drools.template.objects.ArrayDataProvider;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.kie.api.KieServices;
 import org.kie.api.builder.Message;
 import org.kie.api.builder.Results;
@@ -22,17 +25,21 @@ import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.utils.KieHelper;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 
-
-
+@SpringBootTest
 public class SleepPhaseTemplateTest {
 
     @Test
     public void testSimpleTemplateWithArrays(){
         System.out.println("Hello");
-        InputStream template = SleepPhaseTemplate.class.getResourceAsStream("../src/main/resources/sbnz/mrsandman/templates/sleep-stage-clasification.drt");
+        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+
+//        InputStream template = SleepPhaseTemplate.class.getResourceAsStream("..\\neuralink-kjar\\src\\main\\resources\\sbnz\\mrsandman\\templates\\sleep-stage-clasification.drt");
+        InputStream template = SleepPhaseTemplateTest.class.getResourceAsStream("C:/Users/Marko/Desktop/SIIT-Semestar8/SBNZ/Projekat/neuralink-mr-sandman/neuralink-kjar/src/main/resources/sbnz/mrsandman/templates");
         
         DataProvider dataProvider = new ArrayDataProvider(new String[][]{
             new String[]{"0", "15",  "AWAKE"},
