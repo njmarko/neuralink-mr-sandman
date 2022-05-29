@@ -7,9 +7,10 @@ rule "AWAKE event"
     when
         not(
             BrainWaveEvent() 
-            over window:time(5s)
+            over window:time(10s)
         )
     then
+    	System.out.println("Dodat sleep phase event.");
         insert(new SleepPhaseEvent());
-        drools.halt();
+        //drools.halt();
 end

@@ -1,0 +1,23 @@
+package cep2;
+
+import sbnz.mrsandman.neuralinkapp.model.events.BrainWaveEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.heartrate.HeartBeatEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.PhysicalActivityEvent;
+
+rule "Intense physical activity event"
+    when
+        SleepPhaseEvent()
+        $hb1: HeartBeatEvent()
+        Number(intValue >= 3) from accumulate(
+        	$hb2: HeartBeatEvent(
+        		this != $hb1,
+        		this meets[1h] $hb1
+        	),
+        	count($hb2) 
+        )     
+    then
+    	System.out.println("Aktivacija physical eventa");
+        insert(new PhysicalActivityEvent());
+        drools.halt();
+end

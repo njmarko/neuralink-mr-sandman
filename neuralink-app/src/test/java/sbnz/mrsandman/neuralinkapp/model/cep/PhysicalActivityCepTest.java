@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
@@ -29,14 +28,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import sbnz.mrsandman.neuralinkapp.model.events.BrainWaveEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.heartrate.HeartBeatEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.PhysicalActivityEvent;
 
 @SpringBootTest
-public class SleepStageCep {
-	
+public class PhysicalActivityCepTest {
+
     @Test
     public void testCEPConfigThroughCode() throws FileNotFoundException {
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        String fileName = "sleep-cep";
+        String fileName = "physical-activity";
     	
         KieServices ks = KieServices.Factory.get();
         KieFileSystem kfs = ks.newKieFileSystem();
@@ -44,6 +45,12 @@ public class SleepStageCep {
         String filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + ".drl";
         
         File f = new File(filePath);
+        kfs.write(ResourceFactory.newFileResource(f));
+        
+        fileName = "sleep-cep";
+        filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + ".drl";
+        
+        f = new File(filePath);
         kfs.write(ResourceFactory.newFileResource(f));
 //        kfs.write(ResourceFactory.newClassPathResource("cep2/sleep-cep.drl"));
         KieBuilder kbuilder = ks.newKieBuilder(kfs);
@@ -64,25 +71,43 @@ public class SleepStageCep {
         ksconf2.setOption(ClockTypeOption.get(ClockType.PSEUDO_CLOCK.getId()));
         KieSession ksession2 = kbase.newKieSession(ksconf2, null);
         
-        runRealtimeClockExample(ksession1);
+//        runRealtimeClockExample(ksession1);
         runPseudoClockExample(ksession2);
     }
     
     private void runPseudoClockExample(KieSession ksession) {
+    	int ruleCount = 0;
         SessionPseudoClock clock = ksession.getSessionClock();
-        for (int index = 0; index < 100; index++) {
+        for (int index = 0; index < 5; index++) {
             BrainWaveEvent beep = new BrainWaveEvent();
             ksession.insert(beep);
             clock.advanceTime(1, TimeUnit.SECONDS);
-            int ruleCount = ksession.fireAllRules();
+            ruleCount = ksession.fireAllRules();
             //As long as there is a steady heart beat, no rule will fire
             assertThat(ruleCount, equalTo(0));
         }
+//        clock.advanceTime(1, TimeUnit.MINUTES);
+//        int ruleCount = ksession.fireAllRules();
+//        assertThat(ruleCount, equalTo(1));
+        for (int index = 0; index < 3; index++) {
+        	HeartBeatEvent hearthBeet = new HeartBeatEvent();
+        	ksession.insert(hearthBeet);
+        	clock.advanceTime(1,  TimeUnit.SECONDS);
+        	ksession.fireAllRules();
+        }
+
         //We manually advance time 1 minute, without a heart beat
+    	HeartBeatEvent hearthBeet = new HeartBeatEvent();
+    	ksession.insert(hearthBeet);
+        clock.advanceTime(1, TimeUnit.SECONDS);
+        ruleCount = ksession.fireAllRules();
+//        assertThat(ruleCount, equalTo(0));
+        
         clock.advanceTime(1, TimeUnit.MINUTES);
-        int ruleCount = ksession.fireAllRules();
-        assertThat(ruleCount, equalTo(1));
-        Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(SleepPhaseEvent.class));
+        ruleCount = ksession.fireAllRules();
+        assertThat(ruleCount, equalTo(2));
+        
+        Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(PhysicalActivityEvent.class));
         assertThat(newEvents.size(), equalTo(1));
     }
     
@@ -112,5 +137,4 @@ public class SleepStageCep {
         Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(SleepPhaseEvent.class));
         assertThat(newEvents.size(), equalTo(1));
     }
-    
 }
