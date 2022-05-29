@@ -52,30 +52,6 @@ public class SleepStageCepTest extends BaseCepTest {
     }
     
     protected void runRealtimeClockExample(KieSession ksession) {
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                for (int index = 0; index < 4; index++) {
-                	BrainWaveEvent beep = new BrainWaveEvent();
-                    ksession.insert(beep);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        //do nothing
-                    }
-                }
-            }
-        };
-        t.setDaemon(true);
-        t.start();
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            //do nothing
-        }
-        ksession.fireUntilHalt();
-        Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(SleepPhaseEvent.class));
-        assertThat(newEvents.size(), equalTo(1));
     }
 
 	@Override
