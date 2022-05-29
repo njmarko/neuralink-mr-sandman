@@ -1,0 +1,21 @@
+package cep2;
+
+import sbnz.mrsandman.neuralinkapp.model.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.*;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+import sbnz.mrsandman.neuralinkapp.model.events.somnabulism.*;
+
+rule "Somnabulism detected event"
+    when
+    	MuscleToneChangedEvent(muscleTone == MuscleTone.TENSE)
+    	$s: Sleep(sleepPhase == SleepPhase.REM)
+    	$u: User(isStatic == false)
+    then
+    	System.out.println("Aktivacija detect somnabulism eventa");
+        insert(new SomnabulismDetectedEvent());
+        drools.halt();
+end
+
+
+
+
