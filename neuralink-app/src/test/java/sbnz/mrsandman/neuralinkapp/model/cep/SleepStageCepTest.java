@@ -31,44 +31,9 @@ import sbnz.mrsandman.neuralinkapp.model.events.BrainWaveEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
 
 @SpringBootTest
-public class SleepStageCepTest {
+public class SleepStageCepTest extends BaseCepTest {
 	
-    @Test
-    public void testCEPConfigThroughCode() throws FileNotFoundException {
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        String fileName = "sleep-cep";
-    	
-        KieServices ks = KieServices.Factory.get();
-        KieFileSystem kfs = ks.newKieFileSystem();
-        
-        String filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + ".drl";
-        
-        File f = new File(filePath);
-        kfs.write(ResourceFactory.newFileResource(f));
-//        kfs.write(ResourceFactory.newClassPathResource("cep2/sleep-cep.drl"));
-        KieBuilder kbuilder = ks.newKieBuilder(kfs);
-        kbuilder.buildAll();
-        if (kbuilder.getResults().hasMessages(Message.Level.ERROR)) {
-            throw new IllegalArgumentException("Coudln't build knowledge module" + kbuilder.getResults());
-        }
-        KieContainer kContainer = ks.newKieContainer(kbuilder.getKieModule().getReleaseId());
-        KieBaseConfiguration kbconf = ks.newKieBaseConfiguration();
-        kbconf.setOption(EventProcessingOption.STREAM);
-        KieBase kbase = kContainer.newKieBase(kbconf);
-        
-        KieSessionConfiguration ksconf1 = ks.newKieSessionConfiguration();
-        ksconf1.setOption(ClockTypeOption.get(ClockType.REALTIME_CLOCK.getId()));
-        KieSession ksession1 = kbase.newKieSession(ksconf1, null);
-        
-        KieSessionConfiguration ksconf2 = ks.newKieSessionConfiguration();
-        ksconf2.setOption(ClockTypeOption.get(ClockType.PSEUDO_CLOCK.getId()));
-        KieSession ksession2 = kbase.newKieSession(ksconf2, null);
-        
-        runRealtimeClockExample(ksession1);
-        runPseudoClockExample(ksession2);
-    }
-    
-    private void runPseudoClockExample(KieSession ksession) {
+    protected void runPseudoClockExample(KieSession ksession) {
         SessionPseudoClock clock = ksession.getSessionClock();
         for (int index = 0; index < 100; index++) {
             BrainWaveEvent beep = new BrainWaveEvent();
@@ -86,7 +51,7 @@ public class SleepStageCepTest {
         assertThat(newEvents.size(), equalTo(1));
     }
     
-    private void runRealtimeClockExample(KieSession ksession) {
+    protected void runRealtimeClockExample(KieSession ksession) {
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -112,5 +77,13 @@ public class SleepStageCepTest {
         Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(SleepPhaseEvent.class));
         assertThat(newEvents.size(), equalTo(1));
     }
+
+	@Override
+	protected void writeResourcesToSession(KieFileSystem kfs) {
+        String fileName = "sleep-cep";
+        String filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + ".drl";
+        File f = new File(filePath);
+        kfs.write(ResourceFactory.newFileResource(f));
+	}
     
 }

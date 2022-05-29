@@ -1,0 +1,19 @@
+package cep2;
+
+import sbnz.mrsandman.neuralinkapp.model.User;
+import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.*;
+
+rule "Begin sleeping event"
+    when
+    	BodyTemperatureChangedEvent(diff <= -1)
+    	HeartRateLoweredEvent()
+        $u: User(isStatic == true)
+    then
+    	System.out.println("Aktivacija begin sleeping eventa");
+        insert(new BeginSleepingEvent());
+        drools.halt();
+end
+
+
+
+
