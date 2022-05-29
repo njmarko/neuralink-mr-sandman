@@ -33,6 +33,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
+import sbnz.mrsandman.neuralinkapp.model.events.BrainWaveFrequencyChangedEvent;
 
 @SpringBootTest
 public class SleepPhaseTemplateTest {
@@ -89,13 +90,28 @@ public class SleepPhaseTemplateTest {
         Sleep sleep6 = new Sleep(77, SleepPhase.AWAKE);
         
         
+        ksession.insert(new BrainWaveFrequencyChangedEvent());
         ksession.insert(sleep1);
-        ksession.insert(sleep2);
-        ksession.insert(sleep3);
-        ksession.insert(sleep4);
-        ksession.insert(sleep5);
-        ksession.insert(sleep6);
+        ksession.fireAllRules();
         
+        ksession.insert(new BrainWaveFrequencyChangedEvent());
+        ksession.insert(sleep2);
+        ksession.fireAllRules();
+        
+        ksession.insert(new BrainWaveFrequencyChangedEvent());
+        ksession.insert(sleep3);
+        ksession.fireAllRules();
+        
+        ksession.insert(new BrainWaveFrequencyChangedEvent());
+        ksession.insert(sleep4);
+        ksession.fireAllRules();
+        
+        ksession.insert(new BrainWaveFrequencyChangedEvent());
+        ksession.insert(sleep5);
+        ksession.fireAllRules();
+        
+        ksession.insert(new BrainWaveFrequencyChangedEvent());
+        ksession.insert(sleep6);
         ksession.fireAllRules();
         
         assertThat(sleep1.getSleepPhase(), is(SleepPhase.AWAKE));

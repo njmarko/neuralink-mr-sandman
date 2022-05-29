@@ -7,17 +7,21 @@ package chapter07.ruletemplate.simple;
 
 import sbnz.mrsandman.neuralinkapp.model.Sleep;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
 
 template "classification-rules"
 
 rule "Categorize Sleep_@{row.rowNumber}"
 no-loop true
 when
+	BrainWaveFrequencyChangedEvent()
     $c: Sleep(brainwaveFrequency >= @{minFrequency}, 
     			brainwaveFrequency <= @{maxFrequency} 
     		)
 then
     modify ($c){ setSleepPhase(SleepPhase.@{sleepPhase})};
+    insert(new SleepPhaseEvent(SleepPhase.@{sleepPhase}));
+    drools.halt();
 end
 
 end template

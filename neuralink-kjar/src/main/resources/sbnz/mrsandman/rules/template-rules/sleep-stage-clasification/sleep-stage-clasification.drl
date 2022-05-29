@@ -1,65 +1,84 @@
 package chapter07.ruletemplate.simple;
 import sbnz.mrsandman.neuralinkapp.model.Sleep;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
 
 rule "Categorize Sleep_5"
 no-loop true
 when
+	BrainWaveFrequencyChangedEvent()
     $c: Sleep(brainwaveFrequency >= 65, 
     			brainwaveFrequency <= 90 
     		)
 then
     modify ($c){ setSleepPhase(SleepPhase.REM)};
+    insert(new SleepPhaseEvent(SleepPhase.REM));
+    drools.halt();
 end
 
 rule "Categorize Sleep_4"
 no-loop true
 when
+	BrainWaveFrequencyChangedEvent()
     $c: Sleep(brainwaveFrequency >= 50, 
     			brainwaveFrequency <= 65 
     		)
 then
     modify ($c){ setSleepPhase(SleepPhase.PHASE4)};
+    insert(new SleepPhaseEvent(SleepPhase.PHASE4));
+    drools.halt();
 end
 
 rule "Categorize Sleep_3"
 no-loop true
 when
+	BrainWaveFrequencyChangedEvent()
     $c: Sleep(brainwaveFrequency >= 37.5, 
     			brainwaveFrequency <= 50 
     		)
 then
     modify ($c){ setSleepPhase(SleepPhase.PHASE3)};
+    insert(new SleepPhaseEvent(SleepPhase.PHASE3));
+    drools.halt();
 end
 
 rule "Categorize Sleep_2"
 no-loop true
 when
+	BrainWaveFrequencyChangedEvent()
     $c: Sleep(brainwaveFrequency >= 25, 
     			brainwaveFrequency <= 37.5 
     		)
 then
     modify ($c){ setSleepPhase(SleepPhase.PHASE2)};
+    insert(new SleepPhaseEvent(SleepPhase.PHASE2));
+    drools.halt();
 end
 
 rule "Categorize Sleep_1"
 no-loop true
 when
+	BrainWaveFrequencyChangedEvent()
     $c: Sleep(brainwaveFrequency >= 15, 
     			brainwaveFrequency <= 25 
     		)
 then
     modify ($c){ setSleepPhase(SleepPhase.PHASE1)};
+    insert(new SleepPhaseEvent(SleepPhase.PHASE1));
+    drools.halt();
 end
 
 rule "Categorize Sleep_0"
 no-loop true
 when
+	BrainWaveFrequencyChangedEvent()
     $c: Sleep(brainwaveFrequency >= 0, 
     			brainwaveFrequency <= 15 
     		)
 then
     modify ($c){ setSleepPhase(SleepPhase.AWAKE)};
+    insert(new SleepPhaseEvent(SleepPhase.AWAKE));
+    drools.halt();
 end
 
 
