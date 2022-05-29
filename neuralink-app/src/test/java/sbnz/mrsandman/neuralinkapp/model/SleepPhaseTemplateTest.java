@@ -1,6 +1,10 @@
 package sbnz.mrsandman.neuralinkapp.model;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -34,12 +38,15 @@ import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 public class SleepPhaseTemplateTest {
 
     @Test
-    public void testSimpleTemplateWithArrays(){
+    public void testSimpleTemplateWithArrays() throws FileNotFoundException{
         System.out.println("Hello");
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        
+        String fileName = "sleep-stage-clasification";
 
-//        InputStream template = SleepPhaseTemplate.class.getResourceAsStream("..\\neuralink-kjar\\src\\main\\resources\\sbnz\\mrsandman\\templates\\sleep-stage-clasification.drt");
-        InputStream template = SleepPhaseTemplateTest.class.getResourceAsStream("C:/Users/Marko/Desktop/SIIT-Semestar8/SBNZ/Projekat/neuralink-mr-sandman/neuralink-kjar/src/main/resources/sbnz/mrsandman/templates");
+//        InputStream template = SleepPhaseTemplate.class.getResourceAsStream("../neuralink-kjar/src/main/resources/sbnz/mrsandman/templates/sleep-stage-clasification.drt");
+//        InputStream template = SleepPhaseTemplateTest.class.getResourceAsStream("/templates/sleep-stage-clasification.drt");
+        InputStream template = new FileInputStream("../neuralink-kjar/src/main/resources/sbnz/mrsandman/templates/" + fileName + ".drt");
         
         DataProvider dataProvider = new ArrayDataProvider(new String[][]{
             new String[]{"0", "15",  "AWAKE"},
@@ -54,6 +61,19 @@ public class SleepPhaseTemplateTest {
         String drl = converter.compile(dataProvider, template);
         
         System.out.println(drl);
+        
+        
+        
+        try {
+        	new File("../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + "/").mkdirs();
+            FileWriter myWriter = new FileWriter("../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + "/" + fileName + ".drl");
+            myWriter.write(drl);
+            myWriter.close();
+            System.out.println("Successfully wrote to the file: " + fileName);
+          } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+          }
         
         KieSession ksession = createKieSessionFromDRL(drl);
         

@@ -42,6 +42,8 @@ public class SleepPhaseTemplate {
 	public void setSleepPhase(SleepPhase sleepPhase) {
 		this.sleepPhase = sleepPhase;
 	}
+	
+	
 
 	@Override
 	public String toString() {

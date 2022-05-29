@@ -14,7 +14,7 @@ rule "Categorize Sleep_@{row.rowNumber}"
 no-loop true
 when
     $c: Sleep(brainwaveFrequency >= @{minFrequency}, 
-    			brainwaveFrequency <= @{maxFrequency} 
+    			brainwaveFrequency <= @{maxFrequency}, 
     		)
 then
     modify ($c){ setSleepPhase(SleepPhase.@{sleepPhase})};

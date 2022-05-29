@@ -1,0 +1,24 @@
+template header
+lowerTimeBound
+upperTimeBound
+isLightSleep
+chronotype
+
+package chapter07.ruletemplate.simple;
+
+import sbnz.mrsandman.neuralinkapp.model.User;
+import sbnz.mrsandman.neuralinkapp.model.enums.Chronotype;
+
+template "classification-rules"
+
+rule "Categorize Chronotype_@{row.rowNumber}"
+no-loop true
+when
+    $c: User(goingToBedTime >= @{lowerTimeBound}, 
+			goingToBedTime <= @{upperTimeBound}, 
+    		isLightSleep == @{isLightSleep}	)
+then
+    modify ($c){ setChronotype(Chronotype.@{chronotype})};
+end
+
+end template

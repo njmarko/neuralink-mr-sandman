@@ -28,6 +28,20 @@ public class Sleep implements Serializable {
 	public SleepPhase getSleepPhase() {
 		return sleepPhase;
 	}
+	
+	
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void setBrainwaveFrequency(int brainwaveFrequency) {
+		this.brainwaveFrequency = brainwaveFrequency;
+	}
+
+	public void setSleepPhase(SleepPhase sleepPhase) {
+		this.sleepPhase = sleepPhase;
+	}
 
 	@Override
 	public String toString() {
