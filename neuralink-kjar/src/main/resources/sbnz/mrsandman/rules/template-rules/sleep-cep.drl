@@ -2,6 +2,7 @@ package cep2;
 
 import sbnz.mrsandman.neuralinkapp.model.events.BrainWaveEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
+import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 
 rule "AWAKE event"
     when
@@ -11,6 +12,6 @@ rule "AWAKE event"
         )
     then
     	System.out.println("Dodat sleep phase event.");
-        insert(new SleepPhaseEvent());
+        insert(new SleepPhaseEvent(SleepPhase.AWAKE));
         //drools.halt();
 end
