@@ -18,6 +18,12 @@ public class SignalEvent implements Serializable {
 	public SignalEvent() {
 		super();
 	}
+	
+	public SignalEvent(SignalType signalType) {
+		super();
+		this.value = 1.0d;
+		this.signalType = signalType;
+	}
 
 	public SignalEvent(double value, SignalType signalType) {
 		super();
