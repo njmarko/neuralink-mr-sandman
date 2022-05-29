@@ -13,6 +13,8 @@ import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.io.ResourceFactory;
 
+import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
+import sbnz.mrsandman.neuralinkapp.model.events.SignalEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.AlcoholLevelEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.RaisedAlcoholLevelEvent;
 
@@ -20,8 +22,8 @@ public class RaisedAlcoholLevelCepTest extends BaseCepTest {
 
 	@Override
 	protected void writeResourcesToSession(KieFileSystem kfs) {
-		String fileName = "alcohol-cep";
-		String filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/" + fileName + ".drl";
+		String fileName = "signal-clasification";
+		String filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + "/" + fileName + ".drl";
 		File f = new File(filePath);
 		kfs.write(ResourceFactory.newFileResource(f));
 
@@ -31,13 +33,13 @@ public class RaisedAlcoholLevelCepTest extends BaseCepTest {
 	protected void runPseudoClockExample(KieSession ksession) {
 		SessionPseudoClock clock = ksession.getSessionClock();
 		for (int index = 0; index < 3; index++) {
-			AlcoholLevelEvent level = new AlcoholLevelEvent(0.2);
+			SignalEvent level = new SignalEvent(0.2, SignalType.ALCOHOL_LEVEL);
 			ksession.insert(level);
 			clock.advanceTime(1, TimeUnit.SECONDS);
 			int ruleCount = ksession.fireAllRules();
 			assertThat(ruleCount, equalTo(0));
 		}
-		AlcoholLevelEvent level = new AlcoholLevelEvent(0.2);
+		SignalEvent level = new SignalEvent(0.2, SignalType.ALCOHOL_LEVEL);
 		ksession.insert(level);
 		clock.advanceTime(1, TimeUnit.SECONDS);
 		int ruleCount = ksession.fireAllRules();
