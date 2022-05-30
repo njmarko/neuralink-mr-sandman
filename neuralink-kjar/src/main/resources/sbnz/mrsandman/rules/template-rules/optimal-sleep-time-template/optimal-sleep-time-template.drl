@@ -1,0 +1,62 @@
+package chapter07.ruletemplate.simple;
+import sbnz.mrsandman.neuralinkapp.model.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.*;
+import java.time.LocalTime;
+
+rule "Determine optimal sleep time for_3 for BEAR chronotype"
+	no-loop true
+    when
+        $u: User(optimalSleepTime==null, chronotype==Chronotype.BEAR)
+    then
+    	System.out.println("Updated uptimal sleep time for BEAR chronotype");
+        $u.setOptimalSleepTime(
+        	LocalTime.of(22, 0, 59)
+	        .plusHours((($u.getAge() > 14 & $u.getAge()< 28)? -1:1))
+	        .plusMinutes((($u.getGender() == Gender.MALE)? 15:-15))
+	        );
+        update($u);
+end
+
+rule "Determine optimal sleep time for_2 for DOLPHIN chronotype"
+	no-loop true
+    when
+        $u: User(optimalSleepTime==null, chronotype==Chronotype.DOLPHIN)
+    then
+    	System.out.println("Updated uptimal sleep time for DOLPHIN chronotype");
+        $u.setOptimalSleepTime(
+        	LocalTime.of(23, 0, 59)
+	        .plusHours((($u.getAge() > 14 & $u.getAge()< 28)? -1:1))
+	        .plusMinutes((($u.getGender() == Gender.MALE)? 15:-15))
+	        );
+        update($u);
+end
+
+rule "Determine optimal sleep time for_1 for WOLF chronotype"
+	no-loop true
+    when
+        $u: User(optimalSleepTime==null, chronotype==Chronotype.WOLF)
+    then
+    	System.out.println("Updated uptimal sleep time for WOLF chronotype");
+        $u.setOptimalSleepTime(
+        	LocalTime.of(0, 0, 59)
+	        .plusHours((($u.getAge() > 14 & $u.getAge()< 28)? -1:1))
+	        .plusMinutes((($u.getGender() == Gender.MALE)? 15:-15))
+	        );
+        update($u);
+end
+
+rule "Determine optimal sleep time for_0 for LION chronotype"
+	no-loop true
+    when
+        $u: User(optimalSleepTime==null, chronotype==Chronotype.LION)
+    then
+    	System.out.println("Updated uptimal sleep time for LION chronotype");
+        $u.setOptimalSleepTime(
+        	LocalTime.of(21, 30, 59)
+	        .plusHours((($u.getAge() > 14 & $u.getAge()< 28)? -1:1))
+	        .plusMinutes((($u.getGender() == Gender.MALE)? 15:-15))
+	        );
+        update($u);
+end
+
+

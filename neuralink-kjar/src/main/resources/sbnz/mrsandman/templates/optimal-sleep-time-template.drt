@@ -1,0 +1,29 @@
+template header
+baseHour
+baseMinute
+chronotype
+
+package chapter07.ruletemplate.simple;
+
+import sbnz.mrsandman.neuralinkapp.model.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.*;
+import java.time.LocalTime;
+
+template "classification-rules"
+
+rule "Determine optimal sleep time for_@{row.rowNumber} for @{chronotype} chronotype"
+	no-loop true
+    when
+        $u: User(optimalSleepTime==null, chronotype==Chronotype.@{chronotype})
+
+    then
+    	System.out.println("Updated uptimal sleep time for @{chronotype} chronotype");
+        $u.setOptimalSleepTime(
+        	LocalTime.of(@{baseHour}, @{baseMinute}, 59)
+	        .plusHours((($u.getAge() > 14 & $u.getAge()< 28)? -1:1))
+	        .plusMinutes((($u.getGender() == Gender.MALE)? 15:-15))
+	        );
+        update($u);
+end
+
+end template

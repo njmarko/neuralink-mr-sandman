@@ -17,11 +17,12 @@ template "classification-rules"
 rule "Categorize Chronotype_@{row.rowNumber} @{chronotype}"
 no-loop true
 when
-    $c: User(goingToBedTime.compareTo(LocalTime.of(@{lowerHourBound},@{lowerMinuteBound} ,00)) <= 0,
-			goingToBedTime.compareTo(LocalTime.of(@{upperHourBound},@{upperMinuteBound} ,00)) > 0,
+    $c: User(goingToBedTime.compareTo(LocalTime.of(@{lowerHourBound},@{lowerMinuteBound} ,59)) <= 0,
+			goingToBedTime.compareTo(LocalTime.of(@{upperHourBound},@{upperMinuteBound} ,59)) >= 0,
     		isLightSleep == @{lightSleep}
     		)
 then
+	System.out.println("Set chronotype to @{chronotype}");
     modify ($c){ setChronotype(Chronotype.@{chronotype})};
 end
 
