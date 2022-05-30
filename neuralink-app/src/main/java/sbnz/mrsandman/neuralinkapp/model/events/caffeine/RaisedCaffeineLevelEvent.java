@@ -7,7 +7,7 @@ import org.kie.api.definition.type.Role;
 
 @Role(Role.Type.EVENT)
 @Expires("30m")
-public class RaiseCaffeineLevelEvent implements Serializable{
+public class RaisedCaffeineLevelEvent implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 }

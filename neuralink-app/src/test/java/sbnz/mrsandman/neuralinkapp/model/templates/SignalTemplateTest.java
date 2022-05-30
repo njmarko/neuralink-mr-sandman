@@ -50,7 +50,8 @@ public class SignalTemplateTest extends BaseTemplateTest{
 //        	newEvent
             new String[]{"0.2", "100.0",  "ALCOHOL_LEVEL", "10", "s", "3", "RaisedAlcoholLevelEvent"},
             new String[]{"0", "100",  "HEART_BEAT", "60", "s", "100", "HeartRateIncreasedEvent"},
-            new String[]{"20", "100",  "CAFFEINE_LEVEL", "10", "s", "3", "RaiseCaffeineLevelEvent"},
+            new String[]{"20", "100",  "CAFFEINE_LEVEL", "10", "s", "3", "RaisedCaffeineLevelEvent"},
+            new String[]{"38", "100",  "TEMPERATURE", "10", "s", "3", "RaisedTemperatureEvent"},
             
         });
         

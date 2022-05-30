@@ -12,12 +12,14 @@ import org.kie.api.builder.KieFileSystem;
 import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.io.ResourceFactory;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
 import sbnz.mrsandman.neuralinkapp.model.events.SignalEvent;
-import sbnz.mrsandman.neuralinkapp.model.events.caffeine.RaisedCaffeineLevelEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.temperature.RaisedTemperatureEvent;
 
-public class RaisedCaffeineLevelCepTest extends BaseCepTest {
+@SpringBootTest
+public class RaisedTemperatureLevelCepTest extends BaseCepTest {
 
 	@Override
 	protected void writeResourcesToSession(KieFileSystem kfs) {
@@ -33,18 +35,18 @@ public class RaisedCaffeineLevelCepTest extends BaseCepTest {
 	protected void runPseudoClockExample(KieSession ksession) {
 		SessionPseudoClock clock = ksession.getSessionClock();
 		for (int index = 0; index < 3; index++) {
-			SignalEvent level = new SignalEvent(21, SignalType.CAFFEINE_LEVEL);
+			SignalEvent level = new SignalEvent(39, SignalType.TEMPERATURE);
 			ksession.insert(level);
 			clock.advanceTime(1, TimeUnit.SECONDS);
 			int ruleCount = ksession.fireAllRules();
 			assertThat(ruleCount, equalTo(0));
 		}
-		SignalEvent level = new SignalEvent(21, SignalType.CAFFEINE_LEVEL);
+		SignalEvent level = new SignalEvent(39, SignalType.TEMPERATURE);
 		ksession.insert(level);
 		clock.advanceTime(1, TimeUnit.SECONDS);
 		int ruleCount = ksession.fireAllRules();
 		assertThat(ruleCount, equalTo(1));
-		Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(RaisedCaffeineLevelEvent.class));
+		Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(RaisedTemperatureEvent.class));
 		assertThat(newEvents.size(), equalTo(1));
 
 	}
@@ -54,5 +56,4 @@ public class RaisedCaffeineLevelCepTest extends BaseCepTest {
 		// TODO Auto-generated method stub
 
 	}
-
 }
