@@ -3,6 +3,29 @@ import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
 import sbnz.mrsandman.neuralinkapp.model.events.*;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
 import sbnz.mrsandman.neuralinkapp.model.events.heartrate.*;
+import sbnz.mrsandman.neuralinkapp.model.events.caffeine.*;
+
+rule "Categorize Signal_2 - CAFFEINE_LEVEL between 20 and 100 and insert new RaiseCaffeineLevelEvent"
+	no-loop true
+	when
+		s1: SignalEvent(signalType == SignalType.CAFFEINE_LEVEL, value >= 20, value < 100)
+	    Number(intValue >= 3) from accumulate(
+	    	s2: SignalEvent(
+	    		this != s1,
+	    		signalType == SignalType.CAFFEINE_LEVEL,
+	    		value >= 20,
+	    		value < 100,
+	    		this meets[10s] s1
+	    	),
+	    	count(s2) 
+	    )
+        not(
+            RaiseCaffeineLevelEvent() 
+            over window:time(10s)
+        )
+	then
+		insert(new RaiseCaffeineLevelEvent());
+	end
 
 rule "Categorize Signal_1 - HEART_BEAT between 0 and 100 and insert new HeartRateIncreasedEvent"
 	no-loop true
