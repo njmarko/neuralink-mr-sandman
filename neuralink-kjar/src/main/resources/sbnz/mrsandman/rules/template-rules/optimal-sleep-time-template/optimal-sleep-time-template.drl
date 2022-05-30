@@ -4,6 +4,7 @@ import sbnz.mrsandman.neuralinkapp.model.enums.*;
 import java.time.LocalTime;
 
 rule "Determine optimal sleep time for_3 for BEAR chronotype"
+	no-loop true
     when
         $u: User(optimalSleepTime==null, chronotype==Chronotype.BEAR)
     then
@@ -18,6 +19,7 @@ rule "Determine optimal sleep time for_3 for BEAR chronotype"
 end
 
 rule "Determine optimal sleep time for_2 for DOLPHIN chronotype"
+	no-loop true
     when
         $u: User(optimalSleepTime==null, chronotype==Chronotype.DOLPHIN)
     then
@@ -32,6 +34,7 @@ rule "Determine optimal sleep time for_2 for DOLPHIN chronotype"
 end
 
 rule "Determine optimal sleep time for_1 for WOLF chronotype"
+	no-loop true
     when
         $u: User(optimalSleepTime==null, chronotype==Chronotype.WOLF)
     then
@@ -46,6 +49,7 @@ rule "Determine optimal sleep time for_1 for WOLF chronotype"
 end
 
 rule "Determine optimal sleep time for_0 for LION chronotype"
+	no-loop true
     when
         $u: User(optimalSleepTime==null, chronotype==Chronotype.LION)
     then

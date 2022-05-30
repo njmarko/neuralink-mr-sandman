@@ -1,0 +1,26 @@
+package cep2;
+
+import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.*;
+
+rule "Raised alcohol level 4 hours before sleep"
+	no-loop
+    when       
+        SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
+		$al1: RaisedAlcoholLevelEvent() 
+        Number(intValue >= 3) from accumulate(
+        	$al2: RaisedAlcoholLevelEvent(
+        		this != $al1,
+        		this meets[4h] $al1
+        	),
+        	count($al2) 
+        )
+        not(
+            AlcoholBeforeSleepEvent() 
+            over window:time(4h)
+        )
+    then
+    	System.out.println("Warning! Increased blood alcohol level detected less that 4 hours before optimal sleep time!");
+        insert(new AlcoholBeforeSleepEvent());
+end
