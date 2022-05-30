@@ -6,49 +6,49 @@ import java.time.LocalTime;
 rule "Categorize Chronotype_3 BEAR"
 no-loop true
 when
-    $c: User(goingToBedTime.compareTo(LocalTime.of(22,0 ,59)) <= 0,
-			goingToBedTime.compareTo(LocalTime.of(23,59 ,59)) >= 0,
+    $u: User(goingToBedTime.compareTo(LocalTime.of(22,0 ,59)) >= 0,
+			goingToBedTime.compareTo(LocalTime.of(23,59 ,59)) <= 0,
     		isLightSleep == false
     		)
 then
 	System.out.println("Set chronotype to BEAR");
-    modify ($c){ setChronotype(Chronotype.BEAR)};
+	modify ($u){ setChronotype(Chronotype.BEAR);}
 end
 
 rule "Categorize Chronotype_2 DOLPHIN"
 no-loop true
 when
-    $c: User(goingToBedTime.compareTo(LocalTime.of(0,0 ,59)) <= 0,
-			goingToBedTime.compareTo(LocalTime.of(23,59 ,59)) >= 0,
+    $u: User(goingToBedTime.compareTo(LocalTime.of(0,0 ,59)) >= 0,
+			goingToBedTime.compareTo(LocalTime.of(23,59 ,59)) <= 0,
     		isLightSleep == true
     		)
 then
 	System.out.println("Set chronotype to DOLPHIN");
-    modify ($c){ setChronotype(Chronotype.DOLPHIN)};
+	modify ($u){ setChronotype(Chronotype.DOLPHIN);}
 end
 
 rule "Categorize Chronotype_1 WOLF"
 no-loop true
 when
-    $c: User(goingToBedTime.compareTo(LocalTime.of(0,0 ,59)) <= 0,
-			goingToBedTime.compareTo(LocalTime.of(7,0 ,59)) >= 0,
+    $u: User(goingToBedTime.compareTo(LocalTime.of(0,0 ,59)) >= 0,
+			goingToBedTime.compareTo(LocalTime.of(7,0 ,59)) <= 0,
     		isLightSleep == false
     		)
 then
 	System.out.println("Set chronotype to WOLF");
-    modify ($c){ setChronotype(Chronotype.WOLF)};
+	modify ($u){ setChronotype(Chronotype.WOLF);}
 end
 
 rule "Categorize Chronotype_0 LION"
 no-loop true
 when
-    $c: User(goingToBedTime.compareTo(LocalTime.of(7,0 ,59)) <= 0,
-			goingToBedTime.compareTo(LocalTime.of(22,0 ,59)) >= 0,
+    $u: User(goingToBedTime.compareTo(LocalTime.of(7,0 ,59)) >= 0,
+			goingToBedTime.compareTo(LocalTime.of(22,0 ,59)) <= 0,
     		isLightSleep == false
     		)
 then
 	System.out.println("Set chronotype to LION");
-    modify ($c){ setChronotype(Chronotype.LION)};
+	modify ($u){ setChronotype(Chronotype.LION);}
 end
 
 
