@@ -3,11 +3,14 @@ package cep2;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
 import sbnz.mrsandman.neuralinkapp.model.events.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.*;
+import sbnz.mrsandman.neuralinkapp.model.*;
+import java.time.LocalTime;
 
 rule "Raised alcohol level 4 hours before sleep"
 	no-loop
     when       
         SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
+        $u:User(optimalSleepTime != null && optimalSleepTime.compareTo(LocalTime.of(20,0 ,59)) >=0)
 		$al1: RaisedAlcoholLevelEvent() 
         Number(intValue >= 3) from accumulate(
         	$al2: RaisedAlcoholLevelEvent(
