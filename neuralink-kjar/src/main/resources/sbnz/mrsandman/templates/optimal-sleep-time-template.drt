@@ -12,13 +12,13 @@ import java.time.LocalTime;
 template "classification-rules"
 
 rule "Determine optimal sleep time for_@{row.rowNumber} for @{chronotype} chronotype"
-	no-loop true
+
     when
         $u: User(optimalSleepTime==null, chronotype==Chronotype.@{chronotype})
     then
     	System.out.println("Updated uptimal sleep time for @{chronotype} chronotype");
         modify($u){        
-        	$u.setOptimalSleepTime(
+        	setOptimalSleepTime(
 	        	LocalTime.of(@{baseHour}, @{baseMinute}, 59)
 		        .plusHours((($u.getAge() > 14 & $u.getAge()< 28)? -1:1))
 		        .plusMinutes((($u.getGender() == Gender.MALE)? 15:-15))

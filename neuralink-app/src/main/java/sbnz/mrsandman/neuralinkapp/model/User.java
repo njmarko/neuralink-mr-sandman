@@ -1,12 +1,14 @@
 package sbnz.mrsandman.neuralinkapp.model;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 
 import sbnz.mrsandman.neuralinkapp.model.enums.Chronotype;
 import sbnz.mrsandman.neuralinkapp.model.enums.Gender;
 
-public class User {
+public class User implements Serializable {
 
+	private static final long serialVersionUID = 6550597062597968179L;
 	private int age;
 	private Gender gender;
 	private LocalTime goingToBedTime;
