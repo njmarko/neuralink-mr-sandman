@@ -1,22 +1,26 @@
 template header
-lowerTimeBound
-upperTimeBound
-isLightSleep
+lowerHourBound
+lowerMinuteBound
+upperHourBound
+upperMinuteBound
+lightSleep
 chronotype
 
 package chapter07.ruletemplate.simple;
 
-import sbnz.mrsandman.neuralinkapp.model.User;
-import sbnz.mrsandman.neuralinkapp.model.enums.Chronotype;
+import sbnz.mrsandman.neuralinkapp.model.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.*;
+import java.time.LocalTime;
 
 template "classification-rules"
 
-rule "Categorize Chronotype_@{row.rowNumber}"
+rule "Categorize Chronotype_@{row.rowNumber} @{chronotype}"
 no-loop true
 when
-    $c: User(goingToBedTime >= @{lowerTimeBound}, 
-			goingToBedTime <= @{upperTimeBound}, 
-    		isLightSleep == @{isLightSleep}	)
+    $c: User(goingToBedTime.compareTo(LocalTime.of(@{lowerHourBound},@{lowerMinuteBound} ,00)) <= 0,
+			goingToBedTime.compareTo(LocalTime.of(@{upperHourBound},@{upperMinuteBound} ,00)) > 0,
+    		isLightSleep == @{lightSleep}
+    		)
 then
     modify ($c){ setChronotype(Chronotype.@{chronotype})};
 end

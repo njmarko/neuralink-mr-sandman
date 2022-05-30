@@ -57,11 +57,11 @@ public class User {
 		return optimalSleepTime;
 	}
 
-	public boolean isLightSleep() {
+	public boolean getIsLightSleep() {
 		return isLightSleep;
 	}
 
-	public void setLightSleep(boolean isLightSleep) {
+	public void setIsLightSleep(boolean isLightSleep) {
 		this.isLightSleep = isLightSleep;
 	}
 

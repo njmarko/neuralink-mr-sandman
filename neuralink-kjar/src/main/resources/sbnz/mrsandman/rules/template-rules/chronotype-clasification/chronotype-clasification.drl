@@ -1,0 +1,50 @@
+package chapter07.ruletemplate.simple;
+import sbnz.mrsandman.neuralinkapp.model.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.*;
+import java.time.LocalTime;
+
+rule "Categorize Chronotype_3 BEAR"
+no-loop true
+when
+    $c: User(goingToBedTime.compareTo(LocalTime.of(22,0 ,00)) <= 0,
+			goingToBedTime.compareTo(LocalTime.of(23,59 ,00)) > 0,
+    		isLightSleep == false
+    		)
+then
+    modify ($c){ setChronotype(Chronotype.BEAR)};
+end
+
+rule "Categorize Chronotype_2 DOLPHIN"
+no-loop true
+when
+    $c: User(goingToBedTime.compareTo(LocalTime.of(0,0 ,00)) <= 0,
+			goingToBedTime.compareTo(LocalTime.of(23,59 ,00)) > 0,
+    		isLightSleep == true
+    		)
+then
+    modify ($c){ setChronotype(Chronotype.DOLPHIN)};
+end
+
+rule "Categorize Chronotype_1 WOLF"
+no-loop true
+when
+    $c: User(goingToBedTime.compareTo(LocalTime.of(0,0 ,00)) <= 0,
+			goingToBedTime.compareTo(LocalTime.of(7,0 ,00)) > 0,
+    		isLightSleep == false
+    		)
+then
+    modify ($c){ setChronotype(Chronotype.WOLF)};
+end
+
+rule "Categorize Chronotype_0 LION"
+no-loop true
+when
+    $c: User(goingToBedTime.compareTo(LocalTime.of(7,0 ,00)) <= 0,
+			goingToBedTime.compareTo(LocalTime.of(22,0 ,00)) > 0,
+    		isLightSleep == false
+    		)
+then
+    modify ($c){ setChronotype(Chronotype.LION)};
+end
+
+
