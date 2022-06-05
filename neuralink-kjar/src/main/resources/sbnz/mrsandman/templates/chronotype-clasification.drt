@@ -6,7 +6,7 @@ upperMinuteBound
 lightSleep
 chronotype
 
-package chapter07.ruletemplate.simple;
+package cepneuralink;
 
 import sbnz.mrsandman.neuralinkapp.model.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.*;

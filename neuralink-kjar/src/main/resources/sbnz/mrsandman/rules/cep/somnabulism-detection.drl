@@ -1,4 +1,4 @@
-package cep2;
+package cepneuralink;
 
 import sbnz.mrsandman.neuralinkapp.model.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.*;

@@ -8,7 +8,7 @@ amountAppeared
 operator
 newEvent
 
-package chapter07.ruletemplate.simple;
+package cepneuralink;
 
 import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
 import sbnz.mrsandman.neuralinkapp.model.events.*;
@@ -16,6 +16,7 @@ import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
 import sbnz.mrsandman.neuralinkapp.model.events.heartrate.*;
 import sbnz.mrsandman.neuralinkapp.model.events.caffeine.*;
 import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
+import sbnz.mrsandman.neuralinkapp.model.events.light.*;
 
 template "classification-rules"
 
