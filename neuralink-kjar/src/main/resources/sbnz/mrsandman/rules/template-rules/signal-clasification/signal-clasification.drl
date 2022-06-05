@@ -7,7 +7,7 @@ import sbnz.mrsandman.neuralinkapp.model.events.caffeine.*;
 import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
 import sbnz.mrsandman.neuralinkapp.model.events.light.*;
 
-rule "Categorize Signal_4 - LIGHT_LEVEL between 1000 and 100 and insert new BrightLightEvent"
+rule "Categorize Signal_6 - LIGHT_LEVEL between 1000 and 100 and insert new BrightLightEvent"
 	no-loop true
 	when
 		s1: SignalEvent(signalType == SignalType.LIGHT_LEVEL, value >= 1000, value < 100)
