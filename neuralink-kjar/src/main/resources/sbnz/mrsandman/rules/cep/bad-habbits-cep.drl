@@ -4,6 +4,7 @@ import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
 import sbnz.mrsandman.neuralinkapp.model.events.heartrate.*;
 import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
 import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.*;
+import sbnz.mrsandman.neuralinkapp.model.events.caffeine.*;
 import sbnz.mrsandman.neuralinkapp.model.events.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.*;
 import sbnz.mrsandman.neuralinkapp.model.*;
@@ -60,4 +61,26 @@ rule "Intense physical activity 2 hours before optimal sleep time"
     then
     	System.out.println("Warning! Intense physical activity 2 hours before optimal sleep time!");
         insert(new PhysicalActivityEvent());
+end
+
+rule "Raised caffeine level 6 hours before sleep"
+	no-loop
+    when       
+        SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
+        $u:User(optimalSleepTime != null && optimalSleepTime.compareTo(LocalTime.of(20,0 ,59)) >=0)
+		$cf1: RaisedCaffeineLevelEvent() 
+        Number(intValue >= 3) from accumulate(
+        	$cf2: RaisedCaffeineLevelEvent(
+        		this != $cf1,
+        		this meets[10m] $cf1
+        	),
+        	count($cf2) 
+        )
+        not(
+            CaffeineBeforeSleepEvent() 
+            over window:time(10m)
+        )
+    then
+    	System.out.println("Warning! Increased blood caffeine level detected less that 6 hours before optimal sleep time!");
+        insert(new CaffeineBeforeSleepEvent());
 end
