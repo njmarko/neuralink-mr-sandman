@@ -2,10 +2,10 @@
 <kmodule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://jboss.org/kie/6.0.0/kmodule">
     <kbase name="template-simple-KBase" packages="cepneuralink">
-        <ksession name="templateSimpleKsession" type="statefull"/>
+        <ksession name="templateSimpleKsession" type="stateful"/>
     </kbase>
     <kbase name="cepConfigKbase" eventProcessingMode="stream" packages="cepneuralink">
-        <ksession name="cepConfigKsessionPseudoClock" clockType="pseudo"/>
-        <ksession name="cepConfigKsessionRealtimeClock" clockType="realtime"/>
+        <ksession name="cepConfigKsessionPseudoClock" clockType="pseudo" type="stateful"/>
+        <ksession name="cepConfigKsessionRealtimeClock" clockType="realtime" type="stateful"/>
     </kbase>
 </kmodule>
