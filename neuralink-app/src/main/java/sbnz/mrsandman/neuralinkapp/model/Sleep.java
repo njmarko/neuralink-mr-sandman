@@ -1,9 +1,7 @@
 package sbnz.mrsandman.neuralinkapp.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class Sleep implements Serializable {
 
@@ -11,10 +9,11 @@ public class Sleep implements Serializable {
 
 	private Date startTime;
 	private Date endTime;
-	private List<SleepStage> sleepStages;
+
+	private Boolean efficient;
+	private Double quality;
 
 	public Sleep() {
-		this.sleepStages = new ArrayList<SleepStage>();
 		this.startTime = new Date();
 	}
 
@@ -23,21 +22,14 @@ public class Sleep implements Serializable {
 		this.startTime = startTime;
 	}
 
-	public Sleep(Date startTime, Date endTime, List<SleepStage> sleepStages) {
+	public Sleep(Date startTime, Date endTime) {
 		super();
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.sleepStages = sleepStages;
 	}
 
-	public void addSleepStage(SleepStage sleepStage) {
-		// Terminate previous sleep phase
-		if (sleepStages.size() > 0) {
-			SleepStage last = sleepStages.get(sleepStages.size() - 1);
-			last.setEndTime(new Date());
-		}
-		// Append the new sleep phase
-		this.sleepStages.add(sleepStage);
+	public void wakeUp() {
+		this.endTime = new Date();
 	}
 
 	public Date getStartTime() {
@@ -56,16 +48,28 @@ public class Sleep implements Serializable {
 		this.endTime = endTime;
 	}
 
-	public List<SleepStage> getSleepStages() {
-		return sleepStages;
-	}
-
-	public void setSleepStages(List<SleepStage> sleepStages) {
-		this.sleepStages = sleepStages;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Double getQuality() {
+		return quality;
+
+	}
+
+	public void setQuality(Double quality) {
+		this.quality = quality;
+
+	}
+
+	public Boolean getEfficient() {
+		return efficient;
+		
+	}
+
+	public void setEfficient(Boolean efficient) {
+		this.efficient = efficient;
+		
 	}
 
 }

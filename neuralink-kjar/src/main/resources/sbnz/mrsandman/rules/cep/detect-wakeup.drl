@@ -1,0 +1,22 @@
+package cepneuralink;
+
+import sbnz.mrsandman.neuralinkapp.model.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.*;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.*;
+import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
+
+rule "Detect wakeup"
+	no-loop
+	when
+		// seems like it is not possible to get the current time in this
+		$awakePhase: SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
+		$s: Sleep()
+		$awakeStage: SleepStage(sleep == $s, endTime == null)
+	then
+		System.out.println("Detektovan wake up event");
+		modify ($s) {
+			wakeUp();
+		};
+		insert(new WakeUpEvent());
+end

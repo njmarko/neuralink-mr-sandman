@@ -16,7 +16,7 @@ then
     modify($s) {
     	addSleepStage(new SleepStage(SleepPhase.REM));
     }
-    drools.halt();
+    
 end
 
 rule "Categorize Sleep_4"
@@ -32,7 +32,7 @@ then
     modify($s) {
     	addSleepStage(new SleepStage(SleepPhase.PHASE4));
     }
-    drools.halt();
+    
 end
 
 rule "Categorize Sleep_3"
@@ -48,7 +48,7 @@ then
     modify($s) {
     	addSleepStage(new SleepStage(SleepPhase.PHASE3));
     }
-    drools.halt();
+    
 end
 
 rule "Categorize Sleep_2"
@@ -64,7 +64,7 @@ then
     modify($s) {
     	addSleepStage(new SleepStage(SleepPhase.PHASE2));
     }
-    drools.halt();
+    
 end
 
 rule "Categorize Sleep_1"
@@ -80,7 +80,7 @@ then
     modify($s) {
     	addSleepStage(new SleepStage(SleepPhase.PHASE1));
     }
-    drools.halt();
+    
 end
 
 rule "Categorize Sleep_0"
@@ -96,7 +96,7 @@ then
     modify($s) {
     	addSleepStage(new SleepStage(SleepPhase.AWAKE));
     }
-    drools.halt();
+    
 end
 
 

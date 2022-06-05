@@ -1,0 +1,76 @@
+package cepneuralink;
+
+import sbnz.mrsandman.neuralinkapp.model.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.*;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.*;
+import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
+import sbnz.mrsandman.neuralinkapp.model.events.somnabulism.*;
+
+rule "Compute sleep efficienty without somnabulism"
+	when
+		WakeUpEvent()
+		$s: Sleep(efficient == null)
+		SomnabulismDetectedEvent()
+	then
+		System.out.println("Sleep efficient with somnabulism");
+		modify($s) {
+			setEfficient(false);
+		}
+end
+
+rule "Compute sleep efficienty with somnabulism"
+	when
+		WakeUpEvent()
+		$s: Sleep(efficient == null)
+		not (
+			SomnabulismDetectedEvent()
+			over window:time(12h)
+		)
+		$totalSleepTime: Double() from accumulate (
+			$ss: SleepStage(
+				sleep == $s, 
+				$d: stageDuration
+			),
+			sum($d)
+		)
+		$totalAwakeTime: Double() from accumulate (
+			$ss: SleepStage(
+				sleep == $s, 
+				$d: stageDuration, 
+				sleepPhase == SleepPhase.AWAKE
+			),
+			sum($d)
+		)
+	then
+		System.out.println("Sleep efficient without somnabulism");
+		modify($s) {
+			setEfficient($totalAwakeTime / $totalSleepTime < 0.1);
+		}
+end
+
+rule "Compute sleep quality - percentage of REM sleep phase duration"
+	when
+		WakeUpEvent()
+		$s: Sleep(quality == null)
+		$totalSleepTime: Double() from accumulate (
+			$ss: SleepStage(
+				sleep == $s, 
+				$d: stageDuration
+			),
+			sum($d)
+		)
+		$totalRemTime: Double() from accumulate (
+			$ss: SleepStage(
+				sleep == $s, 
+				$d: stageDuration, 
+				sleepPhase == SleepPhase.REM
+			),
+			sum($d)
+		)
+	then
+		modify($s) {
+			setQuality(10 * $totalRemTime / $totalSleepTime);
+		}
+end
+
