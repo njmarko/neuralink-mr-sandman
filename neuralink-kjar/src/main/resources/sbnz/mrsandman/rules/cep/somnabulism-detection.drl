@@ -14,7 +14,7 @@ rule "Somnabulism detected event"
     then
     	System.out.println("Aktivacija detect somnabulism eventa");
         insert(new SomnabulismDetectedEvent());
-        drools.halt();
+        // drools.halt();
 end
 
 

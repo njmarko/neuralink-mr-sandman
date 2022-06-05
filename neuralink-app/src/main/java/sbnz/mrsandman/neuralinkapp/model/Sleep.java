@@ -29,15 +29,24 @@ public class Sleep implements Serializable {
 		this.endTime = endTime;
 		this.sleepStages = sleepStages;
 	}
+	
+	public void wakeUp() {
+		this.finalizeLastStage();
+		this.endTime = new Date();
+	}
 
 	public void addSleepStage(SleepStage sleepStage) {
 		// Terminate previous sleep phase
+		this.finalizeLastStage();
+		// Append the new sleep phase
+		this.sleepStages.add(sleepStage);
+	}
+	
+	private void finalizeLastStage() {
 		if (sleepStages.size() > 0) {
 			SleepStage last = sleepStages.get(sleepStages.size() - 1);
 			last.setEndTime(new Date());
 		}
-		// Append the new sleep phase
-		this.sleepStages.add(sleepStage);
 	}
 
 	public Date getStartTime() {

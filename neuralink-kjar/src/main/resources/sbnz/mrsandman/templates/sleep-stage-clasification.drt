@@ -24,7 +24,7 @@ then
     modify($s) {
     	addSleepStage(new SleepStage(SleepPhase.@{sleepPhase}));
     }
-    drools.halt();
+    //drools.halt();
 end
 
 end template

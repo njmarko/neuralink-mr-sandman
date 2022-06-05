@@ -1,11 +1,9 @@
 package sbnz.mrsandman.neuralinkapp.model.events;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
-import org.kie.api.definition.type.Timestamp;
 
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 
