@@ -1,89 +1,101 @@
 package cepneuralink;
-import sbnz.mrsandman.neuralinkapp.model.Sleep;
+import sbnz.mrsandman.neuralinkapp.model.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 import sbnz.mrsandman.neuralinkapp.model.events.*;
 
 rule "Categorize Sleep_5"
 no-loop true
 when
-	$c: Sleep()
+	$s: Sleep()
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 65, frequency <= 90),
 		count($b)
 	)
 then
-    modify ($c){ setSleepPhase(SleepPhase.REM)};
     insert(new SleepPhaseEvent(SleepPhase.REM));
+    modify($s) {
+    	addSleepStage(new SleepStage(SleepPhase.REM));
+    }
     drools.halt();
 end
 
 rule "Categorize Sleep_4"
 no-loop true
 when
-	$c: Sleep()
+	$s: Sleep()
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 50, frequency <= 65),
 		count($b)
 	)
 then
-    modify ($c){ setSleepPhase(SleepPhase.PHASE4)};
     insert(new SleepPhaseEvent(SleepPhase.PHASE4));
+    modify($s) {
+    	addSleepStage(new SleepStage(SleepPhase.PHASE4));
+    }
     drools.halt();
 end
 
 rule "Categorize Sleep_3"
 no-loop true
 when
-	$c: Sleep()
+	$s: Sleep()
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 37.5, frequency <= 50),
 		count($b)
 	)
 then
-    modify ($c){ setSleepPhase(SleepPhase.PHASE3)};
     insert(new SleepPhaseEvent(SleepPhase.PHASE3));
+    modify($s) {
+    	addSleepStage(new SleepStage(SleepPhase.PHASE3));
+    }
     drools.halt();
 end
 
 rule "Categorize Sleep_2"
 no-loop true
 when
-	$c: Sleep()
+	$s: Sleep()
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 25, frequency <= 37.5),
 		count($b)
 	)
 then
-    modify ($c){ setSleepPhase(SleepPhase.PHASE2)};
     insert(new SleepPhaseEvent(SleepPhase.PHASE2));
+    modify($s) {
+    	addSleepStage(new SleepStage(SleepPhase.PHASE2));
+    }
     drools.halt();
 end
 
 rule "Categorize Sleep_1"
 no-loop true
 when
-	$c: Sleep()
+	$s: Sleep()
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 15, frequency <= 25),
 		count($b)
 	)
 then
-    modify ($c){ setSleepPhase(SleepPhase.PHASE1)};
     insert(new SleepPhaseEvent(SleepPhase.PHASE1));
+    modify($s) {
+    	addSleepStage(new SleepStage(SleepPhase.PHASE1));
+    }
     drools.halt();
 end
 
 rule "Categorize Sleep_0"
 no-loop true
 when
-	$c: Sleep()
+	$s: Sleep()
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 0, frequency <= 15),
 		count($b)
 	)
 then
-    modify ($c){ setSleepPhase(SleepPhase.AWAKE)};
     insert(new SleepPhaseEvent(SleepPhase.AWAKE));
+    modify($s) {
+    	addSleepStage(new SleepStage(SleepPhase.AWAKE));
+    }
     drools.halt();
 end
 

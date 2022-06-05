@@ -13,6 +13,7 @@ import org.kie.api.runtime.KieSession;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import sbnz.mrsandman.neuralinkapp.model.Sleep;
+import sbnz.mrsandman.neuralinkapp.model.SleepStage;
 import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.enums.MuscleTone;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
@@ -35,7 +36,7 @@ public class SomnabulismDetecetionCepTest extends BaseCepTest {
         user.setIsStatic(false);
         ksession.insert(user);
         Sleep sleep = new Sleep();
-//        sleep.setSleepPhase(SleepPhase.REM);
+        sleep.addSleepStage(new SleepStage(SleepPhase.REM));
         ksession.insert(sleep);
         MuscleToneChangedEvent muscleToneChanged = new MuscleToneChangedEvent(MuscleTone.TENSE);
         ksession.insert(muscleToneChanged);

@@ -5,7 +5,7 @@ sleepPhase
 
 package cepneuralink;
 
-import sbnz.mrsandman.neuralinkapp.model.Sleep;
+import sbnz.mrsandman.neuralinkapp.model.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 import sbnz.mrsandman.neuralinkapp.model.events.*;
 
@@ -21,6 +21,9 @@ when
 	)
 then
     insert(new SleepPhaseEvent(SleepPhase.@{sleepPhase}));
+    modify($s) {
+    	addSleepStage(new SleepStage(SleepPhase.@{sleepPhase}));
+    }
     drools.halt();
 end
 

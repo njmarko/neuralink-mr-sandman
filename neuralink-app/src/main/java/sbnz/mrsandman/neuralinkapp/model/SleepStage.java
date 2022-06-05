@@ -6,8 +6,8 @@ import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 
 public class SleepStage {
 	private SleepPhase sleepPhase;
-	private Date start;
-	private Date end;
+	private Date startTime;
+	private Date endTime;
 
 	public SleepStage() {
 
@@ -20,8 +20,8 @@ public class SleepStage {
 	public SleepStage(SleepPhase sleepPhase, Date start, Date end) {
 		super();
 		this.sleepPhase = sleepPhase;
-		this.start = start;
-		this.end = end;
+		this.startTime = start;
+		this.endTime = end;
 	}
 
 	public SleepPhase getSleepPhase() {
@@ -32,20 +32,20 @@ public class SleepStage {
 		this.sleepPhase = sleepPhase;
 	}
 
-	public Date getStart() {
-		return start;
+	public Date getStartTime() {
+		return startTime;
 	}
 
-	public void setStart(Date start) {
-		this.start = start;
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
 
-	public Date getEnd() {
-		return end;
+	public Date getEndTime() {
+		return endTime;
 	}
 
-	public void setEnd(Date end) {
-		this.end = end;
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 
 }

@@ -15,6 +15,7 @@ public class Sleep implements Serializable {
 
 	public Sleep() {
 		this.sleepStages = new ArrayList<SleepStage>();
+		this.startTime = new Date();
 	}
 
 	public Sleep(Date startTime) {
@@ -29,11 +30,11 @@ public class Sleep implements Serializable {
 		this.sleepStages = sleepStages;
 	}
 
-	public void addSleepPhase(SleepStage sleepStage) {
+	public void addSleepStage(SleepStage sleepStage) {
 		// Terminate previous sleep phase
 		if (sleepStages.size() > 0) {
 			SleepStage last = sleepStages.get(sleepStages.size() - 1);
-			last.setEnd(new Date());
+			last.setEndTime(new Date());
 		}
 		// Append the new sleep phase
 		this.sleepStages.add(sleepStage);
