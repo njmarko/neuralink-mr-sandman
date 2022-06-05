@@ -52,6 +52,8 @@ public class SignalTemplateTest extends BaseTemplateTest{
             new String[]{"0", "100",  "HEART_BEAT", "60", "s", "100", "HeartRateIncreasedEvent"},
             new String[]{"20", "100",  "CAFFEINE_LEVEL", "10", "s", "3", "RaisedCaffeineLevelEvent"},
             new String[]{"38", "100",  "TEMPERATURE", "10", "s", "3", "RaisedTemperatureEvent"},
+            new String[]{"1000", "100",  "LIGHT_LEVEL", "10", "s", "3", "BrightLightEvent"},
+            
             
         });
         

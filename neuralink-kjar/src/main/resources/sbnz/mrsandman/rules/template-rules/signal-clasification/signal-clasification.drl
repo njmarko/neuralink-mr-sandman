@@ -1,10 +1,33 @@
-package chapter07.ruletemplate.simple;
+package cepneuralink;
 import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
 import sbnz.mrsandman.neuralinkapp.model.events.*;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
 import sbnz.mrsandman.neuralinkapp.model.events.heartrate.*;
 import sbnz.mrsandman.neuralinkapp.model.events.caffeine.*;
 import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
+import sbnz.mrsandman.neuralinkapp.model.events.light.*;
+
+rule "Categorize Signal_4 - LIGHT_LEVEL between 1000 and 100 and insert new BrightLightEvent"
+	no-loop true
+	when
+		s1: SignalEvent(signalType == SignalType.LIGHT_LEVEL, value >= 1000, value < 100)
+	    Number(intValue >= 3) from accumulate(
+	    	s2: SignalEvent(
+	    		this != s1,
+	    		signalType == SignalType.LIGHT_LEVEL,
+	    		value >= 1000,
+	    		value < 100,
+	    		this meets[10s] s1
+	    	),
+	    	count(s2) 
+	    )
+        not(
+            BrightLightEvent() 
+            over window:time(10s)
+        )
+	then
+		insert(new BrightLightEvent());
+	end
 
 rule "Categorize Signal_3 - TEMPERATURE between 38 and 100 and insert new RaisedTemperatureEvent"
 	no-loop true

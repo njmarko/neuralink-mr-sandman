@@ -1,4 +1,4 @@
-package sbnz.mrsandsman.rules;
+package cepneuralink;
 
 import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.enums.Gender;

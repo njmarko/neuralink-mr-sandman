@@ -1,4 +1,4 @@
-package cep2;
+package cepneuralink;
 
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.AlcoholLevelEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.RaisedAlcoholLevelEvent;

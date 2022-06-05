@@ -3,7 +3,7 @@ minFrequency
 maxFrequency
 sleepPhase
 
-package chapter07.ruletemplate.simple;
+package cepneuralink;
 
 import sbnz.mrsandman.neuralinkapp.model.Sleep;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;

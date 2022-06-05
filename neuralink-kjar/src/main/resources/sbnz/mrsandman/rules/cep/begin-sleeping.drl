@@ -1,4 +1,4 @@
-package cep2;
+package cepneuralink;
 
 import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.*;
