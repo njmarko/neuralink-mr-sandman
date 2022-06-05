@@ -8,8 +8,8 @@ import sbnz.mrsandman.neuralinkapp.model.events.somnabulism.*;
 rule "Somnabulism detected event"
     when
     	MuscleToneChangedEvent(muscleTone == MuscleTone.TENSE)
-    	$s: Sleep($stages: sleepStages)
-    	SleepStage(sleepPhase == SleepPhase.REM, endTime == null) from $stages
+    	$s: Sleep()
+    	SleepStage(sleepPhase == SleepPhase.REM, endTime == null, sleep == $s)
     	$u: User(isStatic == false)
     then
     	System.out.println("Aktivacija detect somnabulism eventa");

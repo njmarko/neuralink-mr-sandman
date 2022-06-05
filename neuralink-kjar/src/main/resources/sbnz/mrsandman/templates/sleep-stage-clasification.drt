@@ -21,9 +21,7 @@ when
 	)
 then
     insert(new SleepPhaseEvent(SleepPhase.@{sleepPhase}));
-    modify($s) {
-    	addSleepStage(new SleepStage(SleepPhase.@{sleepPhase}));
-    }
+    insert(new SleepStage($s, SleepPhase.@{sleepPhase}))
     //drools.halt();
 end
 

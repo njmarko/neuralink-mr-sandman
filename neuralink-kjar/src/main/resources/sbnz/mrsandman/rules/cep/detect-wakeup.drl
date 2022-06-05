@@ -11,8 +11,8 @@ rule "Detect wakeup"
 	when
 		// seems like it is not possible to get the current time in this
 		$awakePhase: SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
-		$s: Sleep($stages: sleepStages)
-		SleepStage(sleepPhase == SleepPhase.AWAKE, endTime == null) from $stages
+		$s: Sleep()
+		$awakeStage: SleepStage(sleep == $s, endTime == null)
 	then
 		System.out.println("Detektovan wake up event");
 		modify ($s) {

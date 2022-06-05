@@ -11,6 +11,7 @@ import org.drools.core.time.SessionPseudoClock;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieSession;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import sbnz.mrsandman.neuralinkapp.model.Sleep;
 import sbnz.mrsandman.neuralinkapp.model.SleepStage;
@@ -18,6 +19,7 @@ import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.WakeUpEvent;
 
+@SpringBootTest
 public class WakeUpCepTest extends BaseCepTest {
 
 	@Override
@@ -34,9 +36,9 @@ public class WakeUpCepTest extends BaseCepTest {
     	ruleCount = ksession.fireAllRules();
     	assertThat(ruleCount, equalTo(0));
     	Sleep sleep = new Sleep();
-    	SleepStage awakeStage = new SleepStage(SleepPhase.AWAKE);
-    	sleep.addSleepStage(awakeStage);
+    	SleepStage awakeStage = new SleepStage(sleep, SleepPhase.AWAKE);
         ksession.insert(sleep);
+        ksession.insert(awakeStage);
     	clock.advanceTime(1,  TimeUnit.SECONDS);
     	ruleCount = ksession.fireAllRules();
     	assertThat(ruleCount, equalTo(1));
