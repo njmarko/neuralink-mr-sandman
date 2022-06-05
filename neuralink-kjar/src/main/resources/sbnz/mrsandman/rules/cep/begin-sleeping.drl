@@ -1,11 +1,11 @@
 package cep2;
 
 import sbnz.mrsandman.neuralinkapp.model.User;
-import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.*;
+import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
 
 rule "Begin sleeping event"
     when
-    	BodyTemperatureChangedEvent(diff <= -1)
+    	LoweredTemepratureEvent()
     	HeartRateLoweredEvent()
         $u: User(isStatic == true)
     then

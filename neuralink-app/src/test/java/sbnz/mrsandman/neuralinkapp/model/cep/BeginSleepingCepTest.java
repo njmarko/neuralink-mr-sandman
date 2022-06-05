@@ -14,8 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.BeginSleepingEvent;
-import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.BodyTemperatureChangedEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.HeartRateLoweredEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.temperature.LoweredTemperatureEvent;
 
 @SpringBootTest
 public class BeginSleepingCepTest extends BaseCepTest {
@@ -37,7 +37,7 @@ public class BeginSleepingCepTest extends BaseCepTest {
     	clock.advanceTime(1,  TimeUnit.SECONDS);
     	ruleCount = ksession.fireAllRules();
     	assertThat(ruleCount, equalTo(0));
-        BodyTemperatureChangedEvent changedTemp = new BodyTemperatureChangedEvent(-1);
+        LoweredTemperatureEvent changedTemp = new LoweredTemperatureEvent();
         ksession.insert(changedTemp);
     	clock.advanceTime(1,  TimeUnit.SECONDS);
     	ruleCount = ksession.fireAllRules();

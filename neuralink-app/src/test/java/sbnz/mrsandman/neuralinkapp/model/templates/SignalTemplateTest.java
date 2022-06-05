@@ -1,31 +1,17 @@
 package sbnz.mrsandman.neuralinkapp.model.templates;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import org.drools.template.DataProvider;
 import org.drools.template.DataProviderCompiler;
 import org.drools.template.objects.ArrayDataProvider;
 import org.junit.jupiter.api.Test;
-import org.kie.api.builder.Message;
-import org.kie.api.builder.Results;
-import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieSession;
-import org.kie.internal.utils.KieHelper;
-
-import sbnz.mrsandman.neuralinkapp.model.Sleep;
-import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
-import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
-import sbnz.mrsandman.neuralinkapp.model.events.BrainWaveFrequencyChangedEvent;
-import sbnz.mrsandman.neuralinkapp.model.events.SignalEvent;
 
 public class SignalTemplateTest extends BaseTemplateTest{
 
@@ -48,11 +34,12 @@ public class SignalTemplateTest extends BaseTemplateTest{
 //        	timeUnit
 //        	amountAppeared
 //        	newEvent
-            new String[]{"0.2", "100.0",  "ALCOHOL_LEVEL", "10", "s", "3", "RaisedAlcoholLevelEvent"},
-            new String[]{"0", "100",  "HEART_BEAT", "60", "s", "100", "HeartRateIncreasedEvent"},
-            new String[]{"20", "100",  "CAFFEINE_LEVEL", "10", "s", "3", "RaisedCaffeineLevelEvent"},
-            new String[]{"38", "100",  "TEMPERATURE", "10", "s", "3", "RaisedTemperatureEvent"},
-            
+            new String[]{"0.2", "100.0",  "ALCOHOL_LEVEL", "10", "s", "3", ">=", "RaisedAlcoholLevelEvent"},
+            new String[]{"0", "100",  "HEART_BEAT", "60", "s", "100", ">=", "HeartRateIncreasedEvent"},
+            new String[]{"0", "100",  "HEART_BEAT", "60", "s", "65", "<=", "HeartRateLoweredEvent"},
+            new String[]{"20", "100",  "CAFFEINE_LEVEL", "10", "s", "3", ">=", "RaisedCaffeineLevelEvent"},
+            new String[]{"38", "100",  "TEMPERATURE", "10", "s", "3", ">=", "RaisedTemperatureEvent"},
+            new String[]{"0", "36", "TEMPERATURE", "10", "s", "3", ">=", "LoweredTemperatureEvent"}
         });
         
         DataProviderCompiler converter = new DataProviderCompiler();

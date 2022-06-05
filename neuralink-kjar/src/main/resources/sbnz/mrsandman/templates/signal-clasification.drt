@@ -5,6 +5,7 @@ signalType
 timePeriod
 timeUnit
 amountAppeared
+operator
 newEvent
 
 package chapter07.ruletemplate.simple;
@@ -22,7 +23,7 @@ rule "Categorize Signal_@{row.rowNumber} - @{signalType} between @{minValue} and
 	no-loop true
 	when
 		s1: SignalEvent(signalType == SignalType.@{signalType}, value >= @{minValue}, value < @{maxValue})
-	    Number(intValue >= @{amountAppeared}) from accumulate(
+	    Number(intValue @{operator} @{amountAppeared}) from accumulate(
 	    	s2: SignalEvent(
 	    		this != s1,
 	    		signalType == SignalType.@{signalType},
