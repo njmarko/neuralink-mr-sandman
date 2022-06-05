@@ -1,6 +1,7 @@
 package sbnz.mrsandman.neuralinkapp.model.events;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.kie.api.definition.type.Expires;
@@ -14,14 +15,14 @@ import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 @Expires("30m")
 public class SleepPhaseEvent implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-//    private Date executionTime;
+
+//	private LocalDateTime executionTime;
 	private SleepPhase sleepPhase;
 
 	public SleepPhaseEvent() {
 		super();
 	}
-	
+
 	public SleepPhaseEvent(SleepPhase sleepPhase) {
 		super();
 		this.sleepPhase = sleepPhase;
@@ -44,6 +45,4 @@ public class SleepPhaseEvent implements Serializable {
 		return "SleepPhaseEvent [sleepPhase=" + sleepPhase + "]";
 	}
 
-	
-	
 }

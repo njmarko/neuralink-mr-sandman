@@ -6,6 +6,7 @@ import sbnz.mrsandman.neuralinkapp.model.events.heartrate.*;
 import sbnz.mrsandman.neuralinkapp.model.events.caffeine.*;
 import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
 import sbnz.mrsandman.neuralinkapp.model.events.light.*;
+import java.util.Date;
 
 rule "Categorize Signal_6 - LIGHT_LEVEL between 1000 and 100 and insert new BrightLightEvent"
 	no-loop true

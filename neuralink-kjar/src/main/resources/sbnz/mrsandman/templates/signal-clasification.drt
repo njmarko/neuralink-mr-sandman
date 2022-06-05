@@ -17,6 +17,7 @@ import sbnz.mrsandman.neuralinkapp.model.events.heartrate.*;
 import sbnz.mrsandman.neuralinkapp.model.events.caffeine.*;
 import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
 import sbnz.mrsandman.neuralinkapp.model.events.light.*;
+import java.util.Date;
 
 template "classification-rules"
 

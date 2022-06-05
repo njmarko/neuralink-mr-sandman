@@ -10,6 +10,8 @@ import sbnz.mrsandman.neuralinkapp.model.events.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.*;
 import sbnz.mrsandman.neuralinkapp.model.*;
 import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 rule "Raised alcohol level 4 hours before sleep"
 	no-loop
@@ -30,7 +32,7 @@ rule "Raised alcohol level 4 hours before sleep"
         )
     then
     	System.out.println("Warning! Increased blood alcohol level detected less that 4 hours before optimal sleep time!");
-        insert(new AlcoholBeforeSleepEvent());
+        insert(new AlcoholBeforeSleepEvent(1.0, LocalDateTime.of(12,12,12,20,0,0)));
 end
 
 

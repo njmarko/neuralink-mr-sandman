@@ -1,0 +1,51 @@
+package cepneuralink;
+
+import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
+import sbnz.mrsandman.neuralinkapp.model.events.heartrate.*;
+import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
+import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.*;
+import sbnz.mrsandman.neuralinkapp.model.events.caffeine.*;
+import sbnz.mrsandman.neuralinkapp.model.events.light.*;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.*;
+import sbnz.mrsandman.neuralinkapp.model.*;
+import java.time.LocalTime;
+import java.util.Date;
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+rule "Raised alcohol level 4 hours before sleep score based time proximity and average value"
+	no-loop
+    when       
+        $spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
+        $u:User($opt_time: optimalSleepTime)
+       	Number(intValue >=1) from accumulate(
+        	$al1: AlcoholBeforeSleepEvent(
+    			this meets[6h] $spe
+        	),
+        	count($al1)
+        )
+       	$min_time: Long() from accumulate(
+        	$al2: AlcoholBeforeSleepEvent(
+        		$val: value,
+        		$t: timeStamp,
+    			this meets[6h] $spe
+        	),
+        	min(Duration.between($t.toLocalTime(), $opt_time).toMinutes())
+        )
+
+        not(
+            BadHabbit() 
+            over window:time(6h)
+        )
+    then
+    	System.out.println("Adding bad habbit score for alcohol");
+    	System.out.println(1 - ($min_time / (6.0*60.0)));
+        insert(
+        	new BadHabbit(
+	        	BadHabbitType.ALCOHOL, 
+	        	LocalDateTime.now(), 
+	        	new Double(1 - ($min_time / (6.0*60.0)))
+        	)
+        );
+end
