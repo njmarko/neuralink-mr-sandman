@@ -12,6 +12,7 @@ import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieSession;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import sbnz.mrsandman.neuralinkapp.model.Sleep;
 import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.BeginSleepingEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.HeartRateLoweredEvent;
@@ -44,6 +45,8 @@ public class BeginSleepingCepTest extends BaseCepTest {
     	assertThat(ruleCount, equalTo(1));
         Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(BeginSleepingEvent.class));
         assertThat(newEvents.size(), equalTo(1));
+        Collection<?> sleepObjects = ksession.getObjects(new ClassObjectFilter(Sleep.class));
+        assertThat(sleepObjects.size(), equalTo(1));
 	}
 
 	@Override

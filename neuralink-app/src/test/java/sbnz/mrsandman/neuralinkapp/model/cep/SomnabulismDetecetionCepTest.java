@@ -35,7 +35,7 @@ public class SomnabulismDetecetionCepTest extends BaseCepTest {
         user.setIsStatic(false);
         ksession.insert(user);
         Sleep sleep = new Sleep();
-        sleep.setSleepPhase(SleepPhase.REM);
+//        sleep.setSleepPhase(SleepPhase.REM);
         ksession.insert(sleep);
         MuscleToneChangedEvent muscleToneChanged = new MuscleToneChangedEvent(MuscleTone.TENSE);
         ksession.insert(muscleToneChanged);
