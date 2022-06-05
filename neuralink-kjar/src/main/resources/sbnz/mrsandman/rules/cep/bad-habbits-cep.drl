@@ -1,6 +1,9 @@
 package cepneuralink;
 
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
+import sbnz.mrsandman.neuralinkapp.model.events.heartrate.*;
+import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
+import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.*;
 import sbnz.mrsandman.neuralinkapp.model.events.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.*;
 import sbnz.mrsandman.neuralinkapp.model.*;
@@ -26,4 +29,35 @@ rule "Raised alcohol level 4 hours before sleep"
     then
     	System.out.println("Warning! Increased blood alcohol level detected less that 4 hours before optimal sleep time!");
         insert(new AlcoholBeforeSleepEvent());
+end
+
+
+rule "Intense physical activity 2 hours before optimal sleep time"
+	no-loop
+    when       
+        SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
+        $u:User(optimalSleepTime != null && optimalSleepTime.compareTo(LocalTime.of(20,0 ,59)) >=0)
+		$temp: RaisedTemperatureEvent() 
+        Number(intValue >= 3) from accumulate(
+        	$t: RaisedTemperatureEvent(
+        		this != $temp,
+        		this meets[10m] $temp
+        	),
+        	count($t) 
+        )
+		$hr: HeartRateIncreasedEvent()
+        Number(intValue >= 3) from accumulate(
+        	$h: HeartRateIncreasedEvent(
+        		this != $hr,
+        		this meets[10m] $hr
+        	),
+        	count($h) 
+        )
+        not(
+            PhysicalActivityEvent()
+            over window:time(10m)
+        )
+    then
+    	System.out.println("Warning! Intense physical activity 2 hours before optimal sleep time!");
+        insert(new PhysicalActivityEvent());
 end
