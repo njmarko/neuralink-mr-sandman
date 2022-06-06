@@ -4,6 +4,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
@@ -14,6 +16,7 @@ import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.io.ResourceFactory;
 
+import sbnz.mrsandman.neuralinkapp.model.BadHabbit;
 import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
@@ -36,33 +39,46 @@ public class BadHabbitsScoringCepTest extends BaseCepTest{
     	
     	int ruleCount = 0;
         SessionPseudoClock clock = ksession.getSessionClock();
-        for (int index = 0; index < 5; index++) {
-        	HeartRateIncreasedEvent raisedHr = new HeartRateIncreasedEvent();
-            ksession.insert(raisedHr);
-            clock.advanceTime(1, TimeUnit.SECONDS);
-            ruleCount = ksession.fireAllRules();
-        	RaisedTemperatureEvent raisedTemp = new RaisedTemperatureEvent();
-            ksession.insert(raisedTemp);
-            clock.advanceTime(1, TimeUnit.SECONDS);
-            ruleCount = ksession.fireAllRules();
-        	RaisedAlcoholLevelEvent alch = new RaisedAlcoholLevelEvent();
-            ksession.insert(alch);
-            clock.advanceTime(1, TimeUnit.SECONDS);
-            ruleCount = ksession.fireAllRules();
-        }
+//        for (int index = 0; index < 5; index++) {
+//        	HeartRateIncreasedEvent raisedHr = new HeartRateIncreasedEvent(1);
+//            ksession.insert(raisedHr);
+//            clock.advanceTime(1, TimeUnit.MINUTES);
+//            ruleCount = ksession.fireAllRules();
+//        	RaisedTemperatureEvent raisedTemp = new RaisedTemperatureEvent(39);
+//            ksession.insert(raisedTemp);
+//            clock.advanceTime(1, TimeUnit.MINUTES);
+//            ruleCount = ksession.fireAllRules();
+//        	RaisedAlcoholLevelEvent alch = new RaisedAlcoholLevelEvent(5);
+//            ksession.insert(alch);
+//            clock.advanceTime(1, TimeUnit.MINUTES);
+//            ruleCount = ksession.fireAllRules();
+//        }
+        
+        AlcoholBeforeSleepEvent alch = new AlcoholBeforeSleepEvent(3.99,LocalDateTime.of(LocalDate.now(), LocalTime.of(20, 6)));
+        ksession.insert(alch);
+        clock.advanceTime(1, TimeUnit.MINUTES);
+        ruleCount = ksession.fireAllRules();
+        
+        alch = new AlcoholBeforeSleepEvent(3.99,LocalDateTime.of(LocalDate.now(), LocalTime.of(20, 10)));
+        ksession.insert(alch);
+        clock.advanceTime(1, TimeUnit.MINUTES);
+        ruleCount = ksession.fireAllRules();
     	
         SleepPhaseEvent phase = new SleepPhaseEvent(SleepPhase.AWAKE);
         ksession.insert(phase);
-        clock.advanceTime(1, TimeUnit.SECONDS);
+        clock.advanceTime(1, TimeUnit.MINUTES);
         ruleCount = ksession.fireAllRules();
 
         Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(AlcoholBeforeSleepEvent.class));
-        assertThat(newEvents.size(), equalTo(1));
+        assertThat(newEvents.size(), equalTo(2));
         
         phase = new SleepPhaseEvent(SleepPhase.PHASE1);
         ksession.insert(phase);
-        clock.advanceTime(1, TimeUnit.SECONDS);
+        clock.advanceTime(1, TimeUnit.MINUTES);
         ruleCount = ksession.fireAllRules();
+        
+        newEvents = ksession.getObjects(new ClassObjectFilter(BadHabbit.class));
+        assertThat(newEvents.size(), equalTo(1));
     }
     
     protected void runRealtimeClockExample(KieSession ksession) {
