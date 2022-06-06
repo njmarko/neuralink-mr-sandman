@@ -117,11 +117,19 @@ rule "Raised light level 2 hours before sleep"
         	),
         	count($e2) 
         )
+        $avg_lux: Double() from accumulate(
+        	$e2: BrightLightEvent(
+        		$val: value,
+        		this != $e1,
+        		this meets[2h] $e1
+        	),
+        	average($val) 
+        )
         not(
             BrightLightBeforeSleepEvent() 
             over window:time(10m)
         )
     then
     	System.out.println("Warning! Increased bright light level detected less that 2 hours before optimal sleep time!");
-        insert(new BrightLightBeforeSleepEvent());
+        insert(new BrightLightBeforeSleepEvent($avg_lux, LocalDateTime.of(12,12,12,20,0,0)));
 end

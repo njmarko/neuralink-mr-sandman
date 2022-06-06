@@ -23,6 +23,7 @@ import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.AlcoholBeforeSleepEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.RaisedAlcoholLevelEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.heartrate.HeartRateIncreasedEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.light.BrightLightBeforeSleepEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.PhysicalActivityEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.temperature.RaisedTemperatureEvent;
 
@@ -65,6 +66,11 @@ public class BadHabbitsScoringCepTest extends BaseCepTest{
           ksession.insert(phys);
           clock.advanceTime(1, TimeUnit.MINUTES);
           ruleCount = ksession.fireAllRules();
+          
+          BrightLightBeforeSleepEvent light = new BrightLightBeforeSleepEvent(1000 + i * 100,LocalDateTime.of(LocalDate.now(), LocalTime.of(20, 0 + 2 * i)));
+          ksession.insert(light);
+          clock.advanceTime(1, TimeUnit.MINUTES);
+          ruleCount = ksession.fireAllRules();
       }
       	
         SleepPhaseEvent phase = new SleepPhaseEvent(SleepPhase.AWAKE);
@@ -78,13 +84,17 @@ public class BadHabbitsScoringCepTest extends BaseCepTest{
         newEvents = ksession.getObjects(new ClassObjectFilter(PhysicalActivityEvent.class));
         assertThat(newEvents.size(), equalTo(2));
         
+        newEvents = ksession.getObjects(new ClassObjectFilter(BrightLightBeforeSleepEvent.class));
+        assertThat(newEvents.size(), equalTo(2));
+        
+        
         phase = new SleepPhaseEvent(SleepPhase.PHASE1);
         ksession.insert(phase);
         clock.advanceTime(1, TimeUnit.MINUTES);
         ruleCount = ksession.fireAllRules();
         
         newEvents = ksession.getObjects(new ClassObjectFilter(BadHabbit.class));
-        assertThat(newEvents.size(), equalTo(2));
+        assertThat(newEvents.size(), equalTo(3));
     }
     
     protected void runRealtimeClockExample(KieSession ksession) {
