@@ -1,0 +1,112 @@
+package cepneuralink;
+
+import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
+import sbnz.mrsandman.neuralinkapp.model.events.heartrate.*;
+import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
+import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.*;
+import sbnz.mrsandman.neuralinkapp.model.events.caffeine.*;
+import sbnz.mrsandman.neuralinkapp.model.events.light.*;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.*;
+import sbnz.mrsandman.neuralinkapp.model.*;
+import java.time.LocalTime;
+import java.util.Date;
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+
+rule "Advice for raised alcohol level 4 hours before sleep based on score"
+	no-loop
+	salience($bh.score * 1.2)
+    when       
+        $spe: SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
+        $bh: BadHabbit(badHabbitType == BadHabbitType.ALCOHOL)
+        $u:User($opt_time: optimalSleepTime)
+       	Number(intValue >=1) from accumulate(
+        	$var1: BadHabbit(
+    			this meets[12h] $spe
+        	),
+        	count($var1)
+        )
+       	Number(doubleValue > 3.0) from accumulate(
+        	$var3: BadHabbit(
+        		$val: score,
+    			this meets[12h] $spe
+        	),
+        	sum($val)
+        )        
+    then
+    	System.out.printf("You should stop drinking less than 4 hours before optimal sleep time!");
+end
+
+rule "Advice for raised light level 2 hours before sleep based on score"
+	no-loop
+	salience($bh.score * 0.2)
+    when       
+        $spe: SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
+        $bh: BadHabbit(badHabbitType == BadHabbitType.BRIGHT_LIGHT_EXPOSURE)
+        $u:User($opt_time: optimalSleepTime)
+       	Number(intValue >=1) from accumulate(
+        	$var1: BadHabbit(
+    			this meets[12h] $spe
+        	),
+        	count($var1)
+        )
+       	Number(doubleValue > 3.0) from accumulate(
+        	$var3: BadHabbit(
+        		$val: score,
+    			this meets[12h] $spe
+        	),
+        	sum($val)
+        )        
+    then
+    	System.out.printf("You should dim the lights 2 hours before optimal sleep time!");
+end
+
+rule "Advice for raised caffeine level 6 hours before sleep based on score"
+	no-loop
+	salience($bh.score * 0.8)
+    when       
+        $spe: SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
+        $bh: BadHabbit(badHabbitType == BadHabbitType.CAFFEINE)
+        $u:User($opt_time: optimalSleepTime)
+       	Number(intValue >=1) from accumulate(
+        	$var1: BadHabbit(
+    			this meets[12h] $spe
+        	),
+        	count($var1)
+        )
+       	Number(doubleValue > 3.0) from accumulate(
+        	$var3: BadHabbit(
+        		$val: score,
+    			this meets[12h] $spe
+        	),
+        	sum($val)
+        )        
+    then
+    	System.out.printf("You should stop drinking less than 4 hours before optimal sleep time!");
+end
+
+rule "Advice for raised physical activity level 2 hours before sleep based on score"
+	no-loop
+	salience($bh.score * 0.6)
+    when       
+        $spe: SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
+        $bh: BadHabbit(badHabbitType == BadHabbitType.INTENSE_PHYSICAL_ACTIVITY)
+        $u:User($opt_time: optimalSleepTime)
+       	Number(intValue >=1) from accumulate(
+        	$var1: BadHabbit(
+    			this meets[12h] $spe
+        	),
+        	count($var1)
+        )
+       	Number(doubleValue > 3.0) from accumulate(
+        	$var3: BadHabbit(
+        		$val: score,
+    			this meets[12h] $spe
+        	),
+        	sum($val)
+        )        
+    then
+    	System.out.printf("You should stop doing intense physical exercises less than 4 hours before optimal sleep time!");
+end
