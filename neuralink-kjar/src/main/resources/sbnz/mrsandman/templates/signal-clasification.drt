@@ -35,12 +35,23 @@ rule "Categorize Signal_@{row.rowNumber} - @{signalType} between @{minValue} and
 	    	),
 	    	count(s2) 
 	    )
+	    $avg_val: Double() from accumulate(
+	    	s2: SignalEvent(
+	    		$val: value,
+	    		this != s1,
+	    		signalType == SignalType.@{signalType},
+	    		value >= @{minValue},
+	    		value < @{maxValue},
+	    		this meets[@{timePeriod}@{timeUnit}] s1
+	    	),
+	    	average($val) 
+	    )
         not(
             @{newEvent}() 
             over window:time(@{timePeriod}@{timeUnit})
         )
 	then
-		insert(new @{newEvent}());
+		insert(new @{newEvent}($avg_val));
 	end
 
 end template

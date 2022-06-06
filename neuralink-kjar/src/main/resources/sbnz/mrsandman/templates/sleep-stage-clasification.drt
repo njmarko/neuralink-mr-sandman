@@ -21,7 +21,7 @@ when
 	)
 then
     insert(new SleepPhaseEvent(SleepPhase.@{sleepPhase}));
-    insert(new SleepStage($s, SleepPhase.@{sleepPhase}))
+    insert(new SleepStage($s, SleepPhase.@{sleepPhase}));
     //drools.halt();
 end
 

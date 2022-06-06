@@ -7,7 +7,35 @@ import org.kie.api.definition.type.Role;
 
 @Role(Role.Type.EVENT)
 @Expires("30m")
-public class RaisedCaffeineLevelEvent implements Serializable{
+public class RaisedCaffeineLevelEvent implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	private double value;
+
+	public RaisedCaffeineLevelEvent() {
+		super();
+	}
+
+	public RaisedCaffeineLevelEvent(double value) {
+		super();
+		this.value = value;
+	}
+
+	public double getValue() {
+		return value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@Override
+	public String toString() {
+		return "RaisedCaffeineLevelEvent [value=" + value + "]";
+	}
 
 }

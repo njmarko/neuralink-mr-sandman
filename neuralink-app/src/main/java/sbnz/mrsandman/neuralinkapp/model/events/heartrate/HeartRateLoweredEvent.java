@@ -15,4 +15,32 @@ public class HeartRateLoweredEvent implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private double value;
+
+	public HeartRateLoweredEvent() {
+		super();
+	}
+
+	public HeartRateLoweredEvent(double value) {
+		super();
+		this.value = value;
+	}
+
+	public double getValue() {
+		return value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@Override
+	public String toString() {
+		return "HeartRateLoweredEvent [value=" + value + "]";
+	}
+
 }

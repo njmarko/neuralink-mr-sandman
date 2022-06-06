@@ -22,12 +22,23 @@ rule "Categorize Signal_6 - LIGHT_LEVEL between 1000 and 100 and insert new Brig
 	    	),
 	    	count(s2) 
 	    )
+	    $avg_val: Double() from accumulate(
+	    	s2: SignalEvent(
+	    		$val: value,
+	    		this != s1,
+	    		signalType == SignalType.LIGHT_LEVEL,
+	    		value >= 1000,
+	    		value < 100,
+	    		this meets[10s] s1
+	    	),
+	    	average($val) 
+	    )
         not(
             BrightLightEvent() 
             over window:time(10s)
         )
 	then
-		insert(new BrightLightEvent());
+		insert(new BrightLightEvent($avg_val));
 	end
 
 rule "Categorize Signal_5 - TEMPERATURE between 0 and 36 and insert new LoweredTemperatureEvent"
@@ -44,12 +55,23 @@ rule "Categorize Signal_5 - TEMPERATURE between 0 and 36 and insert new LoweredT
 	    	),
 	    	count(s2) 
 	    )
+	    $avg_val: Double() from accumulate(
+	    	s2: SignalEvent(
+	    		$val: value,
+	    		this != s1,
+	    		signalType == SignalType.TEMPERATURE,
+	    		value >= 0,
+	    		value < 36,
+	    		this meets[10s] s1
+	    	),
+	    	average($val) 
+	    )
         not(
             LoweredTemperatureEvent() 
             over window:time(10s)
         )
 	then
-		insert(new LoweredTemperatureEvent());
+		insert(new LoweredTemperatureEvent($avg_val));
 	end
 
 rule "Categorize Signal_4 - TEMPERATURE between 38 and 100 and insert new RaisedTemperatureEvent"
@@ -66,12 +88,23 @@ rule "Categorize Signal_4 - TEMPERATURE between 38 and 100 and insert new Raised
 	    	),
 	    	count(s2) 
 	    )
+	    $avg_val: Double() from accumulate(
+	    	s2: SignalEvent(
+	    		$val: value,
+	    		this != s1,
+	    		signalType == SignalType.TEMPERATURE,
+	    		value >= 38,
+	    		value < 100,
+	    		this meets[10s] s1
+	    	),
+	    	average($val) 
+	    )
         not(
             RaisedTemperatureEvent() 
             over window:time(10s)
         )
 	then
-		insert(new RaisedTemperatureEvent());
+		insert(new RaisedTemperatureEvent($avg_val));
 	end
 
 rule "Categorize Signal_3 - CAFFEINE_LEVEL between 20 and 100 and insert new RaisedCaffeineLevelEvent"
@@ -88,12 +121,23 @@ rule "Categorize Signal_3 - CAFFEINE_LEVEL between 20 and 100 and insert new Rai
 	    	),
 	    	count(s2) 
 	    )
+	    $avg_val: Double() from accumulate(
+	    	s2: SignalEvent(
+	    		$val: value,
+	    		this != s1,
+	    		signalType == SignalType.CAFFEINE_LEVEL,
+	    		value >= 20,
+	    		value < 100,
+	    		this meets[10s] s1
+	    	),
+	    	average($val) 
+	    )
         not(
             RaisedCaffeineLevelEvent() 
             over window:time(10s)
         )
 	then
-		insert(new RaisedCaffeineLevelEvent());
+		insert(new RaisedCaffeineLevelEvent($avg_val));
 	end
 
 rule "Categorize Signal_2 - HEART_BEAT between 0 and 100 and insert new HeartRateLoweredEvent"
@@ -110,12 +154,23 @@ rule "Categorize Signal_2 - HEART_BEAT between 0 and 100 and insert new HeartRat
 	    	),
 	    	count(s2) 
 	    )
+	    $avg_val: Double() from accumulate(
+	    	s2: SignalEvent(
+	    		$val: value,
+	    		this != s1,
+	    		signalType == SignalType.HEART_BEAT,
+	    		value >= 0,
+	    		value < 100,
+	    		this meets[60s] s1
+	    	),
+	    	average($val) 
+	    )
         not(
             HeartRateLoweredEvent() 
             over window:time(60s)
         )
 	then
-		insert(new HeartRateLoweredEvent());
+		insert(new HeartRateLoweredEvent($avg_val));
 	end
 
 rule "Categorize Signal_1 - HEART_BEAT between 0 and 100 and insert new HeartRateIncreasedEvent"
@@ -132,12 +187,23 @@ rule "Categorize Signal_1 - HEART_BEAT between 0 and 100 and insert new HeartRat
 	    	),
 	    	count(s2) 
 	    )
+	    $avg_val: Double() from accumulate(
+	    	s2: SignalEvent(
+	    		$val: value,
+	    		this != s1,
+	    		signalType == SignalType.HEART_BEAT,
+	    		value >= 0,
+	    		value < 100,
+	    		this meets[60s] s1
+	    	),
+	    	average($val) 
+	    )
         not(
             HeartRateIncreasedEvent() 
             over window:time(60s)
         )
 	then
-		insert(new HeartRateIncreasedEvent());
+		insert(new HeartRateIncreasedEvent($avg_val));
 	end
 
 rule "Categorize Signal_0 - ALCOHOL_LEVEL between 0.2 and 100.0 and insert new RaisedAlcoholLevelEvent"
@@ -154,12 +220,23 @@ rule "Categorize Signal_0 - ALCOHOL_LEVEL between 0.2 and 100.0 and insert new R
 	    	),
 	    	count(s2) 
 	    )
+	    $avg_val: Double() from accumulate(
+	    	s2: SignalEvent(
+	    		$val: value,
+	    		this != s1,
+	    		signalType == SignalType.ALCOHOL_LEVEL,
+	    		value >= 0.2,
+	    		value < 100.0,
+	    		this meets[10s] s1
+	    	),
+	    	average($val) 
+	    )
         not(
             RaisedAlcoholLevelEvent() 
             over window:time(10s)
         )
 	then
-		insert(new RaisedAlcoholLevelEvent());
+		insert(new RaisedAlcoholLevelEvent($avg_val));
 	end
 
 

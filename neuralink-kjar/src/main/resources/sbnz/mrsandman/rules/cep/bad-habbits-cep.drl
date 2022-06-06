@@ -26,13 +26,21 @@ rule "Raised alcohol level 4 hours before sleep"
         	),
         	count($al2) 
         )
+        $avg_alch: Double() from accumulate(
+        	$al2: RaisedAlcoholLevelEvent(
+        		$val: value,
+        		this != $al1,
+        		this meets[4h] $al1
+        	),
+        	average($val) 
+        )
         not(
             AlcoholBeforeSleepEvent() 
             over window:time(4h)
         )
     then
     	System.out.println("Warning! Increased blood alcohol level detected less that 4 hours before optimal sleep time!");
-        insert(new AlcoholBeforeSleepEvent(1.0, LocalDateTime.of(12,12,12,20,0,0)));
+        insert(new AlcoholBeforeSleepEvent($avg_alch, LocalDateTime.of(12,12,12,20,0,0)));
 end
 
 

@@ -7,8 +7,36 @@ import org.kie.api.definition.type.Role;
 
 @Role(Role.Type.EVENT)
 @Expires("30m")
-public class RaisedTemperatureEvent implements Serializable{
+public class RaisedTemperatureEvent implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	private double value;
+
+	public RaisedTemperatureEvent(double value) {
+		super();
+		this.value = value;
+	}
+
+	public RaisedTemperatureEvent() {
+		super();
+	}
+
+	public double getValue() {
+		return value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@Override
+	public String toString() {
+		return "RaisedTemperatureEvent [value=" + value + "]";
+	}
 
 }
