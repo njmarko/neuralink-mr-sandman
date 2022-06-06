@@ -53,7 +53,7 @@ rule "Intense physical activity 2 hours before optimal sleep time"
         Number(intValue >= 3) from accumulate(
         	$t: RaisedTemperatureEvent(
         		this != $temp,
-        		this meets[10m] $temp
+        		this meets[2h] $temp
         	),
         	count($t) 
         )
@@ -61,9 +61,17 @@ rule "Intense physical activity 2 hours before optimal sleep time"
         Number(intValue >= 3) from accumulate(
         	$h: HeartRateIncreasedEvent(
         		this != $hr,
-        		this meets[10m] $hr
+        		this meets[2h] $hr
         	),
         	count($h) 
+        )
+        $avg_temp: Double() from accumulate(
+        	$t2: RaisedTemperatureEvent(
+        		$val: value,
+        		this != $temp,
+        		this meets[2h] $temp
+        	),
+        	average($val) 
         )
         not(
             PhysicalActivityEvent()
@@ -71,7 +79,7 @@ rule "Intense physical activity 2 hours before optimal sleep time"
         )
     then
     	System.out.println("Warning! Intense physical activity 2 hours before optimal sleep time!");
-        insert(new PhysicalActivityEvent());
+        insert(new PhysicalActivityEvent($avg_temp, LocalDateTime.of(12,12,12,20,0,0)));
 end
 
 rule "Raised caffeine level 6 hours before sleep"

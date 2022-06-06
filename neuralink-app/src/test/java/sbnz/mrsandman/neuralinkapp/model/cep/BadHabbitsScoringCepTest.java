@@ -54,16 +54,19 @@ public class BadHabbitsScoringCepTest extends BaseCepTest{
 //            ruleCount = ksession.fireAllRules();
 //        }
         
-        AlcoholBeforeSleepEvent alch = new AlcoholBeforeSleepEvent(3.99,LocalDateTime.of(LocalDate.now(), LocalTime.of(20, 6)));
-        ksession.insert(alch);
-        clock.advanceTime(1, TimeUnit.MINUTES);
-        ruleCount = ksession.fireAllRules();
-        
-        alch = new AlcoholBeforeSleepEvent(3.99,LocalDateTime.of(LocalDate.now(), LocalTime.of(20, 10)));
-        ksession.insert(alch);
-        clock.advanceTime(1, TimeUnit.MINUTES);
-        ruleCount = ksession.fireAllRules();
-    	
+
+      for (int i = 0; i < 2; i++) {
+          AlcoholBeforeSleepEvent alch = new AlcoholBeforeSleepEvent(3.99 + i,LocalDateTime.of(LocalDate.now(), LocalTime.of(20, 0 + 2 * i)));
+          ksession.insert(alch);
+          clock.advanceTime(1, TimeUnit.MINUTES);
+          ruleCount = ksession.fireAllRules();    
+          
+          PhysicalActivityEvent phys = new PhysicalActivityEvent(38 + i,LocalDateTime.of(LocalDate.now(), LocalTime.of(20, 0 + 2 * i)));
+          ksession.insert(phys);
+          clock.advanceTime(1, TimeUnit.MINUTES);
+          ruleCount = ksession.fireAllRules();
+      }
+      	
         SleepPhaseEvent phase = new SleepPhaseEvent(SleepPhase.AWAKE);
         ksession.insert(phase);
         clock.advanceTime(1, TimeUnit.MINUTES);
@@ -72,13 +75,16 @@ public class BadHabbitsScoringCepTest extends BaseCepTest{
         Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(AlcoholBeforeSleepEvent.class));
         assertThat(newEvents.size(), equalTo(2));
         
+        newEvents = ksession.getObjects(new ClassObjectFilter(PhysicalActivityEvent.class));
+        assertThat(newEvents.size(), equalTo(2));
+        
         phase = new SleepPhaseEvent(SleepPhase.PHASE1);
         ksession.insert(phase);
         clock.advanceTime(1, TimeUnit.MINUTES);
         ruleCount = ksession.fireAllRules();
         
         newEvents = ksession.getObjects(new ClassObjectFilter(BadHabbit.class));
-        assertThat(newEvents.size(), equalTo(1));
+        assertThat(newEvents.size(), equalTo(2));
     }
     
     protected void runRealtimeClockExample(KieSession ksession) {
