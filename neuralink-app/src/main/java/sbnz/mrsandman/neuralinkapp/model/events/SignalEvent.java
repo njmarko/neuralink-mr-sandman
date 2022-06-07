@@ -8,7 +8,7 @@ import org.kie.api.definition.type.Role;
 import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
 
 @Role(Role.Type.EVENT)
-@Expires("30m")
+@Expires("10s")
 public class SignalEvent implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -3,9 +3,12 @@ package sbnz.mrsandman.neuralinkapp.model;
 import java.io.Serializable;
 import java.time.LocalTime;
 
+import org.kie.api.definition.type.PropertyReactive;
+
 import sbnz.mrsandman.neuralinkapp.model.enums.Chronotype;
 import sbnz.mrsandman.neuralinkapp.model.enums.Gender;
 
+@PropertyReactive
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 6550597062597968179L;

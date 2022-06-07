@@ -11,7 +11,7 @@ import sbnz.mrsandman.neuralinkapp.model.events.*;
 
 template "classification-rules"
 
-rule "Categorize Sleep_@{row.rowNumber}"
+rule "Categorize Sleep_@{row.rowNumber} - No initial sleep stage"
 no-loop true
 when
 	$s: Sleep()
@@ -19,9 +19,32 @@ when
 		$b: BrainWaveEvent(frequency >= @{minFrequency}, frequency <= @{maxFrequency}),
 		count($b)
 	)
+	not (
+		SleepStage()
+	)
 then
+	System.out.println("Aktivacija detekcije faze SleepPhase.@{sleepPhase} without initial stage");
+	insert(new SleepStage($s, SleepPhase.@{sleepPhase}));
     insert(new SleepPhaseEvent(SleepPhase.@{sleepPhase}));
-    insert(new SleepStage($s, SleepPhase.@{sleepPhase}));
+    //drools.halt();
+end
+
+rule "Categorize Sleep_@{row.rowNumber} - With initial sleep stage"
+no-loop true
+when
+	$s: Sleep()
+	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.@{sleepPhase})
+	Number(intValue >= 100) from accumulate (
+		$b: BrainWaveEvent(frequency >= @{minFrequency}, frequency <= @{maxFrequency}),
+		count($b)
+	)
+then
+	System.out.println("Aktivacija detekcije faze SleepPhase.@{sleepPhase} with initial stage");
+	modify ($stage) {
+		setEndTime(new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime()));
+	}
+	insert(new SleepStage($s, SleepPhase.@{sleepPhase}, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
+    insert(new SleepPhaseEvent(SleepPhase.@{sleepPhase}));
     //drools.halt();
 end
 

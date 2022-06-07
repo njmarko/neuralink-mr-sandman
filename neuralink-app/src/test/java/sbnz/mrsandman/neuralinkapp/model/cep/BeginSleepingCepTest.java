@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import sbnz.mrsandman.neuralinkapp.model.Sleep;
 import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.BeginSleepingEvent;
-import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.HeartRateLoweredEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.heartrate.HeartRateLoweredEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.temperature.LoweredTemperatureEvent;
 
 @SpringBootTest

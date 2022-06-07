@@ -18,6 +18,7 @@ import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.enums.MuscleTone;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 import sbnz.mrsandman.neuralinkapp.model.events.MuscleToneChangedEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.UserMovementEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.somnabulism.SomnabulismDetectedEvent;
 
 @SpringBootTest
@@ -32,9 +33,7 @@ public class SomnabulismDetecetionCepTest extends BaseCepTest {
 	protected void runPseudoClockExample(KieSession ksession) {
 		int ruleCount = 0;
         SessionPseudoClock clock = ksession.getSessionClock();
-        User user = new User();
-        user.setIsStatic(false);
-        ksession.insert(user);
+        ksession.insert(new UserMovementEvent());
         Sleep sleep = new Sleep();
         ksession.insert(sleep);
         ksession.insert(new SleepStage(sleep, SleepPhase.REM));

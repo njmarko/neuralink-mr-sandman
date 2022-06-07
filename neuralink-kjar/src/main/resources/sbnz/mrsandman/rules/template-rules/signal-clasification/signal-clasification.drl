@@ -38,6 +38,7 @@ rule "Categorize Signal_6 - LIGHT_LEVEL between 1000 and 100 and insert new Brig
             over window:time(10s)
         )
 	then
+		System.out.println("Detekcija promene singala SignalType.LIGHT_LEVEL - BrightLightEvent");
 		insert(new BrightLightEvent($avg_val));
 	end
 
@@ -68,9 +69,9 @@ rule "Categorize Signal_5 - TEMPERATURE between 0 and 36 and insert new LoweredT
 	    )
         not(
             LoweredTemperatureEvent() 
-            over window:time(10s)
         )
 	then
+		System.out.println("Detekcija promene singala SignalType.TEMPERATURE - LoweredTemperatureEvent");
 		insert(new LoweredTemperatureEvent($avg_val));
 	end
 
@@ -104,6 +105,7 @@ rule "Categorize Signal_4 - TEMPERATURE between 38 and 100 and insert new Raised
             over window:time(10s)
         )
 	then
+		System.out.println("Detekcija promene singala SignalType.TEMPERATURE - RaisedTemperatureEvent");
 		insert(new RaisedTemperatureEvent($avg_val));
 	end
 
@@ -137,6 +139,7 @@ rule "Categorize Signal_3 - CAFFEINE_LEVEL between 20 and 100 and insert new Rai
             over window:time(10s)
         )
 	then
+		System.out.println("Detekcija promene singala SignalType.CAFFEINE_LEVEL - RaisedCaffeineLevelEvent");
 		insert(new RaisedCaffeineLevelEvent($avg_val));
 	end
 
@@ -167,9 +170,9 @@ rule "Categorize Signal_2 - HEART_BEAT between 0 and 100 and insert new HeartRat
 	    )
         not(
             HeartRateLoweredEvent() 
-            over window:time(60s)
         )
 	then
+		System.out.println("Detekcija promene singala SignalType.HEART_BEAT - HeartRateLoweredEvent");
 		insert(new HeartRateLoweredEvent($avg_val));
 	end
 
@@ -203,6 +206,7 @@ rule "Categorize Signal_1 - HEART_BEAT between 0 and 100 and insert new HeartRat
             over window:time(60s)
         )
 	then
+		System.out.println("Detekcija promene singala SignalType.HEART_BEAT - HeartRateIncreasedEvent");
 		insert(new HeartRateIncreasedEvent($avg_val));
 	end
 
@@ -236,6 +240,7 @@ rule "Categorize Signal_0 - ALCOHOL_LEVEL between 0.2 and 100.0 and insert new R
             over window:time(10s)
         )
 	then
+		System.out.println("Detekcija promene singala SignalType.ALCOHOL_LEVEL - RaisedAlcoholLevelEvent");
 		insert(new RaisedAlcoholLevelEvent($avg_val));
 	end
 

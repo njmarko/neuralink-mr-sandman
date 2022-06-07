@@ -51,6 +51,7 @@ rule "Categorize Signal_@{row.rowNumber} - @{signalType} between @{minValue} and
             over window:time(@{timePeriod}@{timeUnit})
         )
 	then
+		System.out.println("Detekcija promene singala SignalType.@{signalType} - @{newEvent}");
 		insert(new @{newEvent}($avg_val));
 	end
 

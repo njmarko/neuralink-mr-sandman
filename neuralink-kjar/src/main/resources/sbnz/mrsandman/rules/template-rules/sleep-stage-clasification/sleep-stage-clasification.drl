@@ -3,7 +3,7 @@ import sbnz.mrsandman.neuralinkapp.model.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 import sbnz.mrsandman.neuralinkapp.model.events.*;
 
-rule "Categorize Sleep_5"
+rule "Categorize Sleep_5 - No initial sleep stage"
 no-loop true
 when
 	$s: Sleep()
@@ -11,13 +11,35 @@ when
 		$b: BrainWaveEvent(frequency >= 65, frequency <= 90),
 		count($b)
 	)
+	not (
+		SleepStage()
+	)
 then
+	System.out.println("Aktivacija detekcije faze SleepPhase.REM without initial stage");
+	insert(new SleepStage($s, SleepPhase.REM));
     insert(new SleepPhaseEvent(SleepPhase.REM));
-    insert(new SleepStage($s, SleepPhase.REM));
+    
+end
+rule "Categorize Sleep_5 - With initial sleep stage"
+no-loop true
+when
+	$s: Sleep()
+	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.REM)
+	Number(intValue >= 100) from accumulate (
+		$b: BrainWaveEvent(frequency >= 65, frequency <= 90),
+		count($b)
+	)
+then
+	System.out.println("Aktivacija detekcije faze SleepPhase.REM with initial stage");
+	modify ($stage) {
+		setEndTime(new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime()));
+	}
+	insert(new SleepStage($s, SleepPhase.REM, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
+    insert(new SleepPhaseEvent(SleepPhase.REM));
     
 end
 
-rule "Categorize Sleep_4"
+rule "Categorize Sleep_4 - No initial sleep stage"
 no-loop true
 when
 	$s: Sleep()
@@ -25,13 +47,35 @@ when
 		$b: BrainWaveEvent(frequency >= 50, frequency <= 65),
 		count($b)
 	)
+	not (
+		SleepStage()
+	)
 then
+	System.out.println("Aktivacija detekcije faze SleepPhase.PHASE4 without initial stage");
+	insert(new SleepStage($s, SleepPhase.PHASE4));
     insert(new SleepPhaseEvent(SleepPhase.PHASE4));
-    insert(new SleepStage($s, SleepPhase.PHASE4));
+    
+end
+rule "Categorize Sleep_4 - With initial sleep stage"
+no-loop true
+when
+	$s: Sleep()
+	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.PHASE4)
+	Number(intValue >= 100) from accumulate (
+		$b: BrainWaveEvent(frequency >= 50, frequency <= 65),
+		count($b)
+	)
+then
+	System.out.println("Aktivacija detekcije faze SleepPhase.PHASE4 with initial stage");
+	modify ($stage) {
+		setEndTime(new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime()));
+	}
+	insert(new SleepStage($s, SleepPhase.PHASE4, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
+    insert(new SleepPhaseEvent(SleepPhase.PHASE4));
     
 end
 
-rule "Categorize Sleep_3"
+rule "Categorize Sleep_3 - No initial sleep stage"
 no-loop true
 when
 	$s: Sleep()
@@ -39,13 +83,35 @@ when
 		$b: BrainWaveEvent(frequency >= 37.5, frequency <= 50),
 		count($b)
 	)
+	not (
+		SleepStage()
+	)
 then
+	System.out.println("Aktivacija detekcije faze SleepPhase.PHASE3 without initial stage");
+	insert(new SleepStage($s, SleepPhase.PHASE3));
     insert(new SleepPhaseEvent(SleepPhase.PHASE3));
-    insert(new SleepStage($s, SleepPhase.PHASE3));
+    
+end
+rule "Categorize Sleep_3 - With initial sleep stage"
+no-loop true
+when
+	$s: Sleep()
+	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.PHASE3)
+	Number(intValue >= 100) from accumulate (
+		$b: BrainWaveEvent(frequency >= 37.5, frequency <= 50),
+		count($b)
+	)
+then
+	System.out.println("Aktivacija detekcije faze SleepPhase.PHASE3 with initial stage");
+	modify ($stage) {
+		setEndTime(new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime()));
+	}
+	insert(new SleepStage($s, SleepPhase.PHASE3, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
+    insert(new SleepPhaseEvent(SleepPhase.PHASE3));
     
 end
 
-rule "Categorize Sleep_2"
+rule "Categorize Sleep_2 - No initial sleep stage"
 no-loop true
 when
 	$s: Sleep()
@@ -53,13 +119,35 @@ when
 		$b: BrainWaveEvent(frequency >= 25, frequency <= 37.5),
 		count($b)
 	)
+	not (
+		SleepStage()
+	)
 then
+	System.out.println("Aktivacija detekcije faze SleepPhase.PHASE2 without initial stage");
+	insert(new SleepStage($s, SleepPhase.PHASE2));
     insert(new SleepPhaseEvent(SleepPhase.PHASE2));
-    insert(new SleepStage($s, SleepPhase.PHASE2));
+    
+end
+rule "Categorize Sleep_2 - With initial sleep stage"
+no-loop true
+when
+	$s: Sleep()
+	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.PHASE2)
+	Number(intValue >= 100) from accumulate (
+		$b: BrainWaveEvent(frequency >= 25, frequency <= 37.5),
+		count($b)
+	)
+then
+	System.out.println("Aktivacija detekcije faze SleepPhase.PHASE2 with initial stage");
+	modify ($stage) {
+		setEndTime(new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime()));
+	}
+	insert(new SleepStage($s, SleepPhase.PHASE2, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
+    insert(new SleepPhaseEvent(SleepPhase.PHASE2));
     
 end
 
-rule "Categorize Sleep_1"
+rule "Categorize Sleep_1 - No initial sleep stage"
 no-loop true
 when
 	$s: Sleep()
@@ -67,13 +155,35 @@ when
 		$b: BrainWaveEvent(frequency >= 15, frequency <= 25),
 		count($b)
 	)
+	not (
+		SleepStage()
+	)
 then
+	System.out.println("Aktivacija detekcije faze SleepPhase.PHASE1 without initial stage");
+	insert(new SleepStage($s, SleepPhase.PHASE1));
     insert(new SleepPhaseEvent(SleepPhase.PHASE1));
-    insert(new SleepStage($s, SleepPhase.PHASE1));
+    
+end
+rule "Categorize Sleep_1 - With initial sleep stage"
+no-loop true
+when
+	$s: Sleep()
+	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.PHASE1)
+	Number(intValue >= 100) from accumulate (
+		$b: BrainWaveEvent(frequency >= 15, frequency <= 25),
+		count($b)
+	)
+then
+	System.out.println("Aktivacija detekcije faze SleepPhase.PHASE1 with initial stage");
+	modify ($stage) {
+		setEndTime(new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime()));
+	}
+	insert(new SleepStage($s, SleepPhase.PHASE1, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
+    insert(new SleepPhaseEvent(SleepPhase.PHASE1));
     
 end
 
-rule "Categorize Sleep_0"
+rule "Categorize Sleep_0 - No initial sleep stage"
 no-loop true
 when
 	$s: Sleep()
@@ -81,9 +191,31 @@ when
 		$b: BrainWaveEvent(frequency >= 0, frequency <= 15),
 		count($b)
 	)
+	not (
+		SleepStage()
+	)
 then
+	System.out.println("Aktivacija detekcije faze SleepPhase.AWAKE without initial stage");
+	insert(new SleepStage($s, SleepPhase.AWAKE));
     insert(new SleepPhaseEvent(SleepPhase.AWAKE));
-    insert(new SleepStage($s, SleepPhase.AWAKE));
+    
+end
+rule "Categorize Sleep_0 - With initial sleep stage"
+no-loop true
+when
+	$s: Sleep()
+	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.AWAKE)
+	Number(intValue >= 100) from accumulate (
+		$b: BrainWaveEvent(frequency >= 0, frequency <= 15),
+		count($b)
+	)
+then
+	System.out.println("Aktivacija detekcije faze SleepPhase.AWAKE with initial stage");
+	modify ($stage) {
+		setEndTime(new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime()));
+	}
+	insert(new SleepStage($s, SleepPhase.AWAKE, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
+    insert(new SleepPhaseEvent(SleepPhase.AWAKE));
     
 end
 

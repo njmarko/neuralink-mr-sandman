@@ -7,6 +7,8 @@ rule "Detect if the user is static"
     when
         $u: User(speed == 0 || speed >= 10)
     then
-        $u.setIsStatic(true);
-        update($u);
+    	System.out.println("Aktivacija pravila za detektovanje staticnosti.");
+        modify($u) {
+        	setIsStatic(true);
+        }
 end

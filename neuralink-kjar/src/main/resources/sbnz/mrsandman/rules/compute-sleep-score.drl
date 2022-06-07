@@ -10,7 +10,7 @@ import sbnz.mrsandman.neuralinkapp.model.events.somnabulism.*;
 rule "Compute sleep efficienty without somnabulism"
 	when
 		WakeUpEvent()
-		$s: Sleep(efficient == null)
+		$s: Sleep(efficient == null, quality == null)
 		SomnabulismDetectedEvent()
 	then
 		System.out.println("Sleep efficient with somnabulism");
@@ -22,7 +22,7 @@ end
 rule "Compute sleep efficienty with somnabulism"
 	when
 		WakeUpEvent()
-		$s: Sleep(efficient == null)
+		$s: Sleep(efficient == null, quality == null)
 		not (
 			SomnabulismDetectedEvent()
 			over window:time(12h)
@@ -52,7 +52,7 @@ end
 rule "Compute sleep quality - percentage of REM sleep phase duration"
 	when
 		WakeUpEvent()
-		$s: Sleep(quality == null)
+		$s: Sleep(quality == null, efficient != null)
 		$totalSleepTime: Double() from accumulate (
 			$ss: SleepStage(
 				sleep == $s, 
@@ -69,8 +69,12 @@ rule "Compute sleep quality - percentage of REM sleep phase duration"
 			sum($d)
 		)
 	then
+		System.out.println("Compute sleep quality");
+		System.out.println("Total rem time: " + $totalRemTime);
+		System.out.println("Total sleep time: " + $totalSleepTime);
 		modify($s) {
 			setQuality(10 * $totalRemTime / $totalSleepTime);
 		}
+		insert(new SleepMetricsCalculatedEvent());
 end
 

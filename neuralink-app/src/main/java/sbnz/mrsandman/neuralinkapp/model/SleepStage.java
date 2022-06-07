@@ -23,6 +23,10 @@ public class SleepStage {
 		this(sleep, sleepPhase, new Date(), null);
 		this.stageDuration = duration;
 	}
+	
+	public SleepStage(Sleep sleep, SleepPhase sleepPhase, Date start) {
+		this(sleep, sleepPhase, start, null);
+	}
 
 	public SleepStage(Sleep sleep, SleepPhase sleepPhase, Date start, Date end) {
 		super();
@@ -30,6 +34,10 @@ public class SleepStage {
 		this.sleepPhase = sleepPhase;
 		this.startTime = start;
 		this.endTime = end;
+	}
+	
+	public void endStage() {
+		this.setEndTime(new Date());
 	}
 
 	public SleepPhase getSleepPhase() {
