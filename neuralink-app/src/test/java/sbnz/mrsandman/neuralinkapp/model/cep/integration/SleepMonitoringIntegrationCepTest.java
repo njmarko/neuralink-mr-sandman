@@ -45,6 +45,7 @@ public class SleepMonitoringIntegrationCepTest extends BaseCepTest {
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/movement-detection.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/sleep-stage-clasification/sleep-stage-clasification.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/signal-clasification/signal-clasification.drl");
+		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/muscle-voltage-classification/muscle-voltage-classification.drl");
 	}
 
 	@Override
@@ -64,11 +65,11 @@ public class SleepMonitoringIntegrationCepTest extends BaseCepTest {
 			clock.advanceTime(1, TimeUnit.SECONDS);
 		}
 		ruleCount = ksession.fireAllRules();
-		Collection<?> beginSleepingEvents = ksession.getObjects(new ClassObjectFilter(BeginSleepingEvent.class));
 		// 1 - Rule for detecting heart rate lowered event
 		// 2 - Rule for detecting temperature lowered event
 		// 3 - Rule for detecting start of sleeping
 		assertEquals(3, ruleCount);
+		Collection<?> beginSleepingEvents = ksession.getObjects(new ClassObjectFilter(BeginSleepingEvent.class));
 		assertEquals(1, beginSleepingEvents.size());
 		Sleep sleep = (Sleep) ksession.getObjects(new ClassObjectFilter(Sleep.class)).toArray()[0];
 		assertNotNull(sleep);
@@ -98,16 +99,15 @@ public class SleepMonitoringIntegrationCepTest extends BaseCepTest {
 		// we detect somnabulism
 		for (int i = 0; i < 30; i++) { 
 			ksession.insert(new SignalEvent(new Random().doubles(1,  10).findFirst().getAsDouble(), SignalType.SPEED));
+			ksession.insert(new SignalEvent(new Random().doubles(75,  100).findFirst().getAsDouble(), SignalType.MUSCLE_VOLTAGE));
 			clock.advanceTime(1, TimeUnit.SECONDS);
 		}
-		
-		// TODO: Simulate this event using low-level muscle something signal
-		ksession.insert(new MuscleToneChangedEvent(MuscleTone.TENSE));
 		ruleCount = ksession.fireAllRules();
 		
 		// 1 - Movement detected event
-		// 2 - Somnabulism detected event
-		assertEquals(2, ruleCount);
+		// 2 - Muscle tone changed to tense event
+		// 3 - Somnabulism detected event
+		assertEquals(3, ruleCount);
 		Collection<?> movementDetectedEvent = ksession.getObjects(new ClassObjectFilter(MovementDetectedEvent.class));
 		assertEquals(1, movementDetectedEvent.size());
 		Collection<?> somnabulismDetectedEvent = ksession.getObjects(new ClassObjectFilter(SomnabulismDetectedEvent.class));

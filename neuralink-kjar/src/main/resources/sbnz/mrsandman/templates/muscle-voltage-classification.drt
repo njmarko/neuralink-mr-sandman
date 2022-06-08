@@ -1,0 +1,37 @@
+template header
+minVoltage
+maxVoltage
+muscleTone
+
+package cepneuralink;
+
+import sbnz.mrsandman.neuralinkapp.model.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.MuscleTone;
+import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+
+template "muscle-tone-classification-based-on-voltage"
+
+rule "Categorize MuscleVoltage_@{row.rowNumber} - @{muscleTone} [@{minVoltage} - @{maxVoltage}]V"
+no-loop true
+when
+	s1: SignalEvent(signalType == SignalType.MUSCLE_VOLTAGE, value >= @{minVoltage}, value < @{maxVoltage})
+	    Number(intValue >= 10) from accumulate(
+	    	s2: SignalEvent(
+	    		this != s1,
+	    		signalType == SignalType.MUSCLE_VOLTAGE,
+	    		value >= @{minVoltage},
+	    		value < @{maxVoltage},
+	    		this meets[30s] s1
+	    	),
+	    	count(s2) 
+	    )
+	not (
+		MuscleToneChangedEvent()
+	)
+then
+	System.out.println("Aktivacija promene muslce tone-a MuscleTone.@{muscleTone}");
+	insert(new MuscleToneChangedEvent(MuscleTone.@{muscleTone}));
+end
+
+end template

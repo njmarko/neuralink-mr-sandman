@@ -1,0 +1,73 @@
+package cepneuralink;
+import sbnz.mrsandman.neuralinkapp.model.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.MuscleTone;
+import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+
+rule "Categorize MuscleVoltage_2 - TENSE [75 - 100]V"
+no-loop true
+when
+	s1: SignalEvent(signalType == SignalType.MUSCLE_VOLTAGE, value >= 75, value < 100)
+	    Number(intValue >= 10) from accumulate(
+	    	s2: SignalEvent(
+	    		this != s1,
+	    		signalType == SignalType.MUSCLE_VOLTAGE,
+	    		value >= 75,
+	    		value < 100,
+	    		this meets[30s] s1
+	    	),
+	    	count(s2) 
+	    )
+	not (
+		MuscleToneChangedEvent()
+	)
+then
+	System.out.println("Aktivacija promene muslce tone-a MuscleTone.TENSE");
+	insert(new MuscleToneChangedEvent(MuscleTone.TENSE));
+end
+
+rule "Categorize MuscleVoltage_1 - RELAXED [50 - 75]V"
+no-loop true
+when
+	s1: SignalEvent(signalType == SignalType.MUSCLE_VOLTAGE, value >= 50, value < 75)
+	    Number(intValue >= 10) from accumulate(
+	    	s2: SignalEvent(
+	    		this != s1,
+	    		signalType == SignalType.MUSCLE_VOLTAGE,
+	    		value >= 50,
+	    		value < 75,
+	    		this meets[30s] s1
+	    	),
+	    	count(s2) 
+	    )
+	not (
+		MuscleToneChangedEvent()
+	)
+then
+	System.out.println("Aktivacija promene muslce tone-a MuscleTone.RELAXED");
+	insert(new MuscleToneChangedEvent(MuscleTone.RELAXED));
+end
+
+rule "Categorize MuscleVoltage_0 - ATONIC [0 - 50]V"
+no-loop true
+when
+	s1: SignalEvent(signalType == SignalType.MUSCLE_VOLTAGE, value >= 0, value < 50)
+	    Number(intValue >= 10) from accumulate(
+	    	s2: SignalEvent(
+	    		this != s1,
+	    		signalType == SignalType.MUSCLE_VOLTAGE,
+	    		value >= 0,
+	    		value < 50,
+	    		this meets[30s] s1
+	    	),
+	    	count(s2) 
+	    )
+	not (
+		MuscleToneChangedEvent()
+	)
+then
+	System.out.println("Aktivacija promene muslce tone-a MuscleTone.ATONIC");
+	insert(new MuscleToneChangedEvent(MuscleTone.ATONIC));
+end
+
+
