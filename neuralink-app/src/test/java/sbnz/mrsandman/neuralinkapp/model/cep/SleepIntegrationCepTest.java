@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collection;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.drools.core.time.SessionPseudoClock;
@@ -141,8 +142,7 @@ public class SleepIntegrationCepTest extends BaseCepTest {
 		// 4 - Compute sleep efficiency
 		assertEquals(4, ruleCount);
 		assertFalse(sleep.getEfficient());
-		// TODO: Investigate what is causing this metric to be inconsistent across consecutive test runs
-		assertThat(sleep.getQuality(), Matchers.closeTo(10.0 * 36.0 / 55.0, 1));
+		assertThat(sleep.getQuality(), Matchers.closeTo(10.0 * 36.0 / 120.0, 1e-4));
 		Collection<?> metricsEvent = ksession.getObjects(new ClassObjectFilter(SleepMetricsCalculatedEvent.class));
 		assertEquals(1, metricsEvent.size());
 	}
@@ -163,8 +163,9 @@ public class SleepIntegrationCepTest extends BaseCepTest {
 	}
 
 	private void insertBrainWaveWithFrequencyInRange(KieSession ksession, SessionPseudoClock clock, int low, int high) {
-		int brainWaveFrequency = (low + high) / 2;	// TODO: Replace with random number in a given range
+		Random random = new Random();
 		for (int i = 0; i < 150; i++) {
+			int brainWaveFrequency = random.ints(low, high).findFirst().getAsInt();
 			ksession.insert(new BrainWaveEvent(brainWaveFrequency));
 			clock.advanceTime(5, TimeUnit.SECONDS);
 		}

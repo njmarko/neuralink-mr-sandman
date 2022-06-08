@@ -16,7 +16,7 @@ when
 	)
 then
 	System.out.println("Aktivacija detekcije faze SleepPhase.REM without initial stage");
-	insert(new SleepStage($s, SleepPhase.REM));
+	insert(new SleepStage($s, SleepPhase.REM, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
     insert(new SleepPhaseEvent(SleepPhase.REM));
     
 end
@@ -52,7 +52,7 @@ when
 	)
 then
 	System.out.println("Aktivacija detekcije faze SleepPhase.PHASE4 without initial stage");
-	insert(new SleepStage($s, SleepPhase.PHASE4));
+	insert(new SleepStage($s, SleepPhase.PHASE4, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
     insert(new SleepPhaseEvent(SleepPhase.PHASE4));
     
 end
@@ -88,7 +88,7 @@ when
 	)
 then
 	System.out.println("Aktivacija detekcije faze SleepPhase.PHASE3 without initial stage");
-	insert(new SleepStage($s, SleepPhase.PHASE3));
+	insert(new SleepStage($s, SleepPhase.PHASE3, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
     insert(new SleepPhaseEvent(SleepPhase.PHASE3));
     
 end
@@ -124,7 +124,7 @@ when
 	)
 then
 	System.out.println("Aktivacija detekcije faze SleepPhase.PHASE2 without initial stage");
-	insert(new SleepStage($s, SleepPhase.PHASE2));
+	insert(new SleepStage($s, SleepPhase.PHASE2, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
     insert(new SleepPhaseEvent(SleepPhase.PHASE2));
     
 end
@@ -160,7 +160,7 @@ when
 	)
 then
 	System.out.println("Aktivacija detekcije faze SleepPhase.PHASE1 without initial stage");
-	insert(new SleepStage($s, SleepPhase.PHASE1));
+	insert(new SleepStage($s, SleepPhase.PHASE1, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
     insert(new SleepPhaseEvent(SleepPhase.PHASE1));
     
 end
@@ -196,7 +196,7 @@ when
 	)
 then
 	System.out.println("Aktivacija detekcije faze SleepPhase.AWAKE without initial stage");
-	insert(new SleepStage($s, SleepPhase.AWAKE));
+	insert(new SleepStage($s, SleepPhase.AWAKE, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
     insert(new SleepPhaseEvent(SleepPhase.AWAKE));
     
 end

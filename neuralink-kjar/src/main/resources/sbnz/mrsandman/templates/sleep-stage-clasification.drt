@@ -24,7 +24,7 @@ when
 	)
 then
 	System.out.println("Aktivacija detekcije faze SleepPhase.@{sleepPhase} without initial stage");
-	insert(new SleepStage($s, SleepPhase.@{sleepPhase}));
+	insert(new SleepStage($s, SleepPhase.@{sleepPhase}, new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
     insert(new SleepPhaseEvent(SleepPhase.@{sleepPhase}));
     //drools.halt();
 end
