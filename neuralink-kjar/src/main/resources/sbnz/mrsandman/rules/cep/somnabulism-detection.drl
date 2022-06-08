@@ -10,7 +10,7 @@ rule "Somnabulism detected event"
 	no-loop
     when
     	MuscleToneChangedEvent(muscleTone == MuscleTone.TENSE)
-    	$s: Sleep()
+    	$s: Sleep(endTime == null)
     	SleepStage(sleepPhase == SleepPhase.REM, endTime == null, sleep == $s)
     	MovementDetectedEvent()
     then

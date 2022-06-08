@@ -15,7 +15,7 @@ rule "Begin sleeping event"
     then
     	System.out.println("Aktivacija begin sleeping eventa");
     	insert(new BeginSleepingEvent());
-        insert(new Sleep());
+        insert(new Sleep(new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime())));
         // drools.halt();
 end
 

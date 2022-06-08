@@ -11,12 +11,12 @@ rule "Detect wakeup"
 	when
 		// seems like it is not possible to get the current time in this
 		$awakePhase: SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
-		$s: Sleep()
+		$s: Sleep(endTime == null)
 		$awakeStage: SleepStage(sleep == $s, endTime == null)
 	then
 		System.out.println("Detektovan wake up event");
 		modify ($s) {
-			wakeUp();
+			setEndTime(new java.util.Date(drools.getWorkingMemory().getSessionClock().getCurrentTime()));
 		};
 		insert(new WakeUpEvent());
 end

@@ -14,7 +14,7 @@ template "classification-rules"
 rule "Categorize Sleep_@{row.rowNumber} - No initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= @{minFrequency}, frequency <= @{maxFrequency}),
 		count($b)
@@ -32,7 +32,7 @@ end
 rule "Categorize Sleep_@{row.rowNumber} - With initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.@{sleepPhase})
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= @{minFrequency}, frequency <= @{maxFrequency}),

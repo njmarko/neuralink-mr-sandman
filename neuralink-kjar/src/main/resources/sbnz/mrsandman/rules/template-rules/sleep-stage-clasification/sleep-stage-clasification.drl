@@ -6,7 +6,7 @@ import sbnz.mrsandman.neuralinkapp.model.events.*;
 rule "Categorize Sleep_5 - No initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 65, frequency <= 90),
 		count($b)
@@ -23,7 +23,7 @@ end
 rule "Categorize Sleep_5 - With initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.REM)
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 65, frequency <= 90),
@@ -42,7 +42,7 @@ end
 rule "Categorize Sleep_4 - No initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 50, frequency <= 65),
 		count($b)
@@ -59,7 +59,7 @@ end
 rule "Categorize Sleep_4 - With initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.PHASE4)
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 50, frequency <= 65),
@@ -78,7 +78,7 @@ end
 rule "Categorize Sleep_3 - No initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 37.5, frequency <= 50),
 		count($b)
@@ -95,7 +95,7 @@ end
 rule "Categorize Sleep_3 - With initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.PHASE3)
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 37.5, frequency <= 50),
@@ -114,7 +114,7 @@ end
 rule "Categorize Sleep_2 - No initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 25, frequency <= 37.5),
 		count($b)
@@ -131,7 +131,7 @@ end
 rule "Categorize Sleep_2 - With initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.PHASE2)
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 25, frequency <= 37.5),
@@ -150,7 +150,7 @@ end
 rule "Categorize Sleep_1 - No initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 15, frequency <= 25),
 		count($b)
@@ -167,7 +167,7 @@ end
 rule "Categorize Sleep_1 - With initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.PHASE1)
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 15, frequency <= 25),
@@ -186,7 +186,7 @@ end
 rule "Categorize Sleep_0 - No initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 0, frequency <= 15),
 		count($b)
@@ -203,7 +203,7 @@ end
 rule "Categorize Sleep_0 - With initial sleep stage"
 no-loop true
 when
-	$s: Sleep()
+	$s: Sleep(endTime == null)
 	$stage: SleepStage(endTime == null, sleep == $s, sleepPhase != SleepPhase.AWAKE)
 	Number(intValue >= 100) from accumulate (
 		$b: BrainWaveEvent(frequency >= 0, frequency <= 15),

@@ -28,10 +28,6 @@ public class Sleep implements Serializable {
 		this.endTime = endTime;
 	}
 
-	public void wakeUp() {
-		this.endTime = new Date();
-	}
-
 	public Date getStartTime() {
 		return startTime;
 	}
