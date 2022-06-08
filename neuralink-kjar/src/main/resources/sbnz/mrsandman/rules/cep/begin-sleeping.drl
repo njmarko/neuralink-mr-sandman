@@ -4,12 +4,13 @@ import sbnz.mrsandman.neuralinkapp.model.*;
 import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.*;
 import sbnz.mrsandman.neuralinkapp.model.events.heartrate.*;
 import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
+import sbnz.mrsandman.neuralinkapp.model.events.movement.*;
 
 rule "Begin sleeping event"
     when
     	LoweredTemperatureEvent()
     	HeartRateLoweredEvent()
-        $u: User(isStatic == true)
+        not (MovementDetectedEvent())
         not (Sleep(efficient == null, quality == null))
     then
     	System.out.println("Aktivacija begin sleeping eventa");

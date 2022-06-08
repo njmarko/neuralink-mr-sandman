@@ -3,6 +3,7 @@ package cepneuralink;
 import sbnz.mrsandman.neuralinkapp.model.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.*;
 import sbnz.mrsandman.neuralinkapp.model.events.*;
+import sbnz.mrsandman.neuralinkapp.model.events.movement.*;
 import sbnz.mrsandman.neuralinkapp.model.events.somnabulism.*;
 
 rule "Somnabulism detected event"
@@ -11,7 +12,7 @@ rule "Somnabulism detected event"
     	MuscleToneChangedEvent(muscleTone == MuscleTone.TENSE)
     	$s: Sleep()
     	SleepStage(sleepPhase == SleepPhase.REM, endTime == null, sleep == $s)
-    	UserMovementEvent()
+    	MovementDetectedEvent()
     then
     	System.out.println("Aktivacija detect somnabulism eventa");
         insert(new SomnabulismDetectedEvent());

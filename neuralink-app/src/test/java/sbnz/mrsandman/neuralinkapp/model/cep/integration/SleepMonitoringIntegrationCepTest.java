@@ -1,4 +1,4 @@
-package sbnz.mrsandman.neuralinkapp.model.cep;
+package sbnz.mrsandman.neuralinkapp.model.cep.integration;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.drools.core.time.SessionPseudoClock;
 import org.hamcrest.Matchers;
-import org.hamcrest.number.IsCloseTo;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieSession;
@@ -21,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import sbnz.mrsandman.neuralinkapp.model.Sleep;
 import sbnz.mrsandman.neuralinkapp.model.SleepStage;
 import sbnz.mrsandman.neuralinkapp.model.User;
+import sbnz.mrsandman.neuralinkapp.model.cep.BaseCepTest;
 import sbnz.mrsandman.neuralinkapp.model.enums.MuscleTone;
 import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
@@ -29,12 +29,12 @@ import sbnz.mrsandman.neuralinkapp.model.events.MuscleToneChangedEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SignalEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepMetricsCalculatedEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
-import sbnz.mrsandman.neuralinkapp.model.events.UserMovementEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.BeginSleepingEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.movement.MovementDetectedEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.somnabulism.SomnabulismDetectedEvent;
 
 @SpringBootTest
-public class SleepIntegrationCepTest extends BaseCepTest {
+public class SleepMonitoringIntegrationCepTest extends BaseCepTest {
 
 	@Override
 	protected void writeResourcesToSession(KieFileSystem kfs) {
@@ -42,7 +42,7 @@ public class SleepIntegrationCepTest extends BaseCepTest {
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/compute-sleep-score.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/begin-sleeping.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/somnabulism-detection.drl");
-		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/is-static-rule.drl");
+		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/movement-detection.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/sleep-stage-clasification/sleep-stage-clasification.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/signal-clasification/signal-clasification.drl");
 	}
@@ -56,9 +56,6 @@ public class SleepIntegrationCepTest extends BaseCepTest {
 		User user = new User();
 		user.setSpeed(0f);
 		ksession.insert(user);
-		ruleCount = ksession.fireAllRules();
-		assertEquals(1, ruleCount);
-		assertTrue(user.getIsStatic());
 		
 		// we make user fall asleep
 		for (int i = 0; i < 60; i++) {
@@ -99,15 +96,20 @@ public class SleepIntegrationCepTest extends BaseCepTest {
 		assertedSleepChange(ksession, sleep, SleepPhase.REM);
 		
 		// we detect somnabulism
-		// TODO: Simulate this event using low-level speed signal
-		ksession.insert(new UserMovementEvent());
-		clock.advanceTime(10, TimeUnit.SECONDS);
+		for (int i = 0; i < 30; i++) { 
+			ksession.insert(new SignalEvent(new Random().doubles(1,  10).findFirst().getAsDouble(), SignalType.SPEED));
+			clock.advanceTime(1, TimeUnit.SECONDS);
+		}
+		
 		// TODO: Simulate this event using low-level muscle something signal
 		ksession.insert(new MuscleToneChangedEvent(MuscleTone.TENSE));
-		clock.advanceTime(10, TimeUnit.SECONDS);
 		ruleCount = ksession.fireAllRules();
 		
-		assertEquals(1, ruleCount);
+		// 1 - Movement detected event
+		// 2 - Somnabulism detected event
+		assertEquals(2, ruleCount);
+		Collection<?> movementDetectedEvent = ksession.getObjects(new ClassObjectFilter(MovementDetectedEvent.class));
+		assertEquals(1, movementDetectedEvent.size());
 		Collection<?> somnabulismDetectedEvent = ksession.getObjects(new ClassObjectFilter(SomnabulismDetectedEvent.class));
 		assertEquals(1, somnabulismDetectedEvent.size());
 		
@@ -142,7 +144,7 @@ public class SleepIntegrationCepTest extends BaseCepTest {
 		// 4 - Compute sleep efficiency
 		assertEquals(4, ruleCount);
 		assertFalse(sleep.getEfficient());
-		assertThat(sleep.getQuality(), Matchers.closeTo(10.0 * 36.0 / 120.0, 1e-4));
+		assertThat(sleep.getQuality(), Matchers.closeTo(10.0 * 37.0 / 121.0, 1e-4));
 		Collection<?> metricsEvent = ksession.getObjects(new ClassObjectFilter(SleepMetricsCalculatedEvent.class));
 		assertEquals(1, metricsEvent.size());
 	}

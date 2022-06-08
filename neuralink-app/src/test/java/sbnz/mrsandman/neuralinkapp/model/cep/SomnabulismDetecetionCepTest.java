@@ -14,11 +14,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import sbnz.mrsandman.neuralinkapp.model.Sleep;
 import sbnz.mrsandman.neuralinkapp.model.SleepStage;
-import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.enums.MuscleTone;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 import sbnz.mrsandman.neuralinkapp.model.events.MuscleToneChangedEvent;
-import sbnz.mrsandman.neuralinkapp.model.events.UserMovementEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.movement.MovementDetectedEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.somnabulism.SomnabulismDetectedEvent;
 
 @SpringBootTest
@@ -33,7 +32,7 @@ public class SomnabulismDetecetionCepTest extends BaseCepTest {
 	protected void runPseudoClockExample(KieSession ksession) {
 		int ruleCount = 0;
         SessionPseudoClock clock = ksession.getSessionClock();
-        ksession.insert(new UserMovementEvent());
+        ksession.insert(new MovementDetectedEvent());
         Sleep sleep = new Sleep();
         ksession.insert(sleep);
         ksession.insert(new SleepStage(sleep, SleepPhase.REM));

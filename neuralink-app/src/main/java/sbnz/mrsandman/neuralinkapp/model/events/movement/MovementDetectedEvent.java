@@ -1,4 +1,4 @@
-package sbnz.mrsandman.neuralinkapp.model.events;
+package sbnz.mrsandman.neuralinkapp.model.events.movement;
 
 import java.io.Serializable;
 
@@ -7,8 +7,8 @@ import org.kie.api.definition.type.Role;
 import org.kie.api.definition.type.Role.Type;
 
 @Role(Type.EVENT)
-@Expires("1m")
-public class UserMovementEvent implements Serializable {
+@Expires("5m")
+public class MovementDetectedEvent implements Serializable {
 
 	/**
 	 *

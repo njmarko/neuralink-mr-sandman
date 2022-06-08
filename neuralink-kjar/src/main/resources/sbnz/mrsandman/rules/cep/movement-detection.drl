@@ -1,0 +1,27 @@
+package cepneuralink;
+
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+import sbnz.mrsandman.neuralinkapp.model.events.movement.*;
+
+
+rule "Detect user movement."
+	no-loop
+    when
+       	s1: SignalEvent(signalType == SignalType.SPEED, value > 0, value < 10)
+	    Number(intValue >= 10) from accumulate(
+	    	s2: SignalEvent(
+	    		this != s1,
+	    		signalType == SignalType.SPEED,
+	    		value > 0,
+	    		value < 10,
+	    		this meets[30s] s1
+	    	),
+	    	count(s2) 
+	    )
+	    not (
+	    	MovementDetectedEvent()
+	    )
+    then
+    	System.out.println("Aktivacija pravila za detektovanje staticnosti.");
+        insert(new MovementDetectedEvent());
+end
