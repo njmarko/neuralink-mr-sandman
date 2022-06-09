@@ -1,0 +1,51 @@
+<mat-tab-group>
+  <mat-tab label="Dashboard">
+    <mat-grid-list cols="3" rowHeight="3:2">
+      <mat-grid-tile>
+        <app-signal-chart [type]="'line'" [data]="chartData[0].chartData" [labels]="chartData[0].labels">
+        </app-signal-chart>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <app-signal-chart [type]="'line'" [data]="chartData[1].chartData" [labels]="chartData[1].labels">
+        </app-signal-chart>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <app-signal-chart [type]="'line'" [data]="chartData[2].chartData" [labels]="chartData[2].labels">
+        </app-signal-chart>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <app-signal-chart [type]="'line'" [data]="chartData[3].chartData" [labels]="chartData[3].labels">
+        </app-signal-chart>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <app-signal-chart [type]="'line'" [data]="chartData[5].chartData" [labels]="chartData[5].labels">
+        </app-signal-chart>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <app-signal-chart [type]="'line'" [data]="chartData[6].chartData" [labels]="chartData[6].labels">
+        </app-signal-chart>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-tab>
+  <mat-tab label="Speed chart">
+    <app-signal-chart [type]="'line'" [data]="chartData[0].chartData" [labels]="chartData[0].labels"></app-signal-chart>
+  </mat-tab>
+  <mat-tab label="Temperature chart">
+    <app-signal-chart [type]="'line'" [data]="chartData[1].chartData" [labels]="chartData[1].labels"></app-signal-chart>
+  </mat-tab>
+  <mat-tab label="Heart rate chart">
+    <app-signal-chart [type]="'line'" [data]="chartData[2].chartData" [labels]="chartData[2].labels"></app-signal-chart>
+  </mat-tab>
+  <mat-tab label="Muscle voltage chart">
+    <app-signal-chart [type]="'line'" [data]="chartData[3].chartData" [labels]="chartData[3].labels"></app-signal-chart>
+  </mat-tab>
+  <mat-tab label="Light level chart">
+    <app-signal-chart [type]="'line'" [data]="chartData[4].chartData" [labels]="chartData[4].labels"></app-signal-chart>
+  </mat-tab>
+  <mat-tab label="Alcohol level chart">
+    <app-signal-chart [type]="'line'" [data]="chartData[5].chartData" [labels]="chartData[5].labels"></app-signal-chart>
+  </mat-tab>
+  <mat-tab label="Caffeine level chart">
+    <app-signal-chart [type]="'line'" [data]="chartData[6].chartData" [labels]="chartData[6].labels"></app-signal-chart>
+  </mat-tab>
+</mat-tab-group>

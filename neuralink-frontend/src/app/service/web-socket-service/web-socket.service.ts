@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { DeviceSendSignal } from 'src/app/model/DeviceSendSignal';
+import { SignalReceivedResponse } from 'src/app/model/SignalReceivedResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,7 @@ export class WebSocketService {
   url: string = 'http://localhost:8080/socket/';
   private stompClient!: any;
   public isLoaded: boolean = false;
+  notifier: EventEmitter<SignalReceivedResponse> = new EventEmitter<SignalReceivedResponse>();
 
   constructor(private http: HttpClient) { }
 
@@ -41,10 +43,14 @@ export class WebSocketService {
     }
   }
 
+  onSignalRecieved() {
+    return this.notifier;
+  }
+
   handleResult(message: { body: string }): void {
     if (message.body) {
       const response = JSON.parse(message.body);
-      console.log(response);
+      this.notifier.emit(response);
     }
   }
 
