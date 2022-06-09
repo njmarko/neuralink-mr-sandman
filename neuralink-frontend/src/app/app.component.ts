@@ -18,12 +18,4 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.socketService.initializeWebSocketConnection();
   }
-
-  onClick(): void {
-    this.socketService.sendMessageUsingSocket({
-      deviceId: uuid.v4(),
-      signalType: "SPEED",
-      value: 123
-    });
-  }
 }

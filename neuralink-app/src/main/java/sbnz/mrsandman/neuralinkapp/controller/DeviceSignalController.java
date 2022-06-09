@@ -20,6 +20,6 @@ public class DeviceSignalController {
 	@MessageMapping({"send"})
 	public void onSignalReceived(DeviceSendSignalRequest request) {
 		System.out.println("GOT SIGNAL FROM DEVICE " + request.getDeviceId() + " FOR TYPE " + request.getSignalType() + " WITH VALUE " + request.getValue());
-		this.simpMessagingTemplate.convertAndSend("/live-singals", request);
+		this.simpMessagingTemplate.convertAndSend("/live-signals", request);
 	}
 }

@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import * as Stomp from 'stompjs';
@@ -13,7 +12,7 @@ export class WebSocketService {
   private stompClient!: any;
   public isLoaded: boolean = false;
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
   initializeWebSocketConnection() {
     if (!this.isLoaded) {
@@ -21,23 +20,7 @@ export class WebSocketService {
       this.stompClient = Stomp.over(ws);
       this.stompClient.connect({}, () => {
         this.isLoaded = true;
-        this.openGlobalSocket();
       });
-    }
-  }
-
-  openGlobalSocket() {
-    if (this.isLoaded) {
-      try {
-        this.stompClient.subscribe(
-          '/live-signals',
-          (message: { body: string }) => {
-            this.handleResult(message);
-          }
-        );
-      } catch {
-        console.log('Connection has not been established yet... connecting...');
-      }
     }
   }
 
