@@ -14,19 +14,37 @@
       <!-- Low value Column -->
       <ng-container matColumnDef="low">
         <th mat-header-cell *matHeaderCellDef> Low value </th>
-        <td mat-cell *matCellDef="let signal"> {{signal.low}} </td>
+        <td mat-cell *matCellDef="let signal">
+          <mat-form-field appearance="fill">
+            <mat-label>Lowest value for signal</mat-label>
+            <input type="number" [disabled]="signal.running" [(ngModel)]="signal.low" matInput
+              [matTooltipDisabled]="!signal.running" matTooltip="Driver needs to be stopped in order to make changes.">
+          </mat-form-field>
+        </td>
       </ng-container>
 
       <!-- High value Column -->
       <ng-container matColumnDef="high">
         <th mat-header-cell *matHeaderCellDef> High value </th>
-        <td mat-cell *matCellDef="let signal"> {{signal.high}} </td>
+        <td mat-cell *matCellDef="let signal">
+          <mat-form-field appearance="fill">
+            <mat-label>Highest value for signal</mat-label>
+            <input type="number" [disabled]="signal.running" [(ngModel)]="signal.high" matInput
+              [matTooltipDisabled]="!signal.running" matTooltip="Driver needs to be stopped in order to make changes.">
+          </mat-form-field>
+        </td>
       </ng-container>
 
       <!-- Frequency Column -->
       <ng-container matColumnDef="frequency">
         <th mat-header-cell *matHeaderCellDef> Frequency (ms) </th>
-        <td mat-cell *matCellDef="let signal"> {{signal.frequency}} </td>
+        <td mat-cell *matCellDef="let signal">
+          <mat-form-field appearance="fill">
+            <mat-label>Frequency of sedning signal value (ms)</mat-label>
+            <input type="number" [disabled]="signal.running" [(ngModel)]="signal.frequency" matInput
+              [matTooltipDisabled]="!signal.running" matTooltip="Driver needs to be stopped in order to make changes.">
+          </mat-form-field>
+        </td>
       </ng-container>
 
       <!-- Action Column -->

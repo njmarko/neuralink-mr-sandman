@@ -24,13 +24,6 @@ export class WebSocketService {
     }
   }
 
-  handleResult(message: { body: string }): void {
-    if (message.body) {
-      const response = JSON.parse(message.body);
-      console.log(response);
-    }
-  }
-
   sendMessageUsingSocket(request: DeviceSendSignal) {
     this.stompClient.send(
       '/device-signal/send',

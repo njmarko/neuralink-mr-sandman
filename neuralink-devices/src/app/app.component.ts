@@ -100,6 +100,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   startDriver(signal: SignalDriverConfig): void {
+    console.log(signal);
     this.drivers.set(signal.signalType, setInterval(
       () => {
         this.sendSignal({
@@ -115,6 +116,7 @@ export class AppComponent implements OnInit, OnDestroy {
   stopDriver(signal: SignalDriverConfig): void {
     if (this.drivers.has(signal.signalType)) {
       clearInterval(this.drivers.get(signal.signalType));
+      this.drivers.delete(signal.signalType);
     }
     signal.running = false;
   }
