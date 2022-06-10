@@ -8,7 +8,4 @@
         <ksession name="cepConfigKsessionPseudoClock" clockType="pseudo" type="stateful"/>
         <ksession name="cepConfigKsessionRealtimeClock" clockType="realtime" type="stateful"/>
     </kbase>
-	 <configuration>
-	   <property key="drools.dialect.mvel.strict" value="false" />
-	 </configuration>
 </kmodule>

@@ -62,7 +62,7 @@ rule "Raised @{badHabitType} level @{timePeriod}@{timeUnit} before sleep score b
         insert(
         	new BadHabbit(
 	        	BadHabbitType.@{badHabitType}, 
-	        	LocalDateTime.now(), 
+	        	LocalDateTime.ofInstant(Instant.ofEpochMilli(drools.getWorkingMemory().getSessionClock().getCurrentTime()), ZoneId.systemDefault()), 
 	        	new Double( (1 - (avg_time / (@{timePeriod}*@{timeUnitValue}))) * (avg_val/@{expectedValue}))
         	)
         );
