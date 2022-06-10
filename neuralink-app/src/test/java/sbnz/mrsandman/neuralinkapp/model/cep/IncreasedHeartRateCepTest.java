@@ -32,23 +32,23 @@ public class IncreasedHeartRateCepTest extends BaseCepTest{
 	@Override
 	protected void runPseudoClockExample(KieSession ksession) {
 		SessionPseudoClock clock = ksession.getSessionClock();
-		for (int index = 0; index < 100; index++) {
-			SignalEvent level = new SignalEvent(SignalType.HEART_BEAT);
+		for (int index = 0; index < 2400; index++) {
+			SignalEvent level = new SignalEvent(80, SignalType.HEART_BEAT);
 			ksession.insert(level);
-			clock.advanceTime(400, TimeUnit.MILLISECONDS);
-			int ruleCount = ksession.fireAllRules();
+			clock.advanceTime(10, TimeUnit.MILLISECONDS);
+//			int ruleCount = ksession.fireAllRules();
 //			assertThat(ruleCount, equalTo(0));
 		}
 		SignalEvent level = new SignalEvent(SignalType.HEART_BEAT);
 		ksession.insert(level);
-		clock.advanceTime(400, TimeUnit.MILLISECONDS);
+		clock.advanceTime(100, TimeUnit.MILLISECONDS);
 		int ruleCount = ksession.fireAllRules();
 		assertThat(ruleCount, equalTo(1));
 		
 		// Should not trigger the rule again because HeartRateIncreasedEvent was generated in recently
 		level = new SignalEvent(SignalType.HEART_BEAT);
 		ksession.insert(level);
-		clock.advanceTime(400, TimeUnit.MILLISECONDS);
+		clock.advanceTime(100, TimeUnit.MILLISECONDS);
 		ruleCount = ksession.fireAllRules();
 		assertThat(ruleCount, equalTo(0));
 		

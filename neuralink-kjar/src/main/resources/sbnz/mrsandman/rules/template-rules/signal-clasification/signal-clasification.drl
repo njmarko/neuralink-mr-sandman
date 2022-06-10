@@ -69,7 +69,6 @@ rule "Categorize Signal_5 - TEMPERATURE between 0 and 36 and insert new LoweredT
 	    )
         not(
             LoweredTemperatureEvent() 
-            over window:time(10s)
         )
 	then
 		System.out.println("Detekcija promene singala SignalType.TEMPERATURE - LoweredTemperatureEvent");
@@ -144,16 +143,16 @@ rule "Categorize Signal_3 - CAFFEINE_LEVEL between 20 and 100 and insert new Rai
 		insert(new RaisedCaffeineLevelEvent($avg_val));
 	end
 
-rule "Categorize Signal_2 - HEART_BEAT between 0 and 100 and insert new HeartRateLoweredEvent"
+rule "Categorize Signal_2 - HEART_BEAT between 1 and 50 and insert new HeartRateLoweredEvent"
 	no-loop true
 	when
-		s1: SignalEvent(signalType == SignalType.HEART_BEAT, value >= 0, value < 100)
-	    Number(intValue <= 65) from accumulate(
+		s1: SignalEvent(signalType == SignalType.HEART_BEAT, value >= 1, value < 50)
+	    Number(intValue >= 100) from accumulate(
 	    	s2: SignalEvent(
 	    		this != s1,
 	    		signalType == SignalType.HEART_BEAT,
-	    		value >= 0,
-	    		value < 100,
+	    		value >= 1,
+	    		value < 50,
 	    		this meets[60s] s1
 	    	),
 	    	count(s2) 
@@ -163,30 +162,29 @@ rule "Categorize Signal_2 - HEART_BEAT between 0 and 100 and insert new HeartRat
 	    		$val: value,
 	    		this != s1,
 	    		signalType == SignalType.HEART_BEAT,
-	    		value >= 0,
-	    		value < 100,
+	    		value >= 1,
+	    		value < 50,
 	    		this meets[60s] s1
 	    	),
 	    	average($val) 
 	    )
         not(
             HeartRateLoweredEvent() 
-            over window:time(60s)
         )
 	then
 		System.out.println("Detekcija promene singala SignalType.HEART_BEAT - HeartRateLoweredEvent");
 		insert(new HeartRateLoweredEvent($avg_val));
 	end
 
-rule "Categorize Signal_1 - HEART_BEAT between 0 and 100 and insert new HeartRateIncreasedEvent"
+rule "Categorize Signal_1 - HEART_BEAT between 50 and 100 and insert new HeartRateIncreasedEvent"
 	no-loop true
 	when
-		s1: SignalEvent(signalType == SignalType.HEART_BEAT, value >= 0, value < 100)
+		s1: SignalEvent(signalType == SignalType.HEART_BEAT, value >= 50, value < 100)
 	    Number(intValue >= 100) from accumulate(
 	    	s2: SignalEvent(
 	    		this != s1,
 	    		signalType == SignalType.HEART_BEAT,
-	    		value >= 0,
+	    		value >= 50,
 	    		value < 100,
 	    		this meets[60s] s1
 	    	),
@@ -197,7 +195,7 @@ rule "Categorize Signal_1 - HEART_BEAT between 0 and 100 and insert new HeartRat
 	    		$val: value,
 	    		this != s1,
 	    		signalType == SignalType.HEART_BEAT,
-	    		value >= 0,
+	    		value >= 50,
 	    		value < 100,
 	    		this meets[60s] s1
 	    	),

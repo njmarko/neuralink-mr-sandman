@@ -21,11 +21,9 @@ import sbnz.mrsandman.neuralinkapp.model.Sleep;
 import sbnz.mrsandman.neuralinkapp.model.SleepStage;
 import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.cep.BaseCepTest;
-import sbnz.mrsandman.neuralinkapp.model.enums.MuscleTone;
 import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 import sbnz.mrsandman.neuralinkapp.model.events.BrainWaveEvent;
-import sbnz.mrsandman.neuralinkapp.model.events.MuscleToneChangedEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SignalEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepMetricsCalculatedEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
@@ -59,10 +57,10 @@ public class SleepMonitoringIntegrationCepTest extends BaseCepTest {
 		ksession.insert(user);
 		
 		// we make user fall asleep
-		for (int i = 0; i < 60; i++) {
+		for (int i = 0; i < 240; i++) {
 			ksession.insert(new SignalEvent(35, SignalType.TEMPERATURE));
-			ksession.insert(new SignalEvent(SignalType.HEART_BEAT));
-			clock.advanceTime(1, TimeUnit.SECONDS);
+			ksession.insert(new SignalEvent(40, SignalType.HEART_BEAT));
+			clock.advanceTime(100, TimeUnit.MILLISECONDS);
 		}
 		ruleCount = ksession.fireAllRules();
 		// 1 - Rule for detecting heart rate lowered event
