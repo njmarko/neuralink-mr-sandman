@@ -20,7 +20,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/device-signal")
-                .enableSimpleBroker("/live-signals");				
+                .enableSimpleBroker("/live-signals", "/live-events");
     }
 
     @Override

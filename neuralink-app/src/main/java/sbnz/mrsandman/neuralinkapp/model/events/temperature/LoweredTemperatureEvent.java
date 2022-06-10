@@ -5,9 +5,11 @@ import java.io.Serializable;
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
 
+import sbnz.mrsandman.neuralinkapp.model.events.BaseEvent;
+
 @Role(Role.Type.EVENT)
 @Expires("20m")
-public class LoweredTemperatureEvent implements Serializable {
+public class LoweredTemperatureEvent extends BaseEvent implements Serializable {
 
 	/**
 	 *

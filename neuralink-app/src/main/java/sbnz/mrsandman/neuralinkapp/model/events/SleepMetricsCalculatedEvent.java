@@ -8,7 +8,7 @@ import org.kie.api.definition.type.Role.Type;
 
 @Role(Type.EVENT)
 @Expires("12h")
-public class SleepMetricsCalculatedEvent implements Serializable {
+public class SleepMetricsCalculatedEvent extends BaseEvent implements Serializable {
 
 	/**
 	 *

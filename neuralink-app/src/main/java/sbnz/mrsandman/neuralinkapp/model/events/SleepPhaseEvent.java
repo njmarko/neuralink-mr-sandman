@@ -10,7 +10,7 @@ import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 @Role(Role.Type.EVENT)
 //@Timestamp("executionTime")
 @Expires("30m")
-public class SleepPhaseEvent implements Serializable {
+public class SleepPhaseEvent extends BaseEvent implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 //	private LocalDateTime executionTime;

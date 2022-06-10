@@ -9,7 +9,7 @@ import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
 
 @Role(Role.Type.EVENT)
 @Expires("10s")
-public class SignalEvent implements Serializable {
+public class SignalEvent extends BaseEvent implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private double value;

@@ -22,6 +22,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [],
@@ -50,6 +51,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatTabsModule,
     MatChipsModule,
     MatProgressSpinnerModule,
+    MatCheckboxModule
   ],
   exports: [
     MatDialogModule,
@@ -75,6 +77,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatTabsModule,
     MatChipsModule,
     MatProgressSpinnerModule,
+    MatCheckboxModule
   ],
 })
-export class MaterialModule {}
+export class MaterialModule { }

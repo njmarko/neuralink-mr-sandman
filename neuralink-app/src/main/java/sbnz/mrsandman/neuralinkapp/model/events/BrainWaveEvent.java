@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Role(Role.Type.EVENT)
 @Expires("10m")
-public class BrainWaveEvent implements Serializable {
+public class BrainWaveEvent extends BaseEvent implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

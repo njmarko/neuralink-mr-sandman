@@ -6,10 +6,12 @@ import java.time.LocalDateTime;
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
 
+import sbnz.mrsandman.neuralinkapp.model.events.BaseEvent;
+
 @Role(Role.Type.EVENT)
 //@Timestamp("executionTime")
 @Expires("6h")
-public class AlcoholBeforeSleepEvent implements Serializable {
+public class AlcoholBeforeSleepEvent extends BaseEvent implements Serializable {
 
 	private static final long serialVersionUID = 956194426874483654L;
 

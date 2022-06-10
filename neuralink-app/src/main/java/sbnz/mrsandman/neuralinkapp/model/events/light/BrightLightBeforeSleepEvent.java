@@ -6,9 +6,11 @@ import java.time.LocalDateTime;
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
 
+import sbnz.mrsandman.neuralinkapp.model.events.BaseEvent;
+
 @Role(Role.Type.EVENT)
 @Expires("12h")
-public class BrightLightBeforeSleepEvent implements Serializable {
+public class BrightLightBeforeSleepEvent extends BaseEvent implements Serializable {
 
 	private static final long serialVersionUID = -2686594610495110819L;
 
