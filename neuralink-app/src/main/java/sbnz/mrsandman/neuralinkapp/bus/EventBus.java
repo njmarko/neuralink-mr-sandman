@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import sbnz.mrsandman.neuralinkapp.dto.SignalReceivedResponse;
+import sbnz.mrsandman.neuralinkapp.model.events.BaseEvent;
+
 @Service
 public class EventBus {
 	private final SimpMessagingTemplate simpMessagingTemplate;
@@ -13,12 +16,12 @@ public class EventBus {
 		this.simpMessagingTemplate = simpMessagingTemplate;
 	}
 
-	public void broadcastSignal(Object signal) {
+	public void broadcastSignal(SignalReceivedResponse signal) {
 		this.simpMessagingTemplate.convertAndSend("/live-signals", signal);
 	}
 
 
-	public void logEvent(Object event) {
+	public void logEvent(BaseEvent event) {
 		this.simpMessagingTemplate.convertAndSend("/live-events", event);
 	}
 	
