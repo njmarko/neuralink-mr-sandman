@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { WebSocketService } from './service/web-socket-service/web-socket.service';
 
-import { ChartDataSets } from 'chart.js';
 import { SignalChartData } from './model/SignalChartData';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from './service/user-service/user.service';
 
 @Component({
   selector: 'app-root',
@@ -44,8 +45,11 @@ export class AppComponent implements OnInit {
   ]
 
   chartDataMap: Map<string, SignalChartData> = new Map();
+  form: FormGroup;
+  registered: boolean = false;
+  selectedTabIndex: number = 0;
 
-  constructor(private socketService: WebSocketService) {
+  constructor(private socketService: WebSocketService, private fb: FormBuilder, private userService: UserService) {
     this.chartDataMap.set('SPEED', this.chartData[0]);
     this.chartDataMap.set('TEMPERATURE', this.chartData[1]);
     this.chartDataMap.set('HEART_RATE', this.chartData[2]);
@@ -53,6 +57,13 @@ export class AppComponent implements OnInit {
     this.chartDataMap.set('LIGHT_LEVEL', this.chartData[4]);
     this.chartDataMap.set('ALCOHOL_LEVEL', this.chartData[5]);
     this.chartDataMap.set('CAFFEINE_LEVEL', this.chartData[6]);
+
+    this.form = fb.group({
+      age: [25, Validators.required],
+      goingToBedTime: ['23:00', Validators.required],
+      isLightSleep: [false, Validators.required],
+      gender: ['MALE', Validators.required]
+    });
   }
 
   ngOnInit(): void {
@@ -63,6 +74,17 @@ export class AppComponent implements OnInit {
         this.chartDataMap.get(type)?.labels.push('.');
         this.chartDataMap.get(type)?.chartData[0].data?.push(signal.value);
       }
+    })
+  }
+
+  onSubmit(): void {
+    if (!this.form.valid) {
+      return;
+    }
+    this.userService.register(this.form.value).subscribe(response => {
+      console.log(response);
+      this.registered = true;
+      this.selectedTabIndex = 1;
     })
   }
 }

@@ -1,5 +1,38 @@
-<mat-tab-group>
-  <mat-tab label="Dashboard">
+<mat-tab-group [(selectedIndex)]="selectedTabIndex">
+  <mat-tab label="Questionnaire" [disabled]="registered">
+    <mat-card>
+      <mat-card-content>
+        <form [formGroup]="form" (submit)="onSubmit()">
+          <h2>Please fill in a Questionnaire</h2>
+          <mat-form-field class="full-width-input">
+            <input matInput placeholder="Age" formControlName="age" type="number" required />
+            <mat-error> Please provide a valid age. </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width-input">
+            <input matInput placeholder="When do you usually go to sleep?" formControlName="goingToBedTime"
+              pattern="[0-9]{2}:[0-9]{2}" required />
+            <mat-error> Please provide a valid going to bed time. </mat-error>
+          </mat-form-field>
+          <mat-checkbox formControlName="isLightSleep">Do you have light sleep?</mat-checkbox>
+          <mat-form-field class="full-width-input">
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+              <mat-option value="MALE">
+                Male
+              </mat-option>
+              <mat-option value="FEMALE">
+                Female
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-raised-button type="submit" color="primary">
+            Register
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+  <mat-tab label="Dashboard" [disabled]="!registered">
     <mat-grid-list cols="3" rowHeight="3:2">
       <mat-grid-tile>
         <app-signal-chart [type]="'line'" [data]="chartData[0].chartData" [labels]="chartData[0].labels">
@@ -27,25 +60,25 @@
       </mat-grid-tile>
     </mat-grid-list>
   </mat-tab>
-  <mat-tab label="Speed chart">
+  <mat-tab label="Speed chart" [disabled]="!registered">
     <app-signal-chart [type]="'line'" [data]="chartData[0].chartData" [labels]="chartData[0].labels"></app-signal-chart>
   </mat-tab>
-  <mat-tab label="Temperature chart">
+  <mat-tab label="Temperature chart" [disabled]="!registered">
     <app-signal-chart [type]="'line'" [data]="chartData[1].chartData" [labels]="chartData[1].labels"></app-signal-chart>
   </mat-tab>
-  <mat-tab label="Heart rate chart">
+  <mat-tab label="Heart rate chart" [disabled]="!registered">
     <app-signal-chart [type]="'line'" [data]="chartData[2].chartData" [labels]="chartData[2].labels"></app-signal-chart>
   </mat-tab>
-  <mat-tab label="Muscle voltage chart">
+  <mat-tab label="Muscle voltage chart" [disabled]="!registered">
     <app-signal-chart [type]="'line'" [data]="chartData[3].chartData" [labels]="chartData[3].labels"></app-signal-chart>
   </mat-tab>
-  <mat-tab label="Light level chart">
+  <mat-tab label="Light level chart" [disabled]="!registered">
     <app-signal-chart [type]="'line'" [data]="chartData[4].chartData" [labels]="chartData[4].labels"></app-signal-chart>
   </mat-tab>
-  <mat-tab label="Alcohol level chart">
+  <mat-tab label="Alcohol level chart" [disabled]="!registered">
     <app-signal-chart [type]="'line'" [data]="chartData[5].chartData" [labels]="chartData[5].labels"></app-signal-chart>
   </mat-tab>
-  <mat-tab label="Caffeine level chart">
+  <mat-tab label="Caffeine level chart" [disabled]="!registered">
     <app-signal-chart [type]="'line'" [data]="chartData[6].chartData" [labels]="chartData[6].labels"></app-signal-chart>
   </mat-tab>
 </mat-tab-group>
