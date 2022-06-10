@@ -34,9 +34,9 @@ public class BadHabitScoreTemplate extends BaseTemplateTest {
 //        	timeUnitValue
 //        	expectedValue
             new String[]{ "ALCOHOL", "AlcoholBeforeSleepEvent", "6", "h", "60", "2.0"},
-            new String[]{ "INTENSE_PHYSICAL_ACTIVITY", "PhysicalActivityEvent", "2h", "h", "60", "37.0"},
-            new String[]{ "BRIGHT_LIGHT_EXPOSURE", "BrightLightBeforeSleepEvent", "2h", "h", "60", "1000.0"},
-            new String[]{ "CAFFEINE", "CaffeineBeforeSleepEvent", "6h", "h", "60", "25.0"},
+            new String[]{ "INTENSE_PHYSICAL_ACTIVITY", "PhysicalActivityEvent", "2", "h", "60", "37.0"},
+            new String[]{ "BRIGHT_LIGHT_EXPOSURE", "BrightLightBeforeSleepEvent", "2", "h", "60", "1000.0"},
+            new String[]{ "CAFFEINE", "CaffeineBeforeSleepEvent", "6", "h", "60", "25.0"},
 
         });
         

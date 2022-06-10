@@ -127,9 +127,10 @@ public class BadHabbitsScoringCepTest extends BaseCepTest {
 		filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/" + fileName + ".drl";
 		f = new File(filePath);
 		kfs.write(ResourceFactory.newFileResource(f));
-
-		fileName = "bad-habbit-score-cep";
-		filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/" + fileName + ".drl";
+		
+		fileName = "bad-habit-score-template";
+		filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + "/"
+				+ fileName + ".drl";
 		f = new File(filePath);
 		kfs.write(ResourceFactory.newFileResource(f));
 	}

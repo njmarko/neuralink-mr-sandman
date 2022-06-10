@@ -69,6 +69,7 @@ rule "Categorize Signal_5 - TEMPERATURE between 0 and 36 and insert new LoweredT
 	    )
         not(
             LoweredTemperatureEvent() 
+            over window:time(10s)
         )
 	then
 		System.out.println("Detekcija promene singala SignalType.TEMPERATURE - LoweredTemperatureEvent");
@@ -170,6 +171,7 @@ rule "Categorize Signal_2 - HEART_BEAT between 1 and 50 and insert new HeartRate
 	    )
         not(
             HeartRateLoweredEvent() 
+            over window:time(60s)
         )
 	then
 		System.out.println("Detekcija promene singala SignalType.HEART_BEAT - HeartRateLoweredEvent");
