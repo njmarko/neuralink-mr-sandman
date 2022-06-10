@@ -25,14 +25,14 @@ import java.time.LocalDateTime;
 
 template "bad-habit-score-template"
 
-rule "Raised @{badHabitType} level @{timePeriod} @{timeUnit} before sleep score based on time proximity and average value"
+rule "Raised @{badHabitType} level @{timePeriod}@{timeUnit} before sleep score based on time proximity and average value"
 	no-loop true
     when       
         spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
         u:User(opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
         	var1: @{causeEventName}(
-    			this meets[ @{timePeriod}s ] spe
+    			this meets[@{timePeriod}@{timeUnit}] spe
         	),
         	count(var1)
         )
@@ -40,14 +40,14 @@ rule "Raised @{badHabitType} level @{timePeriod} @{timeUnit} before sleep score 
         	var2: @{causeEventName}(
         		val: value,
         		t: timeStamp,
-    			this meets[6h] spe
+    			this meets[@{timePeriod}@{timeUnit}] spe
         	),
         	average(Duration.between(t.toLocalTime(), opt_time).toMinutes())
         )
        	avg_val: Double() from accumulate(
         	var3: @{causeEventName}(
         		val: value,
-    			this meets[6h] spe
+    			this meets[@{timePeriod}@{timeUnit}] spe
         	),
         	average(val)
         )        

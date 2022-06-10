@@ -13,14 +13,14 @@ import java.util.Date;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-rule "Raised CAFFEINE level 6h h before sleep score based on time proximity and average value"
+rule "Raised CAFFEINE level 6h before sleep score based on time proximity and average value"
 	no-loop true
     when       
         spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
         u:User(opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
         	var1: CaffeineBeforeSleepEvent(
-    			this meets[ 6hs ] spe
+    			this meets[6h] spe
         	),
         	count(var1)
         )
@@ -44,24 +44,24 @@ rule "Raised CAFFEINE level 6h h before sleep score based on time proximity and 
             over window:time(6h)
         )
     then
-    	System.out.printf("Adding bad habit score for CAFFEINE %f\n", (1 - (avg_time / (6h*60))) * (avg_val/25.0));
+    	System.out.printf("Adding bad habit score for CAFFEINE %f\n", (1 - (avg_time / (6*60))) * (avg_val/25.0));
         insert(
         	new BadHabbit(
 	        	BadHabbitType.CAFFEINE, 
 	        	LocalDateTime.now(), 
-	        	new Double( (1 - (avg_time / (6h*60))) * (avg_val/25.0))
+	        	new Double( (1 - (avg_time / (6*60))) * (avg_val/25.0))
         	)
         );
 	end
 
-rule "Raised BRIGHT_LIGHT_EXPOSURE level 2h h before sleep score based on time proximity and average value"
+rule "Raised BRIGHT_LIGHT_EXPOSURE level 2h before sleep score based on time proximity and average value"
 	no-loop true
     when       
         spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
         u:User(opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
         	var1: BrightLightBeforeSleepEvent(
-    			this meets[ 2hs ] spe
+    			this meets[2h] spe
         	),
         	count(var1)
         )
@@ -69,14 +69,14 @@ rule "Raised BRIGHT_LIGHT_EXPOSURE level 2h h before sleep score based on time p
         	var2: BrightLightBeforeSleepEvent(
         		val: value,
         		t: timeStamp,
-    			this meets[6h] spe
+    			this meets[2h] spe
         	),
         	average(Duration.between(t.toLocalTime(), opt_time).toMinutes())
         )
        	avg_val: Double() from accumulate(
         	var3: BrightLightBeforeSleepEvent(
         		val: value,
-    			this meets[6h] spe
+    			this meets[2h] spe
         	),
         	average(val)
         )        
@@ -85,24 +85,24 @@ rule "Raised BRIGHT_LIGHT_EXPOSURE level 2h h before sleep score based on time p
             over window:time(6h)
         )
     then
-    	System.out.printf("Adding bad habit score for BRIGHT_LIGHT_EXPOSURE %f\n", (1 - (avg_time / (2h*60))) * (avg_val/1000.0));
+    	System.out.printf("Adding bad habit score for BRIGHT_LIGHT_EXPOSURE %f\n", (1 - (avg_time / (2*60))) * (avg_val/1000.0));
         insert(
         	new BadHabbit(
 	        	BadHabbitType.BRIGHT_LIGHT_EXPOSURE, 
 	        	LocalDateTime.now(), 
-	        	new Double( (1 - (avg_time / (2h*60))) * (avg_val/1000.0))
+	        	new Double( (1 - (avg_time / (2*60))) * (avg_val/1000.0))
         	)
         );
 	end
 
-rule "Raised INTENSE_PHYSICAL_ACTIVITY level 2h h before sleep score based on time proximity and average value"
+rule "Raised INTENSE_PHYSICAL_ACTIVITY level 2h before sleep score based on time proximity and average value"
 	no-loop true
     when       
         spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
         u:User(opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
         	var1: PhysicalActivityEvent(
-    			this meets[ 2hs ] spe
+    			this meets[2h] spe
         	),
         	count(var1)
         )
@@ -110,14 +110,14 @@ rule "Raised INTENSE_PHYSICAL_ACTIVITY level 2h h before sleep score based on ti
         	var2: PhysicalActivityEvent(
         		val: value,
         		t: timeStamp,
-    			this meets[6h] spe
+    			this meets[2h] spe
         	),
         	average(Duration.between(t.toLocalTime(), opt_time).toMinutes())
         )
        	avg_val: Double() from accumulate(
         	var3: PhysicalActivityEvent(
         		val: value,
-    			this meets[6h] spe
+    			this meets[2h] spe
         	),
         	average(val)
         )        
@@ -126,24 +126,24 @@ rule "Raised INTENSE_PHYSICAL_ACTIVITY level 2h h before sleep score based on ti
             over window:time(6h)
         )
     then
-    	System.out.printf("Adding bad habit score for INTENSE_PHYSICAL_ACTIVITY %f\n", (1 - (avg_time / (2h*60))) * (avg_val/37.0));
+    	System.out.printf("Adding bad habit score for INTENSE_PHYSICAL_ACTIVITY %f\n", (1 - (avg_time / (2*60))) * (avg_val/37.0));
         insert(
         	new BadHabbit(
 	        	BadHabbitType.INTENSE_PHYSICAL_ACTIVITY, 
 	        	LocalDateTime.now(), 
-	        	new Double( (1 - (avg_time / (2h*60))) * (avg_val/37.0))
+	        	new Double( (1 - (avg_time / (2*60))) * (avg_val/37.0))
         	)
         );
 	end
 
-rule "Raised ALCOHOL level 6 h before sleep score based on time proximity and average value"
+rule "Raised ALCOHOL level 6h before sleep score based on time proximity and average value"
 	no-loop true
     when       
         spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
         u:User(opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
         	var1: AlcoholBeforeSleepEvent(
-    			this meets[ 6s ] spe
+    			this meets[6h] spe
         	),
         	count(var1)
         )
