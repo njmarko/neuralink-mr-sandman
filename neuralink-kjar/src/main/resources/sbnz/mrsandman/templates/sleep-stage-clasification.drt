@@ -5,6 +5,8 @@ sleepPhase
 
 package cepneuralink;
 
+global sbnz.mrsandman.neuralinkapp.bus.EventBus eventBus;
+
 import sbnz.mrsandman.neuralinkapp.model.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 import sbnz.mrsandman.neuralinkapp.model.events.*;

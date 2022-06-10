@@ -4,6 +4,7 @@ import { WebSocketService } from './service/web-socket-service/web-socket.servic
 import { SignalChartData } from './model/SignalChartData';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from './service/user-service/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -49,7 +50,12 @@ export class AppComponent implements OnInit {
   registered: boolean = false;
   selectedTabIndex: number = 0;
 
-  constructor(private socketService: WebSocketService, private fb: FormBuilder, private userService: UserService) {
+  constructor(
+    private socketService: WebSocketService,
+    private fb: FormBuilder,
+    private userService: UserService,
+    private snackbar: MatSnackBar
+  ) {
     this.chartDataMap.set('SPEED', this.chartData[0]);
     this.chartDataMap.set('TEMPERATURE', this.chartData[1]);
     this.chartDataMap.set('HEART_RATE', this.chartData[2]);
@@ -68,12 +74,17 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.socketService.initializeWebSocketConnection();
+
     this.socketService.onSignalRecieved().subscribe(signal => {
       const type: string = signal.signalType;
       if (this.chartDataMap.has(type)) {
         this.chartDataMap.get(type)?.labels.push('.');
         this.chartDataMap.get(type)?.chartData[0].data?.push(signal.value);
       }
+    });
+
+    this.socketService.onEventNotification().subscribe(event => {
+      this.snackbar.open(`New notification: ${event.eventType} occured.`, "Confirm", { duration: 3000 });
     })
   }
 

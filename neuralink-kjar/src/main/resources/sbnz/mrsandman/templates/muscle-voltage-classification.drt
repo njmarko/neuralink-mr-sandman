@@ -5,6 +5,8 @@ muscleTone
 
 package cepneuralink;
 
+global sbnz.mrsandman.neuralinkapp.bus.EventBus eventBus;
+
 import sbnz.mrsandman.neuralinkapp.model.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.MuscleTone;
 import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;

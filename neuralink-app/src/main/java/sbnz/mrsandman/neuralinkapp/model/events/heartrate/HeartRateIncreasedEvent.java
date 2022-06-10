@@ -5,9 +5,11 @@ import java.io.Serializable;
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
 
+import sbnz.mrsandman.neuralinkapp.model.events.BaseEvent;
+
 @Role(Role.Type.EVENT)
 @Expires("30m")
-public class HeartRateIncreasedEvent implements Serializable {
+public class HeartRateIncreasedEvent extends BaseEvent implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private double value;

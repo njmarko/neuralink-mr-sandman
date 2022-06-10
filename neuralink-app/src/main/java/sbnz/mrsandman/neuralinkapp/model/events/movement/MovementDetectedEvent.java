@@ -6,9 +6,11 @@ import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
 import org.kie.api.definition.type.Role.Type;
 
+import sbnz.mrsandman.neuralinkapp.model.events.BaseEvent;
+
 @Role(Type.EVENT)
 @Expires("5m")
-public class MovementDetectedEvent implements Serializable {
+public class MovementDetectedEvent extends BaseEvent implements Serializable {
 
 	/**
 	 *

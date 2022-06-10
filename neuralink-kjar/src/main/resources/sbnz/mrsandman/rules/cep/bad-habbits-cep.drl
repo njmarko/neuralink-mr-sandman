@@ -1,5 +1,7 @@
 package cepneuralink;
 
+global sbnz.mrsandman.neuralinkapp.bus.EventBus eventBus;
+
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
 import sbnz.mrsandman.neuralinkapp.model.events.heartrate.*;
 import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;

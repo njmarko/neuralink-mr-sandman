@@ -8,7 +8,7 @@ import org.kie.api.definition.type.Role.Type;
 
 @Role(Type.EVENT)
 @Expires("30m")
-public class WakeUpEvent implements Serializable {
+public class WakeUpEvent extends BaseEvent implements Serializable {
 
 	/**
 	 *

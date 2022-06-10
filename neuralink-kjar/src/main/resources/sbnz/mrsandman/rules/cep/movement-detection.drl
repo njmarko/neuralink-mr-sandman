@@ -1,5 +1,7 @@
 package cepneuralink;
 
+global sbnz.mrsandman.neuralinkapp.bus.EventBus eventBus;
+
 import sbnz.mrsandman.neuralinkapp.model.events.*;
 import sbnz.mrsandman.neuralinkapp.model.events.movement.*;
 
@@ -24,4 +26,5 @@ rule "Detect user movement."
     then
     	System.out.println("Aktivacija pravila za detektovanje staticnosti.");
         insert(new MovementDetectedEvent());
+        eventBus.logEvent(new MovementDetectedEvent());
 end

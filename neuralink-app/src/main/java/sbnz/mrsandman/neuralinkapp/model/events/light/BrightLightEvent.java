@@ -5,9 +5,11 @@ import java.io.Serializable;
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
 
+import sbnz.mrsandman.neuralinkapp.model.events.BaseEvent;
+
 @Role(Role.Type.EVENT)
 @Expires("30m")
-public class BrightLightEvent implements Serializable {
+public class BrightLightEvent extends BaseEvent implements Serializable {
 
 	private static final long serialVersionUID = -8186195864346179721L;
 

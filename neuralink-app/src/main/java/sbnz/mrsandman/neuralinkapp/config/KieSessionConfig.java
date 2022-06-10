@@ -12,11 +12,13 @@ import org.kie.api.runtime.conf.ClockTypeOption;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import sbnz.mrsandman.neuralinkapp.bus.EventBus;
+
 @Configuration
 public class KieSessionConfig {
 
 	@Bean
-	public KieSession kieContainer() {
+	public KieSession kieSession(EventBus eventBus) {
 		KieServices ks = KieServices.Factory.get();
 		KieContainer kContainer = ks
 				.newKieContainer(ks.newReleaseId("sbnz.mrsandman", "neuralink-kjar", "0.0.1-SNAPSHOT"));
@@ -26,6 +28,10 @@ public class KieSessionConfig {
 
 		KieSessionConfiguration kieSessionConfiguration = ks.newKieSessionConfiguration();
 		kieSessionConfiguration.setOption(ClockTypeOption.get(ClockType.REALTIME_CLOCK.getId()));
-		return kieBase.newKieSession(kieSessionConfiguration, null);
+		KieSession kieSession = kieBase.newKieSession(kieSessionConfiguration, null);
+		
+		kieSession.setGlobal("eventBus", eventBus);
+		
+		return kieSession;
 	}
 }

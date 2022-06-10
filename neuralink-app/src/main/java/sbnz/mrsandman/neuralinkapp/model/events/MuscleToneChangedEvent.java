@@ -10,7 +10,7 @@ import sbnz.mrsandman.neuralinkapp.model.enums.MuscleTone;
 
 @Role(Type.EVENT)
 @Expires("10m")
-public class MuscleToneChangedEvent implements Serializable {
+public class MuscleToneChangedEvent extends BaseEvent implements Serializable {
 
 	/**
 	 *

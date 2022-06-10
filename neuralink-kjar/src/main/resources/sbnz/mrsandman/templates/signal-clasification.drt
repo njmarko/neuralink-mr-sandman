@@ -10,6 +10,8 @@ newEvent
 
 package cepneuralink;
 
+global sbnz.mrsandman.neuralinkapp.bus.EventBus eventBus;
+
 import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
 import sbnz.mrsandman.neuralinkapp.model.events.*;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;

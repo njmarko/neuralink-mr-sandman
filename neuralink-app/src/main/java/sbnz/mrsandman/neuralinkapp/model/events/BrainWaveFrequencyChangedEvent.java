@@ -8,7 +8,7 @@ import org.kie.api.definition.type.Role.Type;
 
 @Role(Type.EVENT)
 @Expires("10m")
-public class BrainWaveFrequencyChangedEvent implements Serializable {
+public class BrainWaveFrequencyChangedEvent extends BaseEvent implements Serializable {
 
 	/**
 	 *
