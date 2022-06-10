@@ -4,9 +4,15 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Collection;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import javax.enterprise.inject.New;
 
 import org.drools.core.time.SessionPseudoClock;
 import org.kie.api.builder.KieFileSystem;
@@ -31,9 +37,12 @@ public class BadHabbitsAlcoholCepTest extends BaseCepTest {
 
 		ksession.insert(user1);
 		ksession.fireAllRules();
-    	
+
+		
     	int ruleCount = 0;
         SessionPseudoClock clock = ksession.getSessionClock();
+        clock.advanceTime(1, TimeUnit.DAYS);
+		System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli((new java.util.Date(ksession.getSessionClock().getCurrentTime())).getTime()), ZoneId.systemDefault()).toLocalTime());
         for (int index = 0; index < 5; index++) {
         	RaisedAlcoholLevelEvent raisedAlch = new RaisedAlcoholLevelEvent();
             ksession.insert(raisedAlch);

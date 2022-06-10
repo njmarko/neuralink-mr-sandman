@@ -1,7 +1,11 @@
 package sbnz.mrsandman.neuralinkapp.model;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 import org.kie.api.definition.type.PropertyReactive;
 
@@ -36,6 +40,10 @@ public class User implements Serializable {
 		this.isLightSleep = isLightSleep;
 		this.optimalSleepTime = optimalSleepTime;
 		this.speed = speed;
+	}
+	
+	public int compareDates(Long date) {
+		return this.optimalSleepTime.compareTo(LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault()).toLocalTime());
 	}
 	
 	public void setIsStatic(boolean isStatic) {

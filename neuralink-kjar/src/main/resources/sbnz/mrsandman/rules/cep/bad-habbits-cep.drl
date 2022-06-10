@@ -12,12 +12,14 @@ import sbnz.mrsandman.neuralinkapp.model.*;
 import java.time.LocalTime;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.time.Instant;
+import java.time.ZoneId;
 
 rule "Raised alcohol level 4 hours before sleep"
 	no-loop
     when       
         SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
-        $u:User(optimalSleepTime != null && optimalSleepTime.compareTo(LocalTime.of(20,0 ,59)) >=0)
+        $u:User(optimalSleepTime != null)
 		$al1: RaisedAlcoholLevelEvent() 
         Number(intValue >= 3) from accumulate(
         	$al2: RaisedAlcoholLevelEvent(
@@ -39,8 +41,9 @@ rule "Raised alcohol level 4 hours before sleep"
             over window:time(4h)
         )
     then
+    	System.out.println(LocalDateTime.ofInstant(Instant.ofEpochMilli(drools.getWorkingMemory().getSessionClock().getCurrentTime()), ZoneId.systemDefault()).toLocalTime());
     	System.out.println("Warning! Increased blood alcohol level detected less that 4 hours before optimal sleep time!");
-        insert(new AlcoholBeforeSleepEvent($avg_alch, LocalDateTime.of(12,12,12,20,0,0)));
+        insert(new AlcoholBeforeSleepEvent($avg_alch, LocalDateTime.ofInstant(Instant.ofEpochMilli(drools.getWorkingMemory().getSessionClock().getCurrentTime()), ZoneId.systemDefault())));
 end
 
 
@@ -48,7 +51,7 @@ rule "Intense physical activity 2 hours before optimal sleep time"
 	no-loop
     when       
         SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
-        $u:User(optimalSleepTime != null && optimalSleepTime.compareTo(LocalTime.of(20,0 ,59)) >=0)
+        $u:User(optimalSleepTime != null)
 		$temp: RaisedTemperatureEvent() 
         Number(intValue >= 3) from accumulate(
         	$t: RaisedTemperatureEvent(
@@ -79,14 +82,14 @@ rule "Intense physical activity 2 hours before optimal sleep time"
         )
     then
     	System.out.println("Warning! Intense physical activity 2 hours before optimal sleep time!");
-        insert(new PhysicalActivityEvent($avg_temp, LocalDateTime.of(12,12,12,20,0,0)));
+        insert(new PhysicalActivityEvent($avg_temp, LocalDateTime.ofInstant(Instant.ofEpochMilli(drools.getWorkingMemory().getSessionClock().getCurrentTime()), ZoneId.systemDefault())));
 end
 
 rule "Raised caffeine level 6 hours before sleep"
 	no-loop
     when       
         SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
-        $u:User(optimalSleepTime != null && optimalSleepTime.compareTo(LocalTime.of(20,0 ,59)) >=0)
+        $u:User(optimalSleepTime != null)
 		$cf1: RaisedCaffeineLevelEvent() 
         Number(intValue >= 3) from accumulate(
         	$cf2: RaisedCaffeineLevelEvent(
@@ -95,20 +98,28 @@ rule "Raised caffeine level 6 hours before sleep"
         	),
         	count($cf2) 
         )
+        $avg_caff: Double() from accumulate(
+        	$cf2: RaisedCaffeineLevelEvent(
+        		$val: value,
+        		this != $cf1,
+        		this meets[2h] $cf1
+        	),
+        	average($val) 
+        )
         not(
             CaffeineBeforeSleepEvent() 
             over window:time(10m)
         )
     then
     	System.out.println("Warning! Increased blood caffeine level detected less that 6 hours before optimal sleep time!");
-        insert(new CaffeineBeforeSleepEvent());
+        insert(new CaffeineBeforeSleepEvent($avg_caff, LocalDateTime.ofInstant(Instant.ofEpochMilli(drools.getWorkingMemory().getSessionClock().getCurrentTime()), ZoneId.systemDefault())));
 end
 
 rule "Raised light level 2 hours before sleep"
 	no-loop
     when       
         SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
-        $u:User(optimalSleepTime != null && optimalSleepTime.compareTo(LocalTime.of(20,0 ,59)) >=0)
+        $u:User(optimalSleepTime != null)
 		$e1: BrightLightEvent() 
         Number(intValue >= 3) from accumulate(
         	$e2: BrightLightEvent(
@@ -131,5 +142,5 @@ rule "Raised light level 2 hours before sleep"
         )
     then
     	System.out.println("Warning! Increased bright light level detected less that 2 hours before optimal sleep time!");
-        insert(new BrightLightBeforeSleepEvent($avg_lux, LocalDateTime.of(12,12,12,20,0,0)));
+        insert(new BrightLightBeforeSleepEvent($avg_lux, LocalDateTime.ofInstant(Instant.ofEpochMilli(drools.getWorkingMemory().getSessionClock().getCurrentTime()), ZoneId.systemDefault())));
 end
