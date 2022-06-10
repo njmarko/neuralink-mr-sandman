@@ -1,0 +1,180 @@
+package cepneuralink;
+import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
+import sbnz.mrsandman.neuralinkapp.model.events.heartrate.*;
+import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
+import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.*;
+import sbnz.mrsandman.neuralinkapp.model.events.caffeine.*;
+import sbnz.mrsandman.neuralinkapp.model.events.light.*;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.*;
+import sbnz.mrsandman.neuralinkapp.model.*;
+import java.time.LocalTime;
+import java.util.Date;
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+rule "Raised CAFFEINE level 6h h before sleep score based on time proximity and average value"
+	no-loop true
+    when       
+        spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
+        u:User(opt_time: optimalSleepTime)
+       	Number(intValue >=1) from accumulate(
+        	var1: CaffeineBeforeSleepEvent(
+    			this meets[ 6hs ] spe
+        	),
+        	count(var1)
+        )
+       	avg_time: Double() from accumulate(
+        	var2: CaffeineBeforeSleepEvent(
+        		val: value,
+        		t: timeStamp,
+    			this meets[6h] spe
+        	),
+        	average(Duration.between(t.toLocalTime(), opt_time).toMinutes())
+        )
+       	avg_val: Double() from accumulate(
+        	var3: CaffeineBeforeSleepEvent(
+        		val: value,
+    			this meets[6h] spe
+        	),
+        	average(val)
+        )        
+        not(
+            BadHabbit(badHabbitType == BadHabbitType.CAFFEINE) 
+            over window:time(6h)
+        )
+    then
+    	System.out.printf("Adding bad habit score for CAFFEINE %f\n", (1 - (avg_time / (6h*60))) * (avg_val/25.0));
+        insert(
+        	new BadHabbit(
+	        	BadHabbitType.CAFFEINE, 
+	        	LocalDateTime.now(), 
+	        	new Double( (1 - (avg_time / (6h*60))) * (avg_val/25.0))
+        	)
+        );
+	end
+
+rule "Raised BRIGHT_LIGHT_EXPOSURE level 2h h before sleep score based on time proximity and average value"
+	no-loop true
+    when       
+        spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
+        u:User(opt_time: optimalSleepTime)
+       	Number(intValue >=1) from accumulate(
+        	var1: BrightLightBeforeSleepEvent(
+    			this meets[ 2hs ] spe
+        	),
+        	count(var1)
+        )
+       	avg_time: Double() from accumulate(
+        	var2: BrightLightBeforeSleepEvent(
+        		val: value,
+        		t: timeStamp,
+    			this meets[6h] spe
+        	),
+        	average(Duration.between(t.toLocalTime(), opt_time).toMinutes())
+        )
+       	avg_val: Double() from accumulate(
+        	var3: BrightLightBeforeSleepEvent(
+        		val: value,
+    			this meets[6h] spe
+        	),
+        	average(val)
+        )        
+        not(
+            BadHabbit(badHabbitType == BadHabbitType.BRIGHT_LIGHT_EXPOSURE) 
+            over window:time(6h)
+        )
+    then
+    	System.out.printf("Adding bad habit score for BRIGHT_LIGHT_EXPOSURE %f\n", (1 - (avg_time / (2h*60))) * (avg_val/1000.0));
+        insert(
+        	new BadHabbit(
+	        	BadHabbitType.BRIGHT_LIGHT_EXPOSURE, 
+	        	LocalDateTime.now(), 
+	        	new Double( (1 - (avg_time / (2h*60))) * (avg_val/1000.0))
+        	)
+        );
+	end
+
+rule "Raised INTENSE_PHYSICAL_ACTIVITY level 2h h before sleep score based on time proximity and average value"
+	no-loop true
+    when       
+        spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
+        u:User(opt_time: optimalSleepTime)
+       	Number(intValue >=1) from accumulate(
+        	var1: PhysicalActivityEvent(
+    			this meets[ 2hs ] spe
+        	),
+        	count(var1)
+        )
+       	avg_time: Double() from accumulate(
+        	var2: PhysicalActivityEvent(
+        		val: value,
+        		t: timeStamp,
+    			this meets[6h] spe
+        	),
+        	average(Duration.between(t.toLocalTime(), opt_time).toMinutes())
+        )
+       	avg_val: Double() from accumulate(
+        	var3: PhysicalActivityEvent(
+        		val: value,
+    			this meets[6h] spe
+        	),
+        	average(val)
+        )        
+        not(
+            BadHabbit(badHabbitType == BadHabbitType.INTENSE_PHYSICAL_ACTIVITY) 
+            over window:time(6h)
+        )
+    then
+    	System.out.printf("Adding bad habit score for INTENSE_PHYSICAL_ACTIVITY %f\n", (1 - (avg_time / (2h*60))) * (avg_val/37.0));
+        insert(
+        	new BadHabbit(
+	        	BadHabbitType.INTENSE_PHYSICAL_ACTIVITY, 
+	        	LocalDateTime.now(), 
+	        	new Double( (1 - (avg_time / (2h*60))) * (avg_val/37.0))
+        	)
+        );
+	end
+
+rule "Raised ALCOHOL level 6 h before sleep score based on time proximity and average value"
+	no-loop true
+    when       
+        spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
+        u:User(opt_time: optimalSleepTime)
+       	Number(intValue >=1) from accumulate(
+        	var1: AlcoholBeforeSleepEvent(
+    			this meets[ 6s ] spe
+        	),
+        	count(var1)
+        )
+       	avg_time: Double() from accumulate(
+        	var2: AlcoholBeforeSleepEvent(
+        		val: value,
+        		t: timeStamp,
+    			this meets[6h] spe
+        	),
+        	average(Duration.between(t.toLocalTime(), opt_time).toMinutes())
+        )
+       	avg_val: Double() from accumulate(
+        	var3: AlcoholBeforeSleepEvent(
+        		val: value,
+    			this meets[6h] spe
+        	),
+        	average(val)
+        )        
+        not(
+            BadHabbit(badHabbitType == BadHabbitType.ALCOHOL) 
+            over window:time(6h)
+        )
+    then
+    	System.out.printf("Adding bad habit score for ALCOHOL %f\n", (1 - (avg_time / (6*60))) * (avg_val/2.0));
+        insert(
+        	new BadHabbit(
+	        	BadHabbitType.ALCOHOL, 
+	        	LocalDateTime.now(), 
+	        	new Double( (1 - (avg_time / (6*60))) * (avg_val/2.0))
+        	)
+        );
+	end
+
+
