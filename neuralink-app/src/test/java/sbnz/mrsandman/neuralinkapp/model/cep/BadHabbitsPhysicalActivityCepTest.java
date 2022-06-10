@@ -13,7 +13,10 @@ import org.kie.api.builder.KieFileSystem;
 import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.io.ResourceFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import sbnz.mrsandman.neuralinkapp.bus.EventBus;
 import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
@@ -22,9 +25,15 @@ import sbnz.mrsandman.neuralinkapp.model.events.heartrate.HeartRateIncreasedEven
 import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.PhysicalActivityEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.temperature.RaisedTemperatureEvent;
 
+@SpringBootTest
 public class BadHabbitsPhysicalActivityCepTest extends BaseCepTest {
 
-    protected void runPseudoClockExample(KieSession ksession) {
+	@Autowired
+    public BadHabbitsPhysicalActivityCepTest(EventBus eventBus) {
+		super(eventBus);
+	}
+
+	protected void runPseudoClockExample(KieSession ksession) {
 		User user1 = new User();
 		user1.setAge(16);
 		user1.setIsLightSleep(false);

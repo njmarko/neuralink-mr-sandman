@@ -17,8 +17,16 @@ import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.KieSessionConfiguration;
 import org.kie.api.runtime.conf.ClockTypeOption;
 import org.kie.internal.io.ResourceFactory;
+import org.springframework.context.ApplicationContext;
+
+import sbnz.mrsandman.neuralinkapp.bus.EventBus;
 
 public abstract class BaseCepTest {
+	protected final EventBus eventBus;
+	
+	public BaseCepTest(EventBus eventBus) {
+		this.eventBus = eventBus;
+	}
 
     @Test
     public void testCEPConfigThroughCode() throws FileNotFoundException {
@@ -41,10 +49,12 @@ public abstract class BaseCepTest {
         KieSessionConfiguration ksconf1 = ks.newKieSessionConfiguration();
         ksconf1.setOption(ClockTypeOption.get(ClockType.REALTIME_CLOCK.getId()));
         KieSession ksession1 = kbase.newKieSession(ksconf1, null);
+        ksession1.setGlobal("eventBus", eventBus);
         
         KieSessionConfiguration ksconf2 = ks.newKieSessionConfiguration();
         ksconf2.setOption(ClockTypeOption.get(ClockType.PSEUDO_CLOCK.getId()));
         KieSession ksession2 = kbase.newKieSession(ksconf2, null);
+        ksession2.setGlobal("eventBus", eventBus);
         
         runRealtimeClockExample(ksession1);
         runPseudoClockExample(ksession2);

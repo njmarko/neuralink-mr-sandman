@@ -24,8 +24,10 @@ import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.KieSessionConfiguration;
 import org.kie.api.runtime.conf.ClockTypeOption;
 import org.kie.internal.io.ResourceFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import sbnz.mrsandman.neuralinkapp.bus.EventBus;
 import sbnz.mrsandman.neuralinkapp.model.events.BrainWaveEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.heartrate.HeartBeatEvent;
@@ -34,7 +36,12 @@ import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.PhysicalActivit
 @SpringBootTest
 public class PhysicalActivityCepTest extends BaseCepTest {
     
-    protected void runPseudoClockExample(KieSession ksession) {
+	@Autowired
+    public PhysicalActivityCepTest(EventBus eventBus) {
+		super(eventBus);
+	}
+
+	protected void runPseudoClockExample(KieSession ksession) {
     	int ruleCount = 0;
         SessionPseudoClock clock = ksession.getSessionClock();
         for (int index = 0; index < 5; index++) {

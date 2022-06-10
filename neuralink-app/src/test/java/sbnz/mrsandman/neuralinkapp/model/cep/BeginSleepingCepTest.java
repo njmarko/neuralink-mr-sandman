@@ -10,8 +10,10 @@ import org.drools.core.time.SessionPseudoClock;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import sbnz.mrsandman.neuralinkapp.bus.EventBus;
 import sbnz.mrsandman.neuralinkapp.model.Sleep;
 import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.BeginSleepingEvent;
@@ -20,6 +22,11 @@ import sbnz.mrsandman.neuralinkapp.model.events.temperature.LoweredTemperatureEv
 
 @SpringBootTest
 public class BeginSleepingCepTest extends BaseCepTest {
+
+	@Autowired
+	public BeginSleepingCepTest(EventBus eventBus) {
+		super(eventBus);
+	}
 
 	@Override
 	protected void writeResourcesToSession(KieFileSystem kfs) {

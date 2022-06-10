@@ -25,15 +25,22 @@ import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.KieSessionConfiguration;
 import org.kie.api.runtime.conf.ClockTypeOption;
 import org.kie.internal.io.ResourceFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import sbnz.mrsandman.neuralinkapp.bus.EventBus;
 import sbnz.mrsandman.neuralinkapp.model.events.BrainWaveEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
 
 @SpringBootTest
 public class SleepStageCepTest extends BaseCepTest {
 	
-    protected void runPseudoClockExample(KieSession ksession) {
+	@Autowired
+    public SleepStageCepTest(EventBus eventBus) {
+		super(eventBus);
+	}
+
+	protected void runPseudoClockExample(KieSession ksession) {
         SessionPseudoClock clock = ksession.getSessionClock();
         for (int index = 0; index < 100; index++) {
             BrainWaveEvent beep = new BrainWaveEvent();

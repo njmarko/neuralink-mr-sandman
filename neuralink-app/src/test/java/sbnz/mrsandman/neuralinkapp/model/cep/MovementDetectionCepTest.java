@@ -10,14 +10,21 @@ import org.drools.core.ClassObjectFilter;
 import org.drools.core.time.SessionPseudoClock;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.runtime.KieSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import sbnz.mrsandman.neuralinkapp.bus.EventBus;
 import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
 import sbnz.mrsandman.neuralinkapp.model.events.SignalEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.movement.MovementDetectedEvent;
 
 @SpringBootTest
 public class MovementDetectionCepTest extends BaseCepTest {
+
+	@Autowired
+	public MovementDetectionCepTest(EventBus eventBus) {
+		super(eventBus);
+	}
 
 	@Override
 	protected void writeResourcesToSession(KieFileSystem kfs) {

@@ -19,17 +19,25 @@ import org.kie.api.builder.KieFileSystem;
 import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.io.ResourceFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import sbnz.mrsandman.neuralinkapp.bus.EventBus;
 import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.AlcoholBeforeSleepEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.RaisedAlcoholLevelEvent;
 
+@SpringBootTest
 public class BadHabbitsAlcoholCepTest extends BaseCepTest {
 
+	@Autowired
+    public BadHabbitsAlcoholCepTest(EventBus eventBus) {
+		super(eventBus);
+	}
 
-    protected void runPseudoClockExample(KieSession ksession) {
+	protected void runPseudoClockExample(KieSession ksession) {
 		User user1 = new User();
 		user1.setAge(16);
 		user1.setIsLightSleep(false);

@@ -9,8 +9,10 @@ import org.drools.core.time.SessionPseudoClock;
 import org.hamcrest.Matchers;
 import org.kie.api.builder.KieFileSystem;
 import org.kie.api.runtime.KieSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import sbnz.mrsandman.neuralinkapp.bus.EventBus;
 import sbnz.mrsandman.neuralinkapp.model.Sleep;
 import sbnz.mrsandman.neuralinkapp.model.SleepStage;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
@@ -19,6 +21,11 @@ import sbnz.mrsandman.neuralinkapp.model.events.somnabulism.SomnabulismDetectedE
 
 @SpringBootTest
 public class ComputeSleepScoreTest extends BaseCepTest {
+
+	@Autowired
+	public ComputeSleepScoreTest(EventBus eventBus) {
+		super(eventBus);
+	}
 
 	@Override
 	protected void writeResourcesToSession(KieFileSystem kfs) {
