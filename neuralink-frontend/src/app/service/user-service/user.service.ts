@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RegisterUserRequest } from 'src/app/model/RegisterUserRequest';
+import { User } from 'src/app/model/User';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class UserService {
 
   }
 
-  register(request: RegisterUserRequest): Observable<any> {
-    return this.http.post<any>('http://localhost:8080/api/users', request);
+  register(request: RegisterUserRequest): Observable<User> {
+    return this.http.post<User>('http://localhost:8080/api/users', request);
   }
 }

@@ -5,6 +5,7 @@ import { SignalChartData } from './model/SignalChartData';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from './service/user-service/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { User } from './model/User';
 
 @Component({
   selector: 'app-root',
@@ -49,6 +50,7 @@ export class AppComponent implements OnInit {
   form: FormGroup;
   registered: boolean = false;
   selectedTabIndex: number = 0;
+  user!: User;
 
   constructor(
     private socketService: WebSocketService,
@@ -93,7 +95,7 @@ export class AppComponent implements OnInit {
       return;
     }
     this.userService.register(this.form.value).subscribe(response => {
-      console.log(response);
+      this.user = response;
       this.registered = true;
       this.selectedTabIndex = 1;
     })

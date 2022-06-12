@@ -33,6 +33,12 @@
     </mat-card>
   </mat-tab>
   <mat-tab label="Dashboard" [disabled]="!registered">
+    <mat-card *ngIf="registered">
+      <mat-card-content>
+        <h2>Chronotype: {{user.chronotype}}</h2>
+        <h2>Optimal slepe time: {{user.optimalSleepTime}}</h2>
+      </mat-card-content>
+    </mat-card>
     <mat-grid-list cols="3" rowHeight="3:2">
       <mat-grid-tile>
         <app-signal-chart [type]="'line'" [data]="chartData[0].chartData" [labels]="chartData[0].labels">
