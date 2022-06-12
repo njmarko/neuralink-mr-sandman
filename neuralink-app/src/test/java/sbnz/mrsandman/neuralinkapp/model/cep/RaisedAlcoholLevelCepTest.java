@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import sbnz.mrsandman.neuralinkapp.bus.EventBus;
 import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
 import sbnz.mrsandman.neuralinkapp.model.events.SignalEvent;
-import sbnz.mrsandman.neuralinkapp.model.events.alcohol.AlcoholLevelEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.RaisedAlcoholLevelEvent;
 
 @SpringBootTest

@@ -14,6 +14,8 @@ public class Sleep implements Serializable {
 	private Boolean efficient;
 	private Double quality;
 	
+	private Boolean hadSleepParalysis;
+	
 	public LocalDate day;
 
 	public Sleep() {
@@ -29,6 +31,14 @@ public class Sleep implements Serializable {
 		super();
 		this.startTime = startTime;
 		this.endTime = endTime;
+	}
+
+	public Boolean getHadSleepParalysis() {
+		return hadSleepParalysis;
+	}
+
+	public void setHadSleepParalysis(Boolean hadSleepParalysis) {
+		this.hadSleepParalysis = hadSleepParalysis;
 	}
 
 	public Date getStartTime() {

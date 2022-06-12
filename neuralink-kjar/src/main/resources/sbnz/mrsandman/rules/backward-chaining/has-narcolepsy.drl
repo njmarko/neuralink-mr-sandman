@@ -1,0 +1,28 @@
+package cepneuralink;
+
+global sbnz.mrsandman.neuralinkapp.bus.EventBus eventBus;
+
+import java.time.LocalDate;
+
+import sbnz.mrsandman.neuralinkapp.model.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.*;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.*;
+import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
+import sbnz.mrsandman.neuralinkapp.model.events.somnabulism.*;
+
+rule "Has narcolepsy"
+	when
+		String(this == "Has narcolepsy")
+		isNarcolepsyDay(LocalDate.now().minusDays(7), output;)
+		eval(output >= 3)
+	then
+		System.out.println("IMA NARKOLEPSIJU");
+end
+
+query isNarcolepsyDay(LocalDate inputDay, Long output)
+	output := Number() from accumulate(
+		$s: Sleep(day.compareTo(inputDay) >= 0, hadSleepParalysis == true),
+		count($s)
+	)
+end
