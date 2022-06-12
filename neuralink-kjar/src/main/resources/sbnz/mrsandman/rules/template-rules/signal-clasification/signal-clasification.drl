@@ -47,13 +47,13 @@ rule "Categorize Signal_5 - TEMPERATURE between 0 and 36 and insert new LoweredT
 	no-loop true
 	when
 		s1: SignalEvent(signalType == SignalType.TEMPERATURE, value >= 0, value < 36)
-	    Number(intValue >= 3) from accumulate(
+	    Number(intValue >= 100) from accumulate(
 	    	s2: SignalEvent(
 	    		this != s1,
 	    		signalType == SignalType.TEMPERATURE,
 	    		value >= 0,
 	    		value < 36,
-	    		this meets[10s] s1
+	    		this meets[60s] s1
 	    	),
 	    	count(s2) 
 	    )
@@ -64,13 +64,13 @@ rule "Categorize Signal_5 - TEMPERATURE between 0 and 36 and insert new LoweredT
 	    		signalType == SignalType.TEMPERATURE,
 	    		value >= 0,
 	    		value < 36,
-	    		this meets[10s] s1
+	    		this meets[60s] s1
 	    	),
 	    	average($val) 
 	    )
         not(
             LoweredTemperatureEvent() 
-            over window:time(10s)
+            over window:time(60s)
         )
 	then
 		System.out.println("Detekcija promene singala SignalType.TEMPERATURE - LoweredTemperatureEvent");
@@ -81,13 +81,13 @@ rule "Categorize Signal_4 - TEMPERATURE between 38 and 100 and insert new Raised
 	no-loop true
 	when
 		s1: SignalEvent(signalType == SignalType.TEMPERATURE, value >= 38, value < 100)
-	    Number(intValue >= 3) from accumulate(
+	    Number(intValue >= 100) from accumulate(
 	    	s2: SignalEvent(
 	    		this != s1,
 	    		signalType == SignalType.TEMPERATURE,
 	    		value >= 38,
 	    		value < 100,
-	    		this meets[10s] s1
+	    		this meets[60s] s1
 	    	),
 	    	count(s2) 
 	    )
@@ -98,13 +98,13 @@ rule "Categorize Signal_4 - TEMPERATURE between 38 and 100 and insert new Raised
 	    		signalType == SignalType.TEMPERATURE,
 	    		value >= 38,
 	    		value < 100,
-	    		this meets[10s] s1
+	    		this meets[60s] s1
 	    	),
 	    	average($val) 
 	    )
         not(
             RaisedTemperatureEvent() 
-            over window:time(10s)
+            over window:time(60s)
         )
 	then
 		System.out.println("Detekcija promene singala SignalType.TEMPERATURE - RaisedTemperatureEvent");
