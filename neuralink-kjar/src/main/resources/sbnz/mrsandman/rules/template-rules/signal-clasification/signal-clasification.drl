@@ -121,7 +121,7 @@ rule "Categorize Signal_3 - CAFFEINE_LEVEL between 20 and 100 and insert new Rai
 	    		signalType == SignalType.CAFFEINE_LEVEL,
 	    		value >= 20,
 	    		value < 100,
-	    		this meets[10s] s1
+	    		this meets[60s] s1
 	    	),
 	    	count(s2) 
 	    )
@@ -132,13 +132,13 @@ rule "Categorize Signal_3 - CAFFEINE_LEVEL between 20 and 100 and insert new Rai
 	    		signalType == SignalType.CAFFEINE_LEVEL,
 	    		value >= 20,
 	    		value < 100,
-	    		this meets[10s] s1
+	    		this meets[60s] s1
 	    	),
 	    	average($val) 
 	    )
         not(
             RaisedCaffeineLevelEvent() 
-            over window:time(10s)
+            over window:time(60s)
         )
 	then
 		System.out.println("Detekcija promene singala SignalType.CAFFEINE_LEVEL - RaisedCaffeineLevelEvent");

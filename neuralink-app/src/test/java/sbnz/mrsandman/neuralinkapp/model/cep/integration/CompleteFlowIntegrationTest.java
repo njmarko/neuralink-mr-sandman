@@ -31,6 +31,7 @@ import sbnz.mrsandman.neuralinkapp.model.events.BrainWaveEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SignalEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepMetricsCalculatedEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.alcohol.AlcoholBeforeSleepEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.RaisedAlcoholLevelEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.BeginSleepingEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.caffeine.RaisedCaffeineLevelEvent;
@@ -57,6 +58,10 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/sleep-stage-clasification/sleep-stage-clasification.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/signal-clasification/signal-clasification.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/muscle-voltage-classification/muscle-voltage-classification.drl");
+		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/bad-habbits-cep.drl");
+		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/bad-habbit-score-cep.drl");
+		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/chronotype-clasification/chronotype-clasification.drl");
+		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/optimal-sleep-time-template/optimal-sleep-time-template.drl");
 	}
 
 	@Override
@@ -70,12 +75,23 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		user.setSpeed(0f);
 		user.setAge(16);
 		user.setIsLightSleep(false);
-		user.setGoingToBedTime(LocalTime.of(21, 0));
+		user.setGoingToBedTime(LocalTime.of(22, 0));
 		ksession.insert(user);
 		ksession.fireAllRules();
 		
+		System.out.println(user.getOptimalSleepTime());
+		
+		clock.advanceTime(20, TimeUnit.HOURS);
+		System.out.println(clock.getCurrentTime());
+		
+
+		SleepPhaseEvent initialAwakeEvent = new SleepPhaseEvent(SleepPhase.AWAKE);
+		ksession.insert(initialAwakeEvent);
+		
+
+		
 		SignalEvent level;
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 300; i++) {
 
 			level = new SignalEvent(21, SignalType.CAFFEINE_LEVEL);
 			ksession.insert(level);
@@ -85,6 +101,9 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 
 			level = new SignalEvent(0.22, SignalType.ALCOHOL_LEVEL);
 			ksession.insert(level);
+			
+			BrainWaveEvent bw = new BrainWaveEvent(10);
+			ksession.insert(bw);
 			
 			clock.advanceTime(1, TimeUnit.SECONDS);
 			ruleCount = ksession.fireAllRules();
@@ -99,26 +118,30 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		}
 		
 		Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(RaisedAlcoholLevelEvent.class));
-		assertThat(newEvents.size(), equalTo(2));
+		assertThat(newEvents.size(), equalTo(6));
 		
 		newEvents = ksession.getObjects(new ClassObjectFilter(RaisedCaffeineLevelEvent.class));
-		assertThat(newEvents.size(), equalTo(10));
+		assertThat(newEvents.size(), equalTo(6));
 		
 		newEvents = ksession.getObjects(new ClassObjectFilter(RaisedTemperatureEvent.class));
-		assertThat(newEvents.size(), equalTo(2));
+		assertThat(newEvents.size(), equalTo(6));
 		
 		newEvents = ksession.getObjects(new ClassObjectFilter(HeartRateIncreasedEvent.class));
 		assertThat(newEvents.size(), equalTo(1));
 		
+		newEvents = ksession.getObjects(new ClassObjectFilter(AlcoholBeforeSleepEvent.class));
+		assertThat(newEvents.size(), equalTo(1));
 		
 		
-//		// we make user fall asleep
-//		for (int i = 0; i < 240; i++) {
-//			ksession.insert(new SignalEvent(35, SignalType.TEMPERATURE));
-//			ksession.insert(new SignalEvent(40, SignalType.HEART_BEAT));
-//			clock.advanceTime(100, TimeUnit.MILLISECONDS);
-//		}
-//		ruleCount = ksession.fireAllRules();
+
+		
+		// we make user fall asleep
+		for (int i = 0; i < 240; i++) {
+			ksession.insert(new SignalEvent(35, SignalType.TEMPERATURE));
+			ksession.insert(new SignalEvent(40, SignalType.HEART_BEAT));
+			clock.advanceTime(100, TimeUnit.MILLISECONDS);
+		}
+		ruleCount = ksession.fireAllRules();
 //		// 1 - Rule for detecting heart rate lowered event
 //		// 2 - Rule for detecting temperature lowered event
 //		// 3 - Rule for detecting start of sleeping
