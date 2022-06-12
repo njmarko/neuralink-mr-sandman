@@ -1,6 +1,7 @@
 package sbnz.mrsandman.neuralinkapp.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Sleep implements Serializable {
@@ -12,6 +13,8 @@ public class Sleep implements Serializable {
 
 	private Boolean efficient;
 	private Double quality;
+	
+	public LocalDate day;
 
 	public Sleep() {
 		this.startTime = new Date();
@@ -65,6 +68,16 @@ public class Sleep implements Serializable {
 
 	public void setEfficient(Boolean efficient) {
 		this.efficient = efficient;
+		
+	}
+
+	public LocalDate getDay() {
+		return day;
+		
+	}
+
+	public void setDay(LocalDate day) {
+		this.day = day;
 		
 	}
 
