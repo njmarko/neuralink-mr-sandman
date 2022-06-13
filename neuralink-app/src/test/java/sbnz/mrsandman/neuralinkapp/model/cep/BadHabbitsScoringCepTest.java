@@ -24,6 +24,7 @@ import sbnz.mrsandman.neuralinkapp.model.User;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.AlcoholBeforeSleepEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.BeginSleepingEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.caffeine.CaffeineBeforeSleepEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.light.BrightLightBeforeSleepEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.PhysicalActivityEvent;
@@ -105,8 +106,9 @@ public class BadHabbitsScoringCepTest extends BaseCepTest {
 		newEvents = ksession.getObjects(new ClassObjectFilter(CaffeineBeforeSleepEvent.class));
 		assertThat(newEvents.size(), equalTo(2));
 
-		phase = new SleepPhaseEvent(SleepPhase.PHASE1);
-		ksession.insert(phase);
+//		phase = new SleepPhaseEvent(SleepPhase.PHASE1);
+		BeginSleepingEvent beginSleep = new BeginSleepingEvent();
+		ksession.insert(beginSleep);
 		clock.advanceTime(1, TimeUnit.MINUTES);
 		ruleCount = ksession.fireAllRules();
 

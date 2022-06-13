@@ -6,6 +6,7 @@ import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
 import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.*;
 import sbnz.mrsandman.neuralinkapp.model.events.caffeine.*;
 import sbnz.mrsandman.neuralinkapp.model.events.light.*;
+import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.*;
 import sbnz.mrsandman.neuralinkapp.model.events.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.*;
 import sbnz.mrsandman.neuralinkapp.model.*;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 rule "Raised CAFFEINE level 6h before sleep score based on time proximity and average value"
 	no-loop true
     when       
-        spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
+        spe: BeginSleepingEvent()
         u:User(opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
         	var1: CaffeineBeforeSleepEvent(
@@ -58,7 +59,7 @@ rule "Raised CAFFEINE level 6h before sleep score based on time proximity and av
 rule "Raised BRIGHT_LIGHT_EXPOSURE level 2h before sleep score based on time proximity and average value"
 	no-loop true
     when       
-        spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
+        spe: BeginSleepingEvent()
         u:User(opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
         	var1: BrightLightBeforeSleepEvent(
@@ -99,7 +100,7 @@ rule "Raised BRIGHT_LIGHT_EXPOSURE level 2h before sleep score based on time pro
 rule "Raised INTENSE_PHYSICAL_ACTIVITY level 2h before sleep score based on time proximity and average value"
 	no-loop true
     when       
-        spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
+        spe: BeginSleepingEvent()
         u:User(opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
         	var1: PhysicalActivityEvent(
@@ -140,7 +141,7 @@ rule "Raised INTENSE_PHYSICAL_ACTIVITY level 2h before sleep score based on time
 rule "Raised ALCOHOL level 6h before sleep score based on time proximity and average value"
 	no-loop true
     when       
-        spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
+        spe: BeginSleepingEvent()
         u:User(opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
         	var1: AlcoholBeforeSleepEvent(

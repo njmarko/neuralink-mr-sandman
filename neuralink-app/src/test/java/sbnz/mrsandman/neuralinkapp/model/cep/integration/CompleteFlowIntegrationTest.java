@@ -59,9 +59,9 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/signal-clasification/signal-clasification.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/muscle-voltage-classification/muscle-voltage-classification.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/bad-habbits-cep.drl");
-		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/bad-habbit-score-cep.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/chronotype-clasification/chronotype-clasification.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/optimal-sleep-time-template/optimal-sleep-time-template.drl");
+		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/bad-habit-score-template/bad-habit-score-template.drl");
 	}
 
 	@Override
@@ -75,13 +75,13 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		user.setSpeed(0f);
 		user.setAge(16);
 		user.setIsLightSleep(false);
-		user.setGoingToBedTime(LocalTime.of(22, 0));
+		user.setGoingToBedTime(LocalTime.of(23, 0));
 		ksession.insert(user);
 		ksession.fireAllRules();
 		
 		System.out.println(user.getOptimalSleepTime());
 		
-		clock.advanceTime(20, TimeUnit.HOURS);
+		clock.advanceTime(19, TimeUnit.HOURS);
 		System.out.println(clock.getCurrentTime());
 		
 
@@ -100,6 +100,9 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 			ksession.insert(level);
 
 			level = new SignalEvent(0.22, SignalType.ALCOHOL_LEVEL);
+			ksession.insert(level);
+			
+			level = new SignalEvent(1100, SignalType.LIGHT_LEVEL);
 			ksession.insert(level);
 			
 			BrainWaveEvent bw = new BrainWaveEvent(10);

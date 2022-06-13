@@ -17,6 +17,7 @@ import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
 import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.*;
 import sbnz.mrsandman.neuralinkapp.model.events.caffeine.*;
 import sbnz.mrsandman.neuralinkapp.model.events.light.*;
+import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.*;
 import sbnz.mrsandman.neuralinkapp.model.events.*;
 import sbnz.mrsandman.neuralinkapp.model.enums.*;
 import sbnz.mrsandman.neuralinkapp.model.*;
@@ -30,7 +31,7 @@ template "bad-habit-score-template"
 rule "Raised @{badHabitType} level @{timePeriod}@{timeUnit} before sleep score based on time proximity and average value"
 	no-loop true
     when       
-        spe: SleepPhaseEvent(sleepPhase != SleepPhase.AWAKE)
+        spe: BeginSleepingEvent()
         u:User(opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
         	var1: @{causeEventName}(

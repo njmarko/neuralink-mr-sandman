@@ -9,16 +9,16 @@ import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
 import sbnz.mrsandman.neuralinkapp.model.events.light.*;
 import java.util.Date;
 
-rule "Categorize Signal_6 - LIGHT_LEVEL between 1000 and 100 and insert new BrightLightEvent"
+rule "Categorize Signal_6 - LIGHT_LEVEL between 1000 and 10000 and insert new BrightLightEvent"
 	no-loop true
 	when
-		s1: SignalEvent(signalType == SignalType.LIGHT_LEVEL, value >= 1000, value < 100)
+		s1: SignalEvent(signalType == SignalType.LIGHT_LEVEL, value >= 1000, value < 10000)
 	    Number(intValue >= 3) from accumulate(
 	    	s2: SignalEvent(
 	    		this != s1,
 	    		signalType == SignalType.LIGHT_LEVEL,
 	    		value >= 1000,
-	    		value < 100,
+	    		value < 10000,
 	    		this meets[60s] s1
 	    	),
 	    	count(s2) 
@@ -29,7 +29,7 @@ rule "Categorize Signal_6 - LIGHT_LEVEL between 1000 and 100 and insert new Brig
 	    		this != s1,
 	    		signalType == SignalType.LIGHT_LEVEL,
 	    		value >= 1000,
-	    		value < 100,
+	    		value < 10000,
 	    		this meets[60s] s1
 	    	),
 	    	average($val) 

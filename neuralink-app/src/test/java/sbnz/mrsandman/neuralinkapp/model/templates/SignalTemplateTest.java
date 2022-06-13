@@ -40,7 +40,7 @@ public class SignalTemplateTest extends BaseTemplateTest{
             new String[]{"20", "100",  "CAFFEINE_LEVEL", "60", "s", "3", ">=", "RaisedCaffeineLevelEvent"},
             new String[]{"38", "100",  "TEMPERATURE", "60", "s", "3", ">=", "RaisedTemperatureEvent"},
             new String[]{"0", "36", "TEMPERATURE", "60", "s", "100", ">=", "LoweredTemperatureEvent"},
-            new String[]{"1000", "100",  "LIGHT_LEVEL", "60", "s", "3", ">=", "BrightLightEvent"},
+            new String[]{"1000", "10000",  "LIGHT_LEVEL", "60", "s", "3", ">=", "BrightLightEvent"},
         });
         
         DataProviderCompiler converter = new DataProviderCompiler();
