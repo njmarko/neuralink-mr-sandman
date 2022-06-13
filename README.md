@@ -1,5 +1,5 @@
 # neuralink-mr-sandman
-Expert rule based system for tracking inputs from neuralink chip and smart-watch and improving sleep quality.
+Expert rule-based system for tracking inputs from neuralink chip and smart-watch and improving sleep quality.
 
 <div align="center">
 <img alt="signal-visualization" align="center" width="100%" src="https://user-images.githubusercontent.com/34657562/173451811-c6f2b92b-e57a-4cb3-b6ee-c5cb4991ca9e.png" />
@@ -38,14 +38,15 @@ Expert rule based system for tracking inputs from neuralink chip and smart-watch
   - Forward chaining
   - Complex event processing (CEP)
   - Templates
-  - Queries 
+  - Queries
+  - Dynamic salience
 - Two Angular frontend applications
 
 ## Application screenshots
 
 <div align="center">
 <img alt="user-info" align="center" width="100%" src="https://user-images.githubusercontent.com/34657562/173448738-77c33c5c-526c-48e1-bfb9-af020b775c05.png" />
-  <p align="center">Ilustration 2 - User info form. Chronotype and optimal sleep time are determined based on the provided information.</p>
+  <p align="center">Ilustration 2 - User info form. Chronotype and optimal sleep time are determined based on the provided user information.</p>
 </div>
 
 
