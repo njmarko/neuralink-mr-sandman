@@ -19,33 +19,33 @@ import java.time.LocalDateTime;
 
 rule "Advice for raised alcohol level 4 hours before sleep based on score"
 	no-loop
-	salience($bh.score * 1.2)
+	salience($bh.score * 1.0)
     when       
-        $spe: SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
+        $spe: WakeUpEvent()
         $bh: BadHabbit(badHabbitType == BadHabbitType.ALCOHOL)
         $u:User($opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
         	$var1: BadHabbit(
-    			this meets[12h] $spe
+    			this meets[24h] $spe
         	),
         	count($var1)
         )
        	Number(doubleValue > 3.0) from accumulate(
         	$var3: BadHabbit(
         		$val: score,
-    			this meets[12h] $spe
+    			this meets[24h] $spe
         	),
         	sum($val)
         )        
     then
-    	System.out.printf("You should stop drinking less than 4 hours before optimal sleep time!");
+    	System.out.printf("You should stop drinking less than 4 hours before optimal sleep time!\n");
 end
 
 rule "Advice for raised light level 2 hours before sleep based on score"
 	no-loop
-	salience($bh.score * 0.2)
+	salience($bh.score * 0.85)
     when       
-        $spe: SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
+        $spe: WakeUpEvent()
         $bh: BadHabbit(badHabbitType == BadHabbitType.BRIGHT_LIGHT_EXPOSURE)
         $u:User($opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
@@ -62,14 +62,14 @@ rule "Advice for raised light level 2 hours before sleep based on score"
         	sum($val)
         )        
     then
-    	System.out.printf("You should dim the lights 2 hours before optimal sleep time!");
+    	System.out.printf("You should dim the lights 2 hours before optimal sleep time!\n");
 end
 
 rule "Advice for raised caffeine level 6 hours before sleep based on score"
 	no-loop
-	salience($bh.score * 0.8)
+	salience($bh.score * 0.95)
     when       
-        $spe: SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
+        $spe: WakeUpEvent()
         $bh: BadHabbit(badHabbitType == BadHabbitType.CAFFEINE)
         $u:User($opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
@@ -86,14 +86,14 @@ rule "Advice for raised caffeine level 6 hours before sleep based on score"
         	sum($val)
         )        
     then
-    	System.out.printf("You should stop drinking less than 4 hours before optimal sleep time!");
+    	System.out.printf("You should drink less caffeine less than 4 hours before optimal sleep time!\n");
 end
 
 rule "Advice for raised physical activity level 2 hours before sleep based on score"
 	no-loop
-	salience($bh.score * 0.6)
+	salience($bh.score * 0.90)
     when       
-        $spe: SleepPhaseEvent(sleepPhase == SleepPhase.AWAKE)
+        $spe: WakeUpEvent()
         $bh: BadHabbit(badHabbitType == BadHabbitType.INTENSE_PHYSICAL_ACTIVITY)
         $u:User($opt_time: optimalSleepTime)
        	Number(intValue >=1) from accumulate(
@@ -110,5 +110,5 @@ rule "Advice for raised physical activity level 2 hours before sleep based on sc
         	sum($val)
         )        
     then
-    	System.out.printf("You should stop doing intense physical exercises less than 4 hours before optimal sleep time!");
+    	System.out.printf("You should stop doing intense physical exercises less than 4 hours before optimal sleep time!\n");
 end

@@ -43,7 +43,7 @@ rule "Raised CAFFEINE level 6h before sleep score based on time proximity and av
         )        
         not(
             BadHabbit(badHabbitType == BadHabbitType.CAFFEINE) 
-            over window:time(6h)
+            over window:time(12h)
         )
     then
     	System.out.printf("Adding bad habit score for CAFFEINE %f\n", (1 - (avg_time / (6*60))) * (avg_val/25.0));
@@ -84,7 +84,7 @@ rule "Raised BRIGHT_LIGHT_EXPOSURE level 2h before sleep score based on time pro
         )        
         not(
             BadHabbit(badHabbitType == BadHabbitType.BRIGHT_LIGHT_EXPOSURE) 
-            over window:time(6h)
+            over window:time(12h)
         )
     then
     	System.out.printf("Adding bad habit score for BRIGHT_LIGHT_EXPOSURE %f\n", (1 - (avg_time / (2*60))) * (avg_val/1000.0));
@@ -125,7 +125,7 @@ rule "Raised INTENSE_PHYSICAL_ACTIVITY level 2h before sleep score based on time
         )        
         not(
             BadHabbit(badHabbitType == BadHabbitType.INTENSE_PHYSICAL_ACTIVITY) 
-            over window:time(6h)
+            over window:time(12h)
         )
     then
     	System.out.printf("Adding bad habit score for INTENSE_PHYSICAL_ACTIVITY %f\n", (1 - (avg_time / (2*60))) * (avg_val/37.0));
@@ -166,7 +166,7 @@ rule "Raised ALCOHOL level 6h before sleep score based on time proximity and ave
         )        
         not(
             BadHabbit(badHabbitType == BadHabbitType.ALCOHOL) 
-            over window:time(6h)
+            over window:time(12h)
         )
     then
     	System.out.printf("Adding bad habit score for ALCOHOL %f\n", (1 - (avg_time / (6*60))) * (avg_val/2.0));
