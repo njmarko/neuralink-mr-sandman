@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
     },
     {
       labels: [],
-      chartData: [{ data: [], label: 'Heart rate' }]
+      chartData: [{ data: [], label: 'Heart beat' }]
     },
     {
       labels: [],
@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
   ) {
     this.chartDataMap.set('SPEED', this.chartData[0]);
     this.chartDataMap.set('TEMPERATURE', this.chartData[1]);
-    this.chartDataMap.set('HEART_RATE', this.chartData[2]);
+    this.chartDataMap.set('HEART_BEAT', this.chartData[2]);
     this.chartDataMap.set('MUSCLE_VOLTAGE', this.chartData[3]);
     this.chartDataMap.set('LIGHT_LEVEL', this.chartData[4]);
     this.chartDataMap.set('ALCOHOL_LEVEL', this.chartData[5]);

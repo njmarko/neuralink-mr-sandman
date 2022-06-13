@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
       frequency: 1000,
       running: false,
       deviceId: uuid.v4(),
-      signalType: 'HEART_RATE'
+      signalType: 'HEART_BEAT'
     }, {
       low: 0,
       high: 100,
