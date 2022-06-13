@@ -1,0 +1,52 @@
+template header
+minValue
+habitType
+message
+salience_factor
+
+package cepneuralink;
+
+global sbnz.mrsandman.neuralinkapp.bus.EventBus eventBus;
+
+import sbnz.mrsandman.neuralinkapp.model.events.alcohol.*;
+import sbnz.mrsandman.neuralinkapp.model.events.heartrate.*;
+import sbnz.mrsandman.neuralinkapp.model.events.temperature.*;
+import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.*;
+import sbnz.mrsandman.neuralinkapp.model.events.caffeine.*;
+import sbnz.mrsandman.neuralinkapp.model.events.light.*;
+import sbnz.mrsandman.neuralinkapp.model.events.*;
+import sbnz.mrsandman.neuralinkapp.model.enums.*;
+import sbnz.mrsandman.neuralinkapp.model.*;
+import java.time.LocalTime;
+import java.util.Date;
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+template "habit-recomendations"
+
+rule "Advice for raised @{habitType} level 4 hours before sleep based on score"
+	no-loop
+	salience($bh.score * @{salience_factor})
+    when       
+        $spe: WakeUpEvent()
+        $bh: BadHabbit(badHabbitType == BadHabbitType.@{habitType})
+        $u:User($opt_time: optimalSleepTime)
+       	Number(intValue >=1) from accumulate(
+        	$var1: BadHabbit(
+    			this meets[24h] $spe
+        	),
+        	count($var1)
+        )
+       	Number(doubleValue > @{minValue}) from accumulate(
+        	$var3: BadHabbit(
+        		$val: score,
+    			this meets[24h] $spe
+        	),
+        	sum($val)
+        )        
+    then
+    	System.out.printf("@{message}\n");
+    	insert(new HabitRecomendationEvent("@{message}"));
+end
+
+end template

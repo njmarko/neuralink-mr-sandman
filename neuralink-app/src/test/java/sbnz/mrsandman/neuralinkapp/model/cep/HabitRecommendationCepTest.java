@@ -35,20 +35,20 @@ import sbnz.mrsandman.neuralinkapp.model.events.light.BrightLightBeforeSleepEven
 import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.PhysicalActivityEvent;
 
 @SpringBootTest
-public class HabbitRecommendationCepTest extends BaseCepTest {
+public class HabitRecommendationCepTest extends BaseCepTest {
 
 	@Autowired
-	public HabbitRecommendationCepTest(EventBus eventBus) {
+	public HabitRecommendationCepTest(EventBus eventBus) {
 		super(eventBus);
 	}
 
 	@Override
 	protected void writeResourcesToSession(KieFileSystem kfs) {
-		String fileName = "habbit-reccomendations";
-		String filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/" + fileName + ".drl";
+		String fileName = "habit-recomendations";
+		String filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + "/"
+				+ fileName + ".drl";
 		File f = new File(filePath);
 		kfs.write(ResourceFactory.newFileResource(f));
-
 		
 		fileName = "chronotype-clasification";
 		filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + "/"

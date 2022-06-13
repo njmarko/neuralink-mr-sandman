@@ -34,9 +34,12 @@ import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.AlcoholBeforeSleepEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.RaisedAlcoholLevelEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.BeginSleepingEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.caffeine.CaffeineBeforeSleepEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.caffeine.RaisedCaffeineLevelEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.heartrate.HeartRateIncreasedEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.light.BrightLightBeforeSleepEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.movement.MovementDetectedEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.physicalactivity.PhysicalActivityEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.somnabulism.SomnabulismDetectedEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.temperature.RaisedTemperatureEvent;
 
@@ -116,7 +119,7 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		for (int i = 0; i < 2400; i++) {
 			level = new SignalEvent(80, SignalType.HEART_BEAT);
 			ksession.insert(level);
-			clock.advanceTime(10, TimeUnit.MILLISECONDS);
+			clock.advanceTime(5, TimeUnit.MILLISECONDS);
 			ruleCount = ksession.fireAllRules();
 		}
 		
@@ -135,8 +138,17 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		newEvents = ksession.getObjects(new ClassObjectFilter(AlcoholBeforeSleepEvent.class));
 		assertThat(newEvents.size(), equalTo(1));
 		
+		newEvents = ksession.getObjects(new ClassObjectFilter(CaffeineBeforeSleepEvent.class));
+		assertThat(newEvents.size(), equalTo(1));
 		
-
+		newEvents = ksession.getObjects(new ClassObjectFilter(BrightLightBeforeSleepEvent.class));
+		assertThat(newEvents.size(), equalTo(1));
+		
+		newEvents = ksession.getObjects(new ClassObjectFilter(PhysicalActivityEvent.class));
+		assertThat(newEvents.size(), equalTo(0));
+		
+		clock.advanceTime(1, TimeUnit.HOURS);
+		
 		
 		// we make user fall asleep
 		for (int i = 0; i < 240; i++) {
@@ -145,94 +157,97 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 			clock.advanceTime(100, TimeUnit.MILLISECONDS);
 		}
 		ruleCount = ksession.fireAllRules();
-//		// 1 - Rule for detecting heart rate lowered event
-//		// 2 - Rule for detecting temperature lowered event
-//		// 3 - Rule for detecting start of sleeping
-//		assertEquals(3, ruleCount);
-//		Collection<?> beginSleepingEvents = ksession.getObjects(new ClassObjectFilter(BeginSleepingEvent.class));
-//		assertEquals(1, beginSleepingEvents.size());
-//		Sleep sleep = (Sleep) ksession.getObjects(new ClassObjectFilter(Sleep.class)).toArray()[0];
-//		assertNotNull(sleep);
-//		
-//		// we make user iterate over sleep stages
-//		
-//		// phase 1
-//		insertBrainWaveWithFrequencyInRange(ksession, clock, 15, 25);
-//		assertedSleepChange(ksession, sleep, SleepPhase.PHASE1);
-//	
-//		// phase 2
-//		insertBrainWaveWithFrequencyInRange(ksession, clock, 25, 37);
-//		assertedSleepChange(ksession, sleep, SleepPhase.PHASE2);
-//	
-//		// phase 3
-//		insertBrainWaveWithFrequencyInRange(ksession, clock, 38, 50);
-//		assertedSleepChange(ksession, sleep, SleepPhase.PHASE3);
-//	
-//		// phase 4
-//		insertBrainWaveWithFrequencyInRange(ksession, clock, 50, 65);
-//		assertedSleepChange(ksession, sleep, SleepPhase.PHASE4);
-//	
-//		// rem
-//		insertBrainWaveWithFrequencyInRange(ksession, clock, 65, 90);
-//		assertedSleepChange(ksession, sleep, SleepPhase.REM);
-//		
-//		// we detect somnabulism
-//		for (int i = 0; i < 30; i++) { 
-//			ksession.insert(new SignalEvent(new Random().doubles(1,  10).findFirst().getAsDouble(), SignalType.SPEED));
-//			ksession.insert(new SignalEvent(new Random().doubles(75,  100).findFirst().getAsDouble(), SignalType.MUSCLE_VOLTAGE));
-//			clock.advanceTime(1, TimeUnit.SECONDS);
-//		}
-//		ruleCount = ksession.fireAllRules();
-//		
-//		// 1 - Movement detected event
-//		// 2 - Muscle tone changed to tense event
-//		// 3 - Somnabulism detected event
-//		assertEquals(3, ruleCount);
-//		Collection<?> movementDetectedEvent = ksession.getObjects(new ClassObjectFilter(MovementDetectedEvent.class));
-//		assertEquals(1, movementDetectedEvent.size());
-//		Collection<?> somnabulismDetectedEvent = ksession.getObjects(new ClassObjectFilter(SomnabulismDetectedEvent.class));
-//		assertEquals(1, somnabulismDetectedEvent.size());
-//		
-//		// we make user iterate over sleep stages some more
-//		
-//		// phase 3
-//		insertBrainWaveWithFrequencyInRange(ksession, clock, 38, 50);
-//		assertedSleepChange(ksession, sleep, SleepPhase.PHASE3);
-//	
-//		// phase 4
-//		insertBrainWaveWithFrequencyInRange(ksession, clock, 50, 65);
-//		assertedSleepChange(ksession, sleep, SleepPhase.PHASE4);
-//	
-//		// rem
-//		insertBrainWaveWithFrequencyInRange(ksession, clock, 65, 90);
-//		assertedSleepChange(ksession, sleep, SleepPhase.REM);
-//	
-//		// phase 4
-//		insertBrainWaveWithFrequencyInRange(ksession, clock, 50, 65);
-//		assertedSleepChange(ksession, sleep, SleepPhase.PHASE4);
-//	
-//		// rem
-//		insertBrainWaveWithFrequencyInRange(ksession, clock, 65, 90);
-//		assertedSleepChange(ksession, sleep, SleepPhase.REM);
-//		
-//		// we make user wake up & compute user's sleep quality & efficiency
-//		insertBrainWaveWithFrequencyInRange(ksession, clock, 0, 15);
-//		ruleCount = ksession.fireAllRules();
-//		// 1 - Detect AWAKE sleep phase
-//		// 2 - Detect wake up event
-//		// 3 - Compute sleep score
-//		// 4 - Compute sleep efficiency
-//		assertEquals(4, ruleCount);
-//		assertFalse(sleep.getEfficient());
-//		assertThat(sleep.getQuality(), Matchers.closeTo(10.0 * 37.0 / 121.0, 1e-4));
-//		Collection<?> metricsEvent = ksession.getObjects(new ClassObjectFilter(SleepMetricsCalculatedEvent.class));
-//		assertEquals(1, metricsEvent.size());
+		// 1 - Rule for detecting heart rate lowered event
+		// 2 - Rule for detecting temperature lowered event
+		// 3 - Rule for detecting start of sleeping
+		assertEquals(8, ruleCount);
+		Collection<?> beginSleepingEvents = ksession.getObjects(new ClassObjectFilter(BeginSleepingEvent.class));
+		assertEquals(1, beginSleepingEvents.size());
+		Sleep sleep = (Sleep) ksession.getObjects(new ClassObjectFilter(Sleep.class)).toArray()[0];
+		assertNotNull(sleep);
+		
+		// we make user iterate over sleep stages
+		
+		// phase 1
+		insertBrainWaveWithFrequencyInRange(ksession, clock, 15, 25);
+		assertedSleepChange(ksession, sleep, SleepPhase.PHASE1);
+	
+		// phase 2
+		insertBrainWaveWithFrequencyInRange(ksession, clock, 25, 37);
+		assertedSleepChange(ksession, sleep, SleepPhase.PHASE2);
+	
+		// phase 3
+		insertBrainWaveWithFrequencyInRange(ksession, clock, 38, 50);
+		assertedSleepChange(ksession, sleep, SleepPhase.PHASE3);
+	
+		// phase 4
+		insertBrainWaveWithFrequencyInRange(ksession, clock, 50, 65);
+		assertedSleepChange(ksession, sleep, SleepPhase.PHASE4);
+	
+		// rem
+		insertBrainWaveWithFrequencyInRange(ksession, clock, 65, 90);
+		assertedSleepChange(ksession, sleep, SleepPhase.REM);
+		
+		// we detect somnabulism
+		for (int i = 0; i < 30; i++) { 
+			ksession.insert(new SignalEvent(new Random().doubles(1,  10).findFirst().getAsDouble(), SignalType.SPEED));
+			ksession.insert(new SignalEvent(new Random().doubles(75,  100).findFirst().getAsDouble(), SignalType.MUSCLE_VOLTAGE));
+			clock.advanceTime(1, TimeUnit.SECONDS);
+		}
+		ruleCount = ksession.fireAllRules();
+		
+		// 1 - Movement detected event
+		// 2 - Muscle tone changed to tense event
+		// 3 - Somnabulism detected event
+		assertEquals(3, ruleCount);
+		Collection<?> movementDetectedEvent = ksession.getObjects(new ClassObjectFilter(MovementDetectedEvent.class));
+		assertEquals(1, movementDetectedEvent.size());
+		Collection<?> somnabulismDetectedEvent = ksession.getObjects(new ClassObjectFilter(SomnabulismDetectedEvent.class));
+		assertEquals(1, somnabulismDetectedEvent.size());
+		
+		// we make user iterate over sleep stages some more
+		
+		// phase 3
+		insertBrainWaveWithFrequencyInRange(ksession, clock, 38, 50);
+		assertedSleepChange(ksession, sleep, SleepPhase.PHASE3);
+	
+		// phase 4
+		insertBrainWaveWithFrequencyInRange(ksession, clock, 50, 65);
+		assertedSleepChange(ksession, sleep, SleepPhase.PHASE4);
+	
+		// rem
+		insertBrainWaveWithFrequencyInRange(ksession, clock, 65, 90);
+		assertedSleepChange(ksession, sleep, SleepPhase.REM);
+	
+		// phase 4
+		insertBrainWaveWithFrequencyInRange(ksession, clock, 50, 65);
+		assertedSleepChange(ksession, sleep, SleepPhase.PHASE4);
+	
+		// rem
+		insertBrainWaveWithFrequencyInRange(ksession, clock, 65, 90);
+		assertedSleepChange(ksession, sleep, SleepPhase.REM);
+		
+		// we make user wake up & compute user's sleep quality & efficiency
+		insertBrainWaveWithFrequencyInRange(ksession, clock, 0, 15);
+		ruleCount = ksession.fireAllRules();
+		// 1 - Detect AWAKE sleep phase
+		// 2 - Detect wake up event
+		// 3 - Compute sleep score
+		// 4 - Compute sleep efficiency
+		assertEquals(4, ruleCount);
+		assertFalse(sleep.getEfficient());
+		assertThat(sleep.getQuality(), Matchers.closeTo(10.0 * 37.0 / 121.0, 1e-4));
+		Collection<?> metricsEvent = ksession.getObjects(new ClassObjectFilter(SleepMetricsCalculatedEvent.class));
+		assertEquals(1, metricsEvent.size());
+		
+		
+		
 	}
 
 	@SuppressWarnings("unchecked")
 	private void assertedSleepChange(KieSession ksession, Sleep sleep, SleepPhase sleepPhase) {
 		int ruleCount = ksession.fireAllRules();
-		assertEquals(1, ruleCount);
+//		assertEquals(1, ruleCount);
 		Collection<SleepPhaseEvent> newEvents = (Collection<SleepPhaseEvent>) ksession.getObjects(new ClassObjectFilter(SleepPhaseEvent.class));
 		Collection<SleepStage> sleepStages = (Collection<SleepStage>) ksession.getObjects(new ClassObjectFilter(SleepStage.class));
 		assertTrue(newEvents.size() > 0);
