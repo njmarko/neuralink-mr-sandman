@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import sbnz.mrsandman.neuralinkapp.bus.EventBus;
+import sbnz.mrsandman.neuralinkapp.model.BadHabbit;
 import sbnz.mrsandman.neuralinkapp.model.Sleep;
 import sbnz.mrsandman.neuralinkapp.model.SleepStage;
 import sbnz.mrsandman.neuralinkapp.model.User;
@@ -28,6 +29,7 @@ import sbnz.mrsandman.neuralinkapp.model.cep.BaseCepTest;
 import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
 import sbnz.mrsandman.neuralinkapp.model.events.BrainWaveEvent;
+import sbnz.mrsandman.neuralinkapp.model.events.HabitRecomendationEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SignalEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepMetricsCalculatedEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
@@ -65,6 +67,7 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/chronotype-clasification/chronotype-clasification.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/optimal-sleep-time-template/optimal-sleep-time-template.drl");
 		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/bad-habit-score-template/bad-habit-score-template.drl");
+		writeFile(kfs, "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/habit-recomendations/habit-recomendations.drl");
 	}
 
 	@Override
@@ -80,10 +83,17 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		user.setIsLightSleep(false);
 		user.setGoingToBedTime(LocalTime.of(23, 0));
 		ksession.insert(user);
-		ksession.fireAllRules();
+		ruleCount = ksession.fireAllRules();
+		
+		// 1 - Determine chronotype
+		// 2 - Determine optimal sleep time
+		
+		assertEquals(2, ruleCount);
+		
 		
 		System.out.println(user.getOptimalSleepTime());
 		
+		// Advance time to evening 20h (starts at +1)
 		clock.advanceTime(19, TimeUnit.HOURS);
 		System.out.println(clock.getCurrentTime());
 		
@@ -92,7 +102,7 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		ksession.insert(initialAwakeEvent);
 		
 
-		
+		// Add base level signals
 		SignalEvent level;
 		for (int i = 0; i < 300; i++) {
 
@@ -123,6 +133,8 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 			ruleCount = ksession.fireAllRules();
 		}
 		
+		// Assert base level signals raised events
+		
 		Collection<?> newEvents = ksession.getObjects(new ClassObjectFilter(RaisedAlcoholLevelEvent.class));
 		assertThat(newEvents.size(), equalTo(6));
 		
@@ -134,6 +146,9 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		
 		newEvents = ksession.getObjects(new ClassObjectFilter(HeartRateIncreasedEvent.class));
 		assertThat(newEvents.size(), equalTo(1));
+		
+		
+		// Assert Bad Habit events before sleep
 		
 		newEvents = ksession.getObjects(new ClassObjectFilter(AlcoholBeforeSleepEvent.class));
 		assertThat(newEvents.size(), equalTo(1));
@@ -147,7 +162,7 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		newEvents = ksession.getObjects(new ClassObjectFilter(PhysicalActivityEvent.class));
 		assertThat(newEvents.size(), equalTo(0));
 		
-		clock.advanceTime(1, TimeUnit.HOURS);
+		clock.advanceTime(30, TimeUnit.MINUTES);
 		
 		
 		// we make user fall asleep
@@ -160,11 +175,15 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		// 1 - Rule for detecting heart rate lowered event
 		// 2 - Rule for detecting temperature lowered event
 		// 3 - Rule for detecting start of sleeping
+		// 4 - Bad habit score calculations
 		assertEquals(8, ruleCount);
 		Collection<?> beginSleepingEvents = ksession.getObjects(new ClassObjectFilter(BeginSleepingEvent.class));
 		assertEquals(1, beginSleepingEvents.size());
 		Sleep sleep = (Sleep) ksession.getObjects(new ClassObjectFilter(Sleep.class)).toArray()[0];
 		assertNotNull(sleep);
+		
+		newEvents = ksession.getObjects(new ClassObjectFilter(BadHabbit.class));
+		assertThat(newEvents.size(), equalTo(3));
 		
 		// we make user iterate over sleep stages
 		
@@ -234,13 +253,17 @@ public class CompleteFlowIntegrationTest extends BaseCepTest{
 		// 2 - Detect wake up event
 		// 3 - Compute sleep score
 		// 4 - Compute sleep efficiency
-		assertEquals(4, ruleCount);
+		// 5,6,7 - Show habbit recomendations
+		assertEquals(7, ruleCount);
 		assertFalse(sleep.getEfficient());
 		assertThat(sleep.getQuality(), Matchers.closeTo(10.0 * 37.0 / 121.0, 1e-4));
 		Collection<?> metricsEvent = ksession.getObjects(new ClassObjectFilter(SleepMetricsCalculatedEvent.class));
 		assertEquals(1, metricsEvent.size());
 		
-		
+		// Check that 3 recommendations were shown
+		metricsEvent = ksession.getObjects(new ClassObjectFilter(HabitRecomendationEvent.class));
+		assertEquals(3, metricsEvent.size());
+	
 		
 	}
 
