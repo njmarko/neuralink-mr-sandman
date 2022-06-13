@@ -72,6 +72,17 @@ public class HabitRecommendationCepTest extends BaseCepTest {
 				+ fileName + ".drl";
 		f = new File(filePath);
 		kfs.write(ResourceFactory.newFileResource(f));
+		
+		fileName = "begin-sleeping";
+		filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/" + fileName + ".drl";
+		f = new File(filePath);
+		kfs.write(ResourceFactory.newFileResource(f));
+		
+		fileName = "signal-clasification";
+		filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + "/"
+				+ fileName + ".drl";
+		f = new File(filePath);
+		kfs.write(ResourceFactory.newFileResource(f));
 	}
 
 	@Override
@@ -80,6 +91,7 @@ public class HabitRecommendationCepTest extends BaseCepTest {
 		user1.setAge(16);
 		user1.setIsLightSleep(false);
 		user1.setGoingToBedTime(LocalTime.of(21, 0));
+		user1.setIsStatic(true);
 
 		ksession.insert(user1);
 		ksession.fireAllRules();
@@ -131,9 +143,17 @@ public class HabitRecommendationCepTest extends BaseCepTest {
 		assertThat(newEvents.size(), equalTo(2));
 
 //		phase = new SleepPhaseEvent(SleepPhase.PHASE1);
-		BeginSleepingEvent beginSleep = new BeginSleepingEvent();
-		ksession.insert(beginSleep);
-		clock.advanceTime(1, TimeUnit.MINUTES);
+//		BeginSleepingEvent beginSleep = new BeginSleepingEvent();
+//		ksession.insert(beginSleep);
+//		clock.advanceTime(1, TimeUnit.MINUTES);
+//		ruleCount = ksession.fireAllRules();
+		
+		// we make user fall asleep
+		for (int i = 0; i < 240; i++) {
+			ksession.insert(new SignalEvent(35, SignalType.TEMPERATURE));
+			ksession.insert(new SignalEvent(40, SignalType.HEART_BEAT));
+			clock.advanceTime(100, TimeUnit.MILLISECONDS);
+		}
 		ruleCount = ksession.fireAllRules();
 
 		newEvents = ksession.getObjects(new ClassObjectFilter(BadHabbit.class));

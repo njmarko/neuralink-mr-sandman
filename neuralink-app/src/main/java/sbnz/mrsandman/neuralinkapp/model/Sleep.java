@@ -17,6 +17,8 @@ public class Sleep implements Serializable {
 	private Boolean hadSleepParalysis;
 	
 	public LocalDate day;
+	
+	private Double badHabitsScore = 0.0d;
 
 	public Sleep() {
 		this.startTime = new Date();
@@ -90,5 +92,15 @@ public class Sleep implements Serializable {
 		this.day = day;
 		
 	}
+
+	public Double getBadHabitsScore() {
+		return badHabitsScore;
+	}
+
+	public void setBadHabitsScore(Double badHabitsScore) {
+		this.badHabitsScore = badHabitsScore;
+	}
+	
+	
 
 }

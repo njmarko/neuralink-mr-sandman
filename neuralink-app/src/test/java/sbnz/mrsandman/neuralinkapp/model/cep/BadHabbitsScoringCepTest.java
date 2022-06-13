@@ -1,6 +1,8 @@
 package sbnz.mrsandman.neuralinkapp.model.cep;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 import java.io.File;
@@ -20,8 +22,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import sbnz.mrsandman.neuralinkapp.bus.EventBus;
 import sbnz.mrsandman.neuralinkapp.model.BadHabbit;
+import sbnz.mrsandman.neuralinkapp.model.Sleep;
 import sbnz.mrsandman.neuralinkapp.model.User;
+import sbnz.mrsandman.neuralinkapp.model.enums.SignalType;
 import sbnz.mrsandman.neuralinkapp.model.enums.SleepPhase;
+import sbnz.mrsandman.neuralinkapp.model.events.SignalEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.SleepPhaseEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.alcohol.AlcoholBeforeSleepEvent;
 import sbnz.mrsandman.neuralinkapp.model.events.beginsleeping.BeginSleepingEvent;
@@ -42,6 +47,7 @@ public class BadHabbitsScoringCepTest extends BaseCepTest {
 		user1.setAge(16);
 		user1.setIsLightSleep(false);
 		user1.setGoingToBedTime(LocalTime.of(21, 0));
+		user1.setIsStatic(true);
 
 		ksession.insert(user1);
 		ksession.fireAllRules();
@@ -107,13 +113,28 @@ public class BadHabbitsScoringCepTest extends BaseCepTest {
 		assertThat(newEvents.size(), equalTo(2));
 
 //		phase = new SleepPhaseEvent(SleepPhase.PHASE1);
-		BeginSleepingEvent beginSleep = new BeginSleepingEvent();
-		ksession.insert(beginSleep);
-		clock.advanceTime(1, TimeUnit.MINUTES);
+//		BeginSleepingEvent beginSleep = new BeginSleepingEvent();
+//		ksession.insert(beginSleep);
+//		clock.advanceTime(1, TimeUnit.MINUTES);
+//		ruleCount = ksession.fireAllRules();
+		
+		// we make user fall asleep
+		for (int i = 0; i < 240; i++) {
+			ksession.insert(new SignalEvent(35, SignalType.TEMPERATURE));
+			ksession.insert(new SignalEvent(40, SignalType.HEART_BEAT));
+			clock.advanceTime(100, TimeUnit.MILLISECONDS);
+		}
 		ruleCount = ksession.fireAllRules();
 
 		newEvents = ksession.getObjects(new ClassObjectFilter(BadHabbit.class));
 		assertThat(newEvents.size(), equalTo(4));
+		
+		Sleep sleep = (Sleep) ksession.getObjects(new ClassObjectFilter(Sleep.class)).toArray()[0];
+		assertNotNull(sleep);
+		
+		assertThat(sleep.getBadHabitsScore(), greaterThan(2.0));
+		
+		System.out.println(sleep.getBadHabitsScore());
 	}
 
 	protected void runRealtimeClockExample(KieSession ksession) {
@@ -140,6 +161,17 @@ public class BadHabbitsScoringCepTest extends BaseCepTest {
 		kfs.write(ResourceFactory.newFileResource(f));
 		
 		fileName = "bad-habit-score-template";
+		filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + "/"
+				+ fileName + ".drl";
+		f = new File(filePath);
+		kfs.write(ResourceFactory.newFileResource(f));
+		
+		fileName = "begin-sleeping";
+		filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/cep/" + fileName + ".drl";
+		f = new File(filePath);
+		kfs.write(ResourceFactory.newFileResource(f));
+		
+		fileName = "signal-clasification";
 		filePath = "../neuralink-kjar/src/main/resources/sbnz/mrsandman/rules/template-rules/" + fileName + "/"
 				+ fileName + ".drl";
 		f = new File(filePath);
