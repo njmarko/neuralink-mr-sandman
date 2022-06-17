@@ -57,12 +57,14 @@ Expert rule-based system for tracking inputs from neuralink chip and smart-watch
 </div>
 
 ## References
-
-- [Why we sleep - Book by Neuroscientist and sleep expert Matthew Walker](https://www.goodreads.com/book/show/34466963-why-we-sleep)
-- [Textbook of Medical Physiology - Guyton & Hall](https://www.goodreads.com/book/show/202734.Textbook_of_Medical_Physiology)
-- [Neuroscience - prof Dale Purves](https://www.goodreads.com/book/show/15939503-neuroscience)
 - [Medical Neuroscience - Coursera course by prof Leonard E. White, Ph.D. from the Duke University](https://www.coursera.org/learn/medical-neuroscience)
   - [Certificate earned for completing the 13 week long Medical Neuroscience course](https://www.coursera.org/account/accomplishments/certificate/JE475HPY7A28)
+- [Why we sleep - Book by Neuroscientist and sleep expert Matthew Walker](https://www.goodreads.com/book/show/34466963-why-we-sleep)
+- [Lex Fridman Podcast - Mathew Walker - Sleep](https://www.youtube.com/watch?v=Hc4XvHTlW3s)
+- [Dr. Matthew Walker: The Science & Practice of Perfecting Your Sleep | Huberman Lab Podcast #31](https://www.youtube.com/watch?v=gbQFSMayJxk)
+- [Textbook of Medical Physiology - Guyton & Hall](https://www.goodreads.com/book/show/202734.Textbook_of_Medical_Physiology)
+- [Neuroscience - Book by prof Dale Purves](https://www.goodreads.com/book/show/15939503-neuroscience)
+
 
 
 
