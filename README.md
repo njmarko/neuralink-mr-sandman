@@ -62,6 +62,7 @@ Expert rule-based system for tracking inputs from neuralink chip and smart-watch
 - [Why we sleep - Book by Neuroscientist and sleep expert Matthew Walker](https://www.goodreads.com/book/show/34466963-why-we-sleep)
 - [Lex Fridman Podcast - Mathew Walker - Sleep](https://www.youtube.com/watch?v=Hc4XvHTlW3s)
 - [Dr. Matthew Walker: The Science & Practice of Perfecting Your Sleep | Huberman Lab Podcast #31](https://www.youtube.com/watch?v=gbQFSMayJxk)
+- [Responses to questions from readers on Why we sleep by Mathew Walker](https://sleepdiplomat.wordpress.com/2019/12/19/why-we-sleep-responses-to-questions-from-readers/)
 - [Textbook of Medical Physiology - Guyton & Hall](https://www.goodreads.com/book/show/202734.Textbook_of_Medical_Physiology)
 - [Neuroscience - Book by prof Dale Purves](https://www.goodreads.com/book/show/15939503-neuroscience)
 
